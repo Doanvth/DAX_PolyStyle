@@ -7,57 +7,9 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-8">
-          <div class="form-widget mb-5">
-            <div class="form-title text-white text-center text-uppercase p-3">
-              <h5 class="mb-0 fw-bold">
-                CƠ HỘI KHỞI NGHIỆP AN TOÀN - BỀN VỮNG - SINH LỜI CAO! THỜI TRANG ORCHID TUYỂN ĐẠI LÝ NHƯỢNG QUYỀN
-              </h5>
-            </div>
-            <div class="form-body bg-white p-4 p-md-5">
-              <form action="#" method="POST">
-                <div class="mb-3">
-                  <input type="text" class="form-control form-control-lg" placeholder="Họ và tên" required>
-                </div>
-                <div class="mb-3">
-                  <input type="email" class="form-control form-control-lg" placeholder="Email" required>
-                </div>
-                <div class="mb-3">
-                  <input type="tel" class="form-control form-control-lg" placeholder="Số điện thoại" required>
-                </div>
-                <div class="mb-3">
-                  <input type="text" class="form-control form-control-lg" placeholder="Số vốn dự kiến">
-                </div>
-                <p class="fw-bold mb-2 mt-4">
-                  Vui lòng chọn Khu vực bạn muốn mở showroom nhượng quyền
-                </p>
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <select class="form-select form-select-lg">
-                      <option value="">Tỉnh/Thành phố</option>
-                      <option value="hn">Hà Nội</option>
-                      <option value="hcm">TP. Hồ Chí Minh</option>
-                      <option value="dn">Đà Nẵng</option>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <select class="form-select form-select-lg" disabled>
-                      <option value="">Quận/Huyện</option>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <select class="form-select form-select-lg" disabled>
-                      <option value="">Phường/Xã</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="d-grid mt-4">
-                  <button type="submit" class="btn btn-danger btn-lg text-uppercase fw-bold">
-                    Gửi đăng ký làm đại lý
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+
+          <FranchiseForm class="mb-5"
+            title="CƠ HỘI KHỞI NGHIỆP AN TOÀN - BỀN VỮNG - SINH LỜI CAO! THỜI TRANG ORCHID TUYỂN ĐẠI LÝ NHƯỢNG QUYỀN" />
 
           <div class="text-center pt-5">
             <h3 class="mb-3 fw-bold">TẠI SAO NÊN LỰA CHỌN ORCHID?</h3>
@@ -69,41 +21,42 @@
             <div class="row">
               <div class="col-lg-6 text-start mb-3">
                 <div class="mb-4">
-                  <h4 class="fw-bold fs-5"><i class="bi bi-box-seam-fill"></i> ĐẢM BẢO 100% KHÔNG CÓ TỒN KHO</h4>
+                  <h4 class="fw-bold fs-5"><i class="bi bi-box-seam-fill me-2"></i> ĐẢM BẢO 100% KHÔNG CÓ TỒN KHO</h4>
                   <p>Trong trường hợp không bán được hàng, trả sản phẩm về hệ thống hoặc hỗ trợ luân chuyển qua các
                     showroom khác là một trong những lợi ích thiết thực mà Orchid dành tặng cho các đại lý nhượng quyền.
                   </p>
                 </div>
                 <div class="mb-4">
-                  <h4 class="fw-bold fs-5"><i class="bi bi-tags-fill"></i> MẪU MÃ ĐA DẠNG</h4>
+                  <h4 class="fw-bold fs-5"><i class="bi bi-tags-fill me-2"></i> MẪU MÃ ĐA DẠNG</h4>
                   <p>Hàng mới ra liên tục hàng tuần. Bạn không cần đi đến tận nơi để nhập hàng, chúng tôi sẽ cung cấp
                     hàng
                     đến tay bạn.
                   </p>
                 </div>
                 <div>
-                  <h4 class="fw-bold fs-5"><i class="bi bi-people"></i> NGUỒN DATA KHÁCH HÀNG CÓ SẴN</h4>
+                  <h4 class="fw-bold fs-5"><i class="bi bi-people me-2"></i> NGUỒN DATA KHÁCH HÀNG CÓ SẴN</h4>
                   <p>Công ty sẽ cung cấp lượng lớn data tiềm năng có sẵn tại khu vực bạn làm đại lý nhượng quyền.
                   </p>
                 </div>
               </div>
               <div class="col-lg-6 text-start mb-3">
                 <div class="mb-4">
-                  <h4 class="fw-bold fs-5"><i class="bi bi-graph-up-arrow"></i> HƯỞNG CHIẾT KHẤU, LỢI NHUẬN HẤP DẪN</h4>
+                  <h4 class="fw-bold fs-5"><i class="bi bi-graph-up-arrow me-2"></i> HƯỞNG CHIẾT KHẤU, LỢI NHUẬN HẤP DẪN
+                  </h4>
                   <p>Nhờ các chương trình khuyến mại diễn ra liên tục hàng tuần, đại lý sẽ có cơ hội bán hàng tốt nhất
                     và
                     được hưởng các chính sách bán hàng đồng nhất trên toàn hệ thống.
                   </p>
                 </div>
                 <div class="mb-4">
-                  <h4 class="fw-bold fs-5"><i class="bi bi-truck"></i> VẬN HÀNH CHUYÊN NGHIỆP</h4>
+                  <h4 class="fw-bold fs-5"><i class="bi bi-truck me-2"></i> VẬN HÀNH CHUYÊN NGHIỆP</h4>
                   <p>Với hệ thống quy trình phần mềm hiện đại, tiên tiến giúp bạn quản lý cửa hàng một cách nhanh chóng
                     và
                     thuận tiện.
                   </p>
                 </div>
                 <div>
-                  <h4 class="fw-bold fs-5"><i class="bi bi-gear"></i> MARKETING TỪ A - Z</h4>
+                  <h4 class="fw-bold fs-5"><i class="bi bi-gear me-2"></i> MARKETING TỪ A - Z</h4>
                   <p>Được hỗ trợ trước và sau khi diễn ra khai trương. Đội ngũ hỗ trợ MARKETING, truyền thông chuyên
                     nghiệp, hỗ trợ, tư vấn trong suốt quá trình làm đại lý.
                   </p>
@@ -114,11 +67,11 @@
           
         </div>
       </div>
-    </div>
-    <div class="row pt-5">
+      <div class="row pt-5">
             <div class="col-lg-6 stage-section pb-4">
               <h3 class="mb-4 fw-bold text-center">GIAI ĐOẠN XÂY DỰNG ĐẠI LÝ NHƯỢNG QUYỀN</h3>
-              <img class="mb-3" src="https://pos.nvncdn.com/af3c03-152482/bn/20250219_yaybqDF8.gif?v=1739954921"
+              <img class="img-fluid mb-3"
+                src="https://pos.nvncdn.com/af3c03-152482/bn/20250219_yaybqDF8.gif?v=1739954921"
                 alt="Giai đoạn xây dựng đại lý nhượng quyền">
             </div>
 
@@ -145,6 +98,7 @@
               </ul>
             </div>
           </div>
+    </div>
     <div class="showroom-gallery-section pt-4 pb-5">
       <div class="container">
         <h3 class="mb-4 fw-bold text-center">MỘT SỐ HÌNH ẢNH SHOWROOM ORCHID TIÊU BIỂU</h3>
@@ -312,7 +266,7 @@
       <div class="container">
         <div class="row g-5 align-items-center">
 
-          <div class="col-lg-4 text-white">
+          <div class="col-lg-5 text-white">
             <h2 class="fw-bold mb-4">Liên hệ với chúng tôi</h2>
             <ul class="list-unstyled contact-info">
               <li class="d-flex align-items-start mb-3">
@@ -348,56 +302,7 @@
           </div>
 
           <div class="col-lg-7">
-            <div class="form-widget">
-              <div class="form-title text-white text-center text-uppercase p-3">
-                <h5 class="mb-0 fw-bold">
-                  CƠ HỘI KHỞI NGHIỆP AN TOÀN - BỀN VỮNG - SINH LỜI CAO!
-                </h5>
-              </div>
-              <div class="form-body bg-white p-4 p-md-5">
-                <form action="#" method="POST">
-                  <div class="mb-3">
-                    <input type="text" class="form-control form-control-lg" placeholder="Họ và tên" required>
-                  </div>
-                  <div class="mb-3">
-                    <input type="email" class="form-control form-control-lg" placeholder="Email" required>
-                  </div>
-                  <div class="mb-3">
-                    <input type="tel" class="form-control form-control-lg" placeholder="Số điện thoại" required>
-                  </div>
-                  <div class="mb-3">
-                    <input type="text" class="form-control form-control-lg" placeholder="Số vốn dự kiến">
-                  </div>
-                  <p class="fw-bold mb-2 mt-4">
-                    Vui lòng chọn Khu vực bạn muốn mở showroom nhượng quyền
-                  </p>
-                  <div class="row g-3">
-                    <div class="col-md-4">
-                      <select class="form-select form-select-lg">
-                        <option value="">Tỉnh/Thành phố</option>
-                        <option value="hn">Hà Nội</option>
-                        <option value="hcm">TP. Hồ Chí Minh</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <select class="form-select form-select-lg" disabled>
-                        <option value="">Quận/Huyện</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <select class="form-select form-select-lg" disabled>
-                        <option value="">Phường/Xã</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-danger btn-lg text-uppercase fw-bold">
-                      Gửi đăng ký làm đại lý
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+            <FranchiseForm title="CƠ HỘI KHỞI NGHIỆP AN TOÀN - BỀN VỮNG - SINH LỜI CAO!" />
           </div>
         </div>
       </div>
@@ -407,6 +312,7 @@
 </template>
 
 <script setup>
+import FranchiseForm from '@/components/FranchiseForm.vue'; 
 </script>
 
 <style scoped>
@@ -433,44 +339,13 @@
   width: 100%;
 }
 
-.form-widget {
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #dee2e6;
-  box-shadow: none;
-}
-
-.form-title {
-  background-color: #0d1a3e;
-}
-
-.form-title h5 {
-  font-size: 1.1rem;
-  line-height: 1.5;
-}
-
-.form-control-lg,
-.form-select-lg {
-  padding: 0.75rem 1rem;
-}
-
-.btn-danger {
-  background-color: #e2001a;
-  border-color: #e2001a;
-  padding: 0.75rem;
-}
-
-.btn-danger:hover {
-  background-color: #c00;
-  border-color: #c00;
-}
-
-.form-select:disabled {
-  background-color: #e9ecef;
-}
-
 .fs-5 {
   font-size: 1.1rem !important;
+}
+
+.fs-5 i {
+  vertical-align: middle;
+  margin-top: -4px;
 }
 
 .stage-section img {
