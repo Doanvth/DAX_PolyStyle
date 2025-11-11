@@ -1,3 +1,3 @@
 <template>
-  <h1>Home is working ✅</h1>
+  <h1>Nội dung trang home</h1>
 </template>

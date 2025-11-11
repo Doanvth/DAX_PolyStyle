@@ -1,5 +1,5 @@
 <template>
-  <div class="form-widget">
+  <div class="form-widget mt-5">
     <div class="form-title text-white text-center text-uppercase p-3">
       <h5 class="mb-0 fw-bold">
         {{ title }}

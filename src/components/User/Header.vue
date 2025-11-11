@@ -1,21 +1,19 @@
 <template>
   <header>
-    <!-- Top Header -->
     <div class="top-header">
       <div class="container">
         <div class="top-header-content">
           <div class="contact-info">
             <div class="phone">
               <a href="tel:0972359666">
-                <!-- Điện thoại -->
                 <i class="bi bi-telephone"></i> 0972359666
               </a>
             </div>
             <div class="showroom-info">
-              <!-- Showroom -->
               <i class="bi bi-geo-alt"></i> Hệ thống showroom
             </div>
           </div>
+
           <div class="search-cart">
             <div class="search-box">
               <input
@@ -24,44 +22,45 @@
                 v-model="searchQuery"
               />
               <button type="button" @click="onSearch">
-                <!-- Tìm kiếm -->
                 <i class="bi bi-search"></i>
               </button>
             </div>
+
             <a href="#" class="cart">
-              <!-- Giỏ hàng -->
               <i class="bi bi-cart"></i>
               <span>Giỏ hàng</span>
               <span class="cart-count">{{ cartCount }}</span>
             </a>
+
+            <div class="auth-links">
+              <router-link to="/login">Đăng nhập</router-link>
+              <span>/</span>
+              <router-link to="/register">Đăng ký</router-link>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Main Header -->
     <div class="main-header">
-      <div class="container">
+      <div class="container header-flex">
         <div class="logo">
           <img src="/src/assets/images/logo.png" alt="Logo" />
         </div>
+
+        <nav class="navigation">
+          <ul class="nav-list">
+            <li><router-link to="/">Trang chủ</router-link></li>
+            <li><a href="#">Bộ sưu tập</a></li>
+            <li><a href="#">Mua sắm</a></li>
+            <li><a href="#">Khuyến mãi</a></li>
+            <li><router-link to="/franchise">Nhượng quyền</router-link></li>
+            <li><a href="#">Tin tức</a></li>
+            <li><router-link to="/contact">Liên hệ</router-link></li>
+          </ul>
+        </nav>
       </div>
     </div>
-
-    <!-- Navigation -->
-    <nav class="navigation">
-      <div class="container">
-        <ul class="nav-list">
-          <li><a href="#">Trang chủ</a></li>
-          <li><a href="#">Bộ sưu tập</a></li>
-          <li><a href="#">Mua sắm</a></li>
-          <li><a href="#">Khuyến mãi</a></li>
-          <li><a href="#">Nhượng quyền</a></li>
-          <li><a href="#">Tin tức</a></li>
-          <li><a href="#">Liên hệ</a></li>
-        </ul>
-      </div>
-    </nav>
   </header>
 </template>
 
@@ -77,12 +76,10 @@ export default {
   methods: {
     onSearch() {
       console.log("Searching for:", this.searchQuery);
-      // Xử lý tìm kiếm ở đây
     },
   },
 };
 </script>
-
 <style scoped>
 * {
   margin: 0;
@@ -91,15 +88,16 @@ export default {
   font-family: Arial, sans-serif;
 }
 
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
 .top-header {
   background-color: #f8f8f8;
   padding: 10px 0;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+  font-size: 14px; 
 }
 
 .top-header-content {
@@ -118,11 +116,13 @@ export default {
   color: #333;
   text-decoration: none;
 }
+.phone a:hover {
+  color: #f00;
+}
 
 .showroom-info {
   color: #333;
 }
-
 .search-cart {
   display: flex;
   align-items: center;
@@ -148,6 +148,7 @@ export default {
   background: none;
   border: none;
   cursor: pointer;
+  color: #555;
 }
 
 .cart {
@@ -157,24 +158,63 @@ export default {
   color: #333;
   text-decoration: none;
 }
+.cart:hover {
+  color: #f00;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.auth-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-links a:hover {
+  color: #f00;
+}
+
+.auth-links span {
+  color: #ccc;
+  font-size: 12px;
+}
 
 .main-header {
-  padding: 20px 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header-flex {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
 }
 
 .logo img {
-  max-height: 60px;
+  max-height: 50px;
+  width: auto;
+  display: block;
 }
 
 .navigation {
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  padding: 15px 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 0;
+  margin: 0;
 }
 
 .nav-list {
   display: flex;
-  justify-content: center;
+  align-items: center;
   list-style: none;
   gap: 30px;
 }
@@ -182,14 +222,18 @@ export default {
 .nav-list a {
   color: #333;
   text-decoration: none;
-  font-weight: bold;
   text-transform: uppercase;
   font-size: 14px;
+  padding: 10px 0;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-list a.router-link-exact-active {
+  color: #f00;
 }
 
 .nav-list a:hover {
   color: #f00;
 }
 </style>
-
-<!-- Link Font Awesome trong index.html hoặc main.js -->

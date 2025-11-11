@@ -1,86 +1,67 @@
 <template>
   <footer class="footer">
     <div class="container">
-      <div class="footer-content">
-        <!-- Thông tin công ty -->
-        <div class="footer-section">
-          <h3>Thông tin công ty</h3>
-          <div class="company-info">
-            <p>
-              <strong>CÔNG TY TNHH SẢN XUẤT VÀ THƯƠNG MẠI TUẤN TRANG</strong>
-            </p>
-            <p>
-              Giấy chứng nhận đăng ký kinh doanh số 0106002077 do Sở kế hoạch và
-              đầu tư Thành phố Hà Nội cấp ngày 17/12/2012
-            </p>
-            <p>
-              <i class="bi bi-geo-alt"></i> Địa chỉ: Số 147 đường Thanh Lâm,
-              Phường Phú Lương, Thành phố Hà Nội, Việt Nam
-            </p>
-            <p><i class="bi bi-telephone"></i> Điện thoại: 0972.359.666</p>
-            <p>
-              <i class="bi bi-envelope"></i> Email: thoitrangtuanchid@gmail.com
-            </p>
-            <p>Đại diện theo pháp luật: <strong>HÀ QUỐC VIỆT</strong></p>
-            <div class="certified-logo">
-              <img
-                src="/src/assets/images/logo.png"
-                alt="Đã thông báo Bộ Công Thương"
-              />
-            </div>
-          </div>
-        </div>
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 class="title">Thông tin công ty</h4>
+          <h5><strong>CÔNG TY TNHH SẢN XUẤT VÀ THƯƠNG MẠI TUẤN TRANG</strong></h5>
+          <p>
+            Giấy chứng nhận đăng ký kinh doanh số 0106062077 do Sở kế hoạch và đầu tư Thành phố Hà Nội cấp ngày 17/12/2012
+          </p>
+          <p>Địa chỉ: Số 147 đường Thanh Lâm, Phường Phú Lương, Thành phố Hà Nội, Việt Nam</p>
+          <p>Điện thoại: 0972.359.666</p>
+          <p>Email: thoitrangorchid@gmail.com</p>
+          <p>Đại diện theo pháp luật: <strong>HÀ QUỐC VIỆT</strong></p>
 
-        <!-- Chính sách khách hàng -->
-        <div class="footer-section">
-          <h3>Chính sách khách hàng</h3>
+          <img
+            src="@/assets/images/dathongbaobocongthuong.png"
+            alt="Đã thông báo Bộ Công Thương"
+            class="gov-logo"
+          />
+        </div>
+        <div class="footer-col">
+          <h4 class="title">Chính sách khách hàng</h4>
           <ul>
-            <li><a href="#">Chính sách thẻ VIP</a></li>
-            <li><a href="#">Chính sách tích điểm - tiêu điểm</a></li>
-            <li><a href="#">Chính sách ưu đãi sinh nhật</a></li>
-            <li><a href="#">Chính sách hoạt động và quy định chung</a></li>
-            <li><a href="#">Chính sách kiểm hàng</a></li>
-            <li><a href="#">Chính sách vận chuyển</a></li>
-            <li><a href="#">Thông tin về hình thức thanh toán</a></li>
-            <li><a href="#">Thông tin về điều kiện giao dịch chung</a></li>
-            <li><a href="#">Thông tin sản phẩm</a></li>
+            <li>Chính sách thẻ VIP</li>
+            <li>Chính sách tích điểm - tiêu điểm</li>
+            <li>Chính sách ưu đãi sinh nhật</li>
           </ul>
         </div>
 
-        <!-- Hỗ trợ khách hàng -->
-        <div class="footer-section">
-          <h3>Hỗ trợ khách hàng</h3>
+        <div class="footer-col">
+          <h4 class="title">Hỗ trợ khách hàng</h4>
           <ul>
-            <li><a href="#">Chính sách bảo hành</a></li>
-            <li><a href="#">Chính sách bảo mật thông tin</a></li>
-            <li><a href="#">Chính sách đổi trả hàng và hoàn tiền</a></li>
+            <li>Chính sách bảo hành</li>
+            <li>Chính sách bảo mật thông tin</li>
+            <li>Chính sách đổi trả hàng và hoàn tiền</li>
+            <li>Chính sách hoạt động và quy định chung</li>
+            <li>Chính sách kiểm hàng</li>
+            <li>Chính sách vận chuyển</li>
+            <li>Thông tin về hình thức thanh toán</li>
+            <li>Thông tin về điều kiện giao dịch chung</li>
+            <li>Thông tin sản phẩm</li>
           </ul>
         </div>
 
-        <!-- Đăng ký nhận ưu đãi -->
-        <div class="footer-section">
-          <h3>Đăng ký để nhận ưu đãi mới nhất</h3>
-          <div class="newsletter-form">
-            <input type="text" placeholder="Họ và tên" v-model="name" />
-            <input type="tel" placeholder="Số điện thoại" v-model="phone" />
-            <input type="email" placeholder="Email" v-model="email" />
-            <button type="button" @click="registerNewsletter">
-              Đăng ký ngay
-            </button>
-          </div>
+        <div class="footer-col">
+          <h4 class="title">Đăng ký để nhận ưu đãi mới nhất</h4>
+          <input type="text" placeholder="Họ và tên" v-model="name" />
+          <input type="text" placeholder="Số điện thoại" v-model="phone" />
+          <input type="email" placeholder="Email" v-model="email" />
+          <button @click="registerNewsletter">Đăng ký ngay</button>
         </div>
       </div>
 
-      <!-- Mạng xã hội -->
-      <div class="social-links">
-        <h4>Kết nối với chúng tôi</h4>
-        <div class="social-icons">
-          <a href="#"><i class="bi bi-facebook"></i></a>
-          <a href="#"><i class="bi bi-tiktok"></i></a>
-          <a href="#"><i class="bi bi-youtube"></i></a>
-          <a href="#"><i class="bi bi-messenger"></i></a>
-          <a href="#"><i class="bi bi-chat-dots"></i></a>
-          <a href="#"><i class="bi bi-telephone-fill"></i></a>
+      <div class="footer-bottom ">
+        <div class="connect">
+          <span>Kết nối với chúng tôi</span>
+          <div class="icons">
+            <i class="bi bi-facebook"></i>
+            <i class="bi bi-tiktok"></i>
+            <i class="bi bi-youtube"></i>
+            <i class="bi bi-chat-dots"></i>
+            <i class="bi bi-telephone-fill"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -89,140 +70,137 @@
 
 <script>
 export default {
-  name: "Footer",
+  name: "FooterSection",
   data() {
-    return {
-      name: "",
-      phone: "",
-      email: "",
-    };
+    return { name: "", phone: "", email: "" };
   },
   methods: {
     registerNewsletter() {
-      console.log("Đăng ký nhận ưu đãi:", {
-        name: this.name,
-        phone: this.phone,
-        email: this.email,
-      });
-      // Xử lý gửi dữ liệu newsletter ở đây
-      alert("Cảm ơn bạn đã đăng ký!");
-      this.name = "";
-      this.phone = "";
-      this.email = "";
+      alert(`Cảm ơn ${this.name} đã đăng ký nhận ưu đãi!`);
+      this.name = this.phone = this.email = "";
     },
   },
 };
 </script>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
 .footer {
-  background-color: #f8f8f8;
-  padding: 50px 0;
-  color: #333;
+  background-color: #fff;
+  border-top: 1px solid #000;
+  padding: 40px 0 0;
+  font-family: Arial, sans-serif;
+  color: #222;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 40px;
 }
 
-.footer-content {
+.footer-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  justify-content: space-between;
+  align-items: start;
+  gap: 40px;
 }
 
-.footer-section h3 {
-  font-size: 18px;
-  margin-bottom: 20px;
-  color: #333;
+
+/* Tiêu đề */
+.title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 12px;
 }
 
-.footer-section ul {
-  list-style: none;
-}
-
-.footer-section ul li {
-  margin-bottom: 10px;
-}
-
-.footer-section ul li a {
-  color: #666;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-section ul li a:hover {
-  color: #007bff;
-}
-
-.company-info p {
-  margin-bottom: 10px;
-  color: #666;
+/* Nội dung text */
+.footer-col p {
+  font-size: 14px;
+  color: #222;
   line-height: 1.6;
+  margin-bottom: 6px;
 }
 
-.social-links {
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  font-size: 14px;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+/* 🔹 Logo Bộ Công Thương */
+.gov-logo {
+  width: 140px;
+  margin-top: 15px;
+}
+
+/* Form đăng ký ưu đãi */
+.footer-col input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #eee;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.footer-col button {
+  width: 100%;
+  padding: 8px;
+  background-color: #4a90ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.footer-col button:hover {
+  background-color: #2f73e0;
+}
+
+/* Phần cuối (Kết nối với chúng tôi) */
+.footer-bottom {
+  border-top: 1px solid #000;
   margin-top: 30px;
+  padding: 10px 0;
   text-align: center;
 }
 
-.social-links h4 {
-  margin-bottom: 15px;
-}
-
-.social-icons {
+.connect {
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
-.social-icons a {
-  color: #333;
-  font-size: 24px;
-  transition: color 0.3s;
+.connect span {
+  font-size: 14px;
+  color: #222;
 }
 
-.social-icons a:hover {
-  color: #007bff;
+.icons {
+  display: flex;
+  gap: 10px;
 }
 
-.newsletter-form {
-  margin-top: 20px;
-}
-
-.newsletter-form input {
-  padding: 8px;
-  width: 100%;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.newsletter-form button {
-  padding: 8px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
+.icons i {
+  font-size: 28px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: transform 0.2s;
 }
 
-.newsletter-form button:hover {
-  background-color: #0056b3;
-}
-
-.certified-logo img {
-  max-width: 150px;
-  margin-top: 20px;
+.icons i:hover {
+  transform: scale(1.1);
 }
 </style>

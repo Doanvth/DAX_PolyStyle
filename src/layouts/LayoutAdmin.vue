@@ -73,8 +73,4 @@ header.admin-header {
   padding-top: 24px;
 }
 
-.admin-layout.collapsed header.admin-header {
-}
-.admin-layout.collapsed .page-content {
-}
 </style>

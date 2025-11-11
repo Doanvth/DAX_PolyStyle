@@ -116,7 +116,13 @@ const handleSubmit = () => {
 </script>
 
 <style scoped>
-/* Biến màu (tùy chỉnh nếu cần) */
+/*
+ * ===============================================
+ * CSS TONE TRẮNG (Giao diện gốc)
+ * ===============================================
+*/
+
+/* Biến màu (Theme Trắng) */
 :root {
     --primary-color: #333;
     --border-color: #ddd;
@@ -125,8 +131,7 @@ const handleSubmit = () => {
     --text-light: #777;
 }
 
-/* Thiết lập cơ bản (Mobile First)
-*/
+/* Thiết lập cơ bản (Mobile First) */
 .checkout-page {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: white;
@@ -137,7 +142,6 @@ const handleSubmit = () => {
 .checkout-container {
     display: flex;
     flex-direction: column;
-    /* Xếp chồng lên nhau trên mobile */
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -146,7 +150,6 @@ const handleSubmit = () => {
     width: 100%;
     padding: 20px;
     order: 2;
-    /* Hiển thị form bên dưới summary trên mobile */
 }
 
 .summary-section {
@@ -155,7 +158,6 @@ const handleSubmit = () => {
     background-color: var(--background-color);
     border-bottom: 1px solid var(--border-color);
     order: 1;
-    /* Hiển thị summary bên trên trên mobile */
 }
 
 /* Logo (Căn giữa) */
@@ -168,7 +170,6 @@ const handleSubmit = () => {
     font-size: 2.5rem;
     font-weight: bold;
     margin: 0;
-    /* Giả lập logo Orchid */
     letter-spacing: -1px;
 }
 
@@ -201,7 +202,6 @@ const handleSubmit = () => {
 
 .back-link-desktop {
     display: none;
-    /* Ẩn trên mobile */
 }
 
 /* Phần Form */
@@ -243,7 +243,8 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-    /* Đảm bảo padding không làm vỡ layout */
+    background-color: white; /* Đảm bảo nền trắng */
+    color: var(--text-color); /* Đảm bảo chữ đen */
 }
 
 textarea {
@@ -291,7 +292,6 @@ select {
 .payment-option input[type="radio"] {
     width: auto;
     margin-right: 10px;
-    /* Tùy chỉnh radio button cho giống ảnh */
     appearance: none;
     width: 18px;
     height: 18px;
@@ -304,7 +304,6 @@ select {
     background-color: var(--primary-color);
     border-width: 3px;
     background-clip: content-box;
-    /* Tạo chấm tròn ở giữa */
 }
 
 .payment-option label {
@@ -332,6 +331,7 @@ select {
     margin: 15px 0;
 }
 
+/* Nút Đặt hàng */
 .order-button {
     width: 100%;
     padding: 15px;
@@ -345,69 +345,37 @@ select {
     margin-top: 15px;
 }
 
-/* Nút FAB */
-.fab {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #222;
-    color: white;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    gap: 4px;
-    /* Khoảng cách giữa 2 icon */
-    padding: 10px;
-    /* Thêm padding để icon không bị sát viền */
-    box-sizing: border-box;
-}
+/* Nút FAB (Ẩn) */
+.fab { display: none; }
 
-.fab-icon {
-    stroke: white;
-}
 
-/* Thiết lập cho Desktop (Responsive) 
-*/
+/* Thiết lập cho Desktop (Responsive) */
 @media (min-width: 1024px) {
     .checkout-container {
         flex-direction: row;
-        /* Chuyển sang layout 2 cột */
         padding: 40px 20px;
         gap: 40px;
     }
 
     .form-section {
         flex: 6;
-        /* Cột form chiếm 6 phần */
         order: 1;
-        /* Về lại vị trí 1 */
         padding: 0;
     }
 
     .summary-section {
         flex: 4;
-        /* Cột summary chiếm 4 phần */
         order: 2;
-        /* Về lại vị trí 2 */
         border: 1px solid var(--border-color);
         border-radius: 5px;
         background-color: white;
         height: fit-content;
-        /* Chỉ cao bằng nội dung */
     }
 
     .logo-container {
         text-align: left;
-        /* Căn trái logo trên desktop */
     }
 
-    /* Ẩn header mobile, hiện link desktop */
     .mobile-header {
         display: none;
     }
@@ -418,11 +386,6 @@ select {
         color: var(--primary-color);
         text-decoration: none;
         margin-top: 20px;
-    }
-
-    .fab {
-        bottom: 30px;
-        right: 30px;
     }
 }
 </style>
