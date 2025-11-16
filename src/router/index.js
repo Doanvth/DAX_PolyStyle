@@ -11,6 +11,13 @@ import ContactSectionView from "@/views/User/ContactSectionView.vue";
 import ShipingForm from "@/components/ShipingForm.vue";
 import ShipingFormView from "@/views/User/ShipingFormView.vue";
 
+import ProfileView from "@/views/User/ProfileView.vue";
+import UserDetails from "@/components/User/profile/UserDetails.vue";
+import UserAddresses from "@/components/User/profile/UserAddresses.vue";
+import UserOrders from "@/components/User/profile/UserOrders.vue";
+import UserVouchers from "@/components/User/profile/UserVouchers.vue";
+import AlbumView from "@/views/User/AlbumView.vue";
+import AlbumDetails from "@/components/AlbumDetails.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -54,7 +61,42 @@ const router = createRouter({
           name: "franchise",
           component: FranchiseView,
         },
-
+        {
+          path: 'profile', 
+          component: ProfileView, 
+          children: [
+            {
+              path: '',
+              name: 'ProfileDetails',
+              component: UserDetails,
+            },
+            {
+              path: 'addresses', 
+              name: 'ProfileAddresses',
+              component: UserAddresses,
+            },
+            {
+              path: 'orders', 
+              name: 'ProfileOrders',
+              component: UserOrders,
+            },
+            {
+              path: 'vouchers', 
+              name: 'ProfileVouchers',
+              component: UserVouchers,
+            },
+          ],
+        },
+        {
+          path: "album",
+          name: "albumView",
+          component: AlbumView,
+        },
+        {
+          path: "albumDetail",
+          name: "albumDetails",
+          component: AlbumDetails,
+        },
       ],
     },
   ],

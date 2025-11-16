@@ -51,12 +51,13 @@
         <nav class="navigation">
           <ul class="nav-list">
             <li><router-link to="/">Trang chủ</router-link></li>
-            <li><a href="#">Bộ sưu tập</a></li>
+            <li><router-link to="album">Bộ sưu tập</router-link></li>
             <li><a href="#">Mua sắm</a></li>
             <li><a href="#">Khuyến mãi</a></li>
             <li><router-link to="/franchise">Nhượng quyền</router-link></li>
             <li><a href="#">Tin tức</a></li>
             <li><router-link to="/contact">Liên hệ</router-link></li>
+            <li><router-link to="/profile">Profile</router-link></li>
           </ul>
         </nav>
       </div>
