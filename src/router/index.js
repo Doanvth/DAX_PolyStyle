@@ -18,6 +18,13 @@ import UserOrders from "@/components/User/profile/UserOrders.vue";
 import UserVouchers from "@/components/User/profile/UserVouchers.vue";
 import AlbumView from "@/views/User/AlbumView.vue";
 import AlbumDetails from "@/components/AlbumDetails.vue";
+import ShoppingCart from "@/views/User/ShoppingCart.vue";
+import HomePageView from "@/views/User/HomePageView.vue";
+import ProductPageView from "@/views/User/ProductPageView.vue";
+import NewsPageView from "@/views/User/NewsPageView.vue";
+import ProductDetailPageView from "@/views/User/ProductDetailPageView.vue";
+import CheckoutPage from "@/views/User/CheckoutPage.vue";
+import OrderSuccessPage from "@/views/User/OrderSuccessPage.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -39,7 +46,7 @@ const router = createRouter({
         {
           path: "",
           name: "home",
-          component: HomeView,
+          component: HomePageView,
         },
         {
           path: "/register",
@@ -96,6 +103,36 @@ const router = createRouter({
           path: "albumDetail",
           name: "albumDetails",
           component: AlbumDetails,
+        },
+        {
+          path: "shoppingCart",
+          name: "ShoppingCarts",
+          component: ShoppingCart,
+        },
+        {
+          path: "ProductPageView",
+          name: "ProductPageViews",
+          component: ProductPageView,
+        },
+        {
+          path: "NewsPageView",
+          name: "NewsPageViews",
+          component: NewsPageView,
+        },
+        {
+          path: "ProductDetailPageView",
+          name: "ProductDetailPageViews",
+          component: ProductDetailPageView,
+        },
+        {
+          path: "CheckoutPage",
+          name: "CheckoutPages",
+          component: CheckoutPage,
+        },
+        {
+          path: "OrderSuccessPage",
+          name: "OrderSuccessPages",
+          component: OrderSuccessPage,
         },
       ],
     },
