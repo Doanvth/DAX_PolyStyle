@@ -11,19 +11,19 @@
       "description": "Thiết kế quần nằm trong BST Thu - Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
       "image": [
         {
-          "id": "",
+          "id": "1",
           "url": ""
         }
       ],
       "video": [
         {
-          "video_id": "",
+          "video_id": "1",
           "video_url": ""
         }
       ],
       "variant": [
         {
-          "size_id": "",
+          "size_id": "1",
           "color_id": ""
         }
       ],
@@ -51,12 +51,12 @@
           ]
         }
       ],
-      "desc": [
+      "desc":[
         {
-          "warning_info": "",
-          "create_year": "",
-          "manufacturing_unit": "",
-          "country": ""
+            "warning_info": "",
+            "create_year": "",
+            "manufacturing_unit": "",
+            "country": ""
         }
       ],
       "create_At": "",
@@ -80,30 +80,30 @@
     {
       "id": "1",
       "fullname": "Nguyễn Thành Công",
-      "email": "",
-      "password": "",
-      "phone": "",
+      "email": "01236614499@gmail.com",
+      "password": "12345678",
+      "phone": "0987654321",
       "address": [
         {
-          "id": "",
-          "place_id": ""
+          "id": "1",
+          "place_id": "1"
         }
       ],
-      "gender": "",
-      "role": "",
-      "status": "",
-      "birthday": "",
+      "gender": "Nam",
+      "role": "Admin",
+      "status": "Hoạt động",
+      "birthday": "22/04/2004",
       "create_At": "",
       "avatar": "",
       "voucher_id": [],
       "cart": [
         {
           "id": "1",
-          "product_id": "",
+          "product_id": "1",
           "quantity": "",
           "total": "",
           "voucher_id": [],
-          "checked": ""
+          "checked": "" 
         }
       ],
       "order": [
@@ -112,7 +112,7 @@
           "cart_id": "",
           "order_detail": [
             {
-              "product_id": "",
+              "product_id": "1",
               "quantity": "",
               "total": "",
               "payment": "",
@@ -135,7 +135,7 @@
       "id": "",
       "name": "",
       "phone": "",
-      "province": "",
+      "province": "", 
       "commune": "",
       "place_detail": ""
     }
@@ -152,6 +152,7 @@
       "name": ""
     }
   ],
+
   "categories": [
     {
       "id": 1,
@@ -212,19 +213,19 @@
       "min_price": "",
       "max_price": "",
       "create_At": "",
-      "expire_At": "",
+      "expire_At": "", 
       "status": ""
     }
   ],
   "voucher": [
     {
-      "id": "1",
+      "id": "",
       "name": "",
       "code_voucher": "",
       "description": "",
-      "type": "",
+      "type": "", 
       "create_At": "",
-      "expire_At": "",
+      "expire_At": "", 
       "quantity": "",
       "price_reduction": "",
       "percent_reduction": "",
