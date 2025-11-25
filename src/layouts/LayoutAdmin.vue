@@ -67,14 +67,10 @@ header.admin-header {
   padding: 24px;
   padding-bottom: 80px;
   overflow-y: auto;
-  background: #f5f7fb;
-
+  background: #ffffff;
   height: 100%;
   padding-top: 24px;
 }
 
-.admin-layout.collapsed header.admin-header {
-}
-.admin-layout.collapsed .page-content {
-}
+
 </style>
