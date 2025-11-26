@@ -2,12 +2,12 @@
   "products": [
     {
       "id": "",
-      "name": "Áo thun Orchid Basic",
-      "sku": "OT001",
-      "price": 199000,
-      "stock": 20,
-      "quantity": "",
-      "categoryId": 1,
+      "name": "OD4B494 - ÁO COTTON",
+      "sku": "OD4B494",
+      "price": 595000,
+      "stock": 50,
+      "quantity": 100,
+      "categoryId": "40",
       "description": "Thiết kế quần nằm trong BST Thu - Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
       "image": [
         {
@@ -23,20 +23,29 @@
       ],
       "variant": [
         {
-          "size_id": "",
-          "color_id": ""
+          "size_id": "1",
+          "color_id": "1"
+        },
+        {
+          "size_id": "2",
+          "color_id": "2"
+        },
+        {
+          "size_id": "3",
+          "color_id": "3"
         }
       ],
       "product_detail": [
         {
-          "id": "",
-          "silhouette": "",
-          "sleeve_style": "",
-          "neckline": "",
+          "id": "1",
+          "silhouette": "Phom dáng ôm được thiết kế 1 lớp",
+          "sleeve_style": "Tay dài bo gấu",
+          "neckline": "Cổ tim cách điệu",
           "pant_leg_style": "",
-          "highlight": "",
-          "material": "",
-          "notice": "",
+          "highlight": "Thiết kế cổ tim, phối bo tay tinh tế với điểm nhấn phần thân áo được may kết cấu rút dây tạo nhún cho phép người mặc có thể giãn rút tuỳ theo sở thích.",
+          "material": "Cotton",
+          "color": "Hoạ tiết đen trắng",
+          "notice": " Do điều kiện ánh sáng khác nhau, màu sắc hiển thị của sản phẩm trên Website có thể chênh lệch từ 3-5% so với màu sắc thực tế. Thời trang Orchid mong quý khách thông cảm. Sản phẩm không đi kèm phụ kiện.",
           "video": [
             {
               "video_id": "",
@@ -53,10 +62,94 @@
       ],
       "desc":[
         {
-            "warning_info": "",
-            "create_year": "",
-            "manufacturing_unit": "",
-            "country": ""
+            "warning_info": "Không",
+            "create_year": "2025 - Xu hướng 2026",
+            "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
+            "country": "Việt Nam"
+        }
+      ],
+      "create_At": "",
+      "rate": "",
+      "comments": [
+        {
+          "id": "",
+          "user_id": 1,
+          "content": "",
+          "rate": "",
+          "status": "",
+          "comment_id": "",
+          "img_comment": "",
+          "video_comment": "",
+          "create_At": ""
+        }
+      ]
+    },
+    {
+      "id": "",
+      "name": "OD4S439 - Áo len lông ghi",
+      "sku": "OD4B494",
+      "price": 659000,
+      "stock": 50,
+      "quantity": 100,
+      "categoryId": "40",
+      "description": "Thiết kế áo nằm trong BST Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
+      "image": [
+        {
+          "id": "",
+          "url": ""
+        }
+      ],
+      "video": [
+        {
+          "video_id": "",
+          "video_url": ""
+        }
+      ],
+      "variant": [
+        {
+          "size_id": "1",
+          "color_id": "5"
+        },
+        {
+          "size_id": "2",
+          "color_id": "5"
+        },
+        {
+          "size_id": "3",
+          "color_id": "5"
+        }
+      ],
+      "product_detail": [
+        {
+          "id": "2",
+          "silhouette": "Phom dáng suông được thiết kế 1 lớp",
+          "sleeve_style": "Tay dài bo gấu",
+          "neckline": "Cổ lọ",
+          "pant_leg_style": "",
+          "highlight": " Thiết kế cổ lọ với phần cổ cao giúp giữ ấm cơ thể tối đa kết hợp với kết cấu bo gấu ở tay áo và thân dưới áo không chỉ tăng khả năng giữ thân nhiệt mùa lạnh mà còn tôn vóc dáng thon gọn cho người mặc.",
+          "material": "Len lông thỏ dày dặn, giữ ấm tốt",
+          "color": "Ghi đá",
+          "notice": "Do điều kiện ánh sáng khác nhau, màu sắc hiển thị của sản phẩm trên Website có thể chênh lệch từ 3-5% so với màu sắc thực tế. Thời trang Orchid mong quý khách thông cảm. Sản phẩm không đi kèm phụ kiện.",
+          "video": [
+            {
+              "video_id": "",
+              "video_url": ""
+            }
+          ],
+          "image": [
+            {
+              "image_id": "",
+              "image_url": ""
+            }
+          ]
+        }
+      ],
+      "desc":[
+        {
+            "warning_info": "Không",
+            "create_year": "2025 - Xu hướng 2026",
+            "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
+            "country": "Việt Nam"
         }
       ],
       "create_At": "",
@@ -212,31 +305,31 @@
   ],
   "color": [
     {
-      "id": "",
+      "id": "1",
       "name": "Đỏ"
     },
     {
-      "id": "",
+      "id": "2",
       "name": "Trắng"
     },
     {
-      "id": "",
+      "id": "3",
       "name": "Đen"
     },
     {
-      "id": "",
+      "id": "4",
       "name": "Trắng/Đen"
     },
     {
-      "id": "",
+      "id": "5",
       "name": "Ghi"
     },
     {
-      "id": "",
+      "id": "6",
       "name": "Đỏ đô"
     },
     {
-      "id": "",
+      "id": "7",
       "name": "Hồng"
     }
   ],
@@ -962,14 +1055,17 @@
   ],
   "news": [
     {
-      "id": "",
+      "id": "1",
       "img": "",
-      "title": "",
-      "content": "",
-      "categories_news_id": "",
-      "status": "",
+      "title": "Vẻ đẹp tĩnh lặng của mùa Đông qua Mini Collection Stillness of Snow",
+      "content": "Giữa những ngày đông trải dài trên nền tuyết trắng, thế giới dường như bước vào một nhịp điệu chậm rãi hơn. Mọi chuyển động nhỏ đều được ghi lại bằng sự tinh khiết, mọi ánh nhìn đều trở nên trong trẻo đến lạ. Chính khoảnh khắc tĩnh lặng ấy đã truyền cảm hứng để Orchid tạo nên “Stillness of Snow” - Mini Collection tái hiện vẻ đẹp cao cấp của mùa đông theo cách nhẹ nhàng nhất, tinh giản nhất nhưng cũng sâu sắc nhất. ",
+      "content2": "Cân bằng giữa vẻ đẹp tĩnh lặng của mùa đông và sự mềm mại đặc trưng, “Stillness of Snow” gây ấn tượng bằng những thiết kế tối giản nhưng giàu chiều sâu. Mini Collection sử dụng bảng màu tối giản, trầm ấm, lấy cảm hứng từ những lớp tuyết nguyên sơ, tạo nên một tổng thể hài hòa và đầy khí chất. ",
+      "content3": "Điểm nhấn được thể hiện qua các bề mặt chất liệu mềm - xốp - nhẹ, những đường cắt tối giản nhưng tinh tế, cùng kỹ thuật layering mượt mà tạo hiệu ứng “êm như tuyết chạm da”, mang theo tinh thần “quiet luxury” không cần phô trương, nhưng vẫn chạm đến cảm giác cao cấp ngay từ cái nhìn đầu tiên. ",
+      "content4": "Vẻ đẹp mùa đông không nằm ở những sắc màu rực rỡ, mà ở những điều gần như vô hình: là ánh sáng len qua lớp sương lạnh, là hơi ấm giữ dưới lớp vải mềm và là hình bóng dịu dàng của người phụ nữ đứng giữa không gian phủ trắng. ",
+      "categories_news_id": "3",
+      "status": "active",
       "author": "",
-      "create_At": "",
+      "create_At": "26-11-2025",
       "comments": [
         {
           "id": "",
@@ -1023,32 +1119,36 @@
   ],
   "collection": [
     {
-      "id": "",
+      "id": "1",
       "image": "",
       "collection_detail": [
         {
-          "collection_id": "",
+          "collection_id": "1",
           "image": [
             {
               "image_id": "",
               "image_url": ""
             }
           ],
-          "title": "",
-          "content": "",
-          "small_title": "",
-          "hotline": "",
-          "fanpage": "",
+          "title": "FLOW MOTION",
+          "content": "Giữa nhịp sống vội vã, nơi công việc, cảm xúc và những “deadline” đôi khi khiến ta quên mất đi được là chính mình. Bộ sưu tập “Flow Motion” ra đời như một khoảng dừng nhẹ, gửi gắm lời nhắn nhủ: chuyển động không chỉ để vận động, mà để lắng nghe cơ thể, làm mới năng lượng và tìm lại sự cân bằng bên trong. ",
+          "content2": "Lấy cảm hứng từ tinh thần thể thao hiện đại, BST “Flow Motion” mang đến hình ảnh người phụ nữ Orchid năng động mà tinh tế, khỏe khoắn mà đầy cảm xúc. Mỗi thiết kế là sự hòa quyện giữa tính ứng dụng cao và phong thái thời trang để nàng có thể tự do di chuyển giữa công việc - cuộc sống - bản thân mà không đánh mất phong cách riêng. ",
+          "content3": "Khai thác các chất liệu co giãn linh hoạt, giữ nhiệt nhẹ và thoáng như Umi Hàn, xốp gió, len gân, nhung the, từng thiết kế ôm trọn cơ thể nhưng vẫn cho nàng sự tự do trong từng chuyển động. Bảng màu trung tính pha điểm nhấn metallic khơi gợi năng lượng tích cực như ánh sáng len lỏi trong mùa đông, phản chiếu tinh thần sống chủ động và rực rỡ",
+          "content4": "Không dừng lại ở đó, kết cấu xử lý phom dáng tài tình, thể hiện rõ cá tính, đường cắt dứt khoát tạo nên nét khỏe khoắn tự nhiên, tôn vinh tinh thần #move_with_balance năng động, tự tin, và đầy sức sống. ",
+          "content5": "“Flow Motion” không dừng lại là thời trang thể thao, không đơn thuần là vận động, mà là cách nàng sống trọn trong từng chuyển động của mình",
+          "small_title": "ORCHID - DẪN LỐI THỜI TRANG PHÁI ĐẸP",
+          "hotline": "0972.359.666",
+          "fanpage": "https://www.facebook.com/ThoiTrangOrchid/",
           "social_chanel": [
             {
-              "lazada_url": "",
-              "shopee_url": ""
+              "lazada_url": "https://s.lazada.vn/s.2ArTZ?cc",
+              "shopee_url": "https://s.shopee.vn/9Uk45PlirC"
             }
           ],
           "entertainment_chanel": [
             {
-              "youtube_url": "",
-              "tiktok_url": ""
+              "youtube_url": "https://www.youtube.com/channel/UC3rqZ2JMisKK6xnf55iPjkg",
+              "tiktok_url": "https://www.tiktok.com/@orchid_fashion"
             }
           ]
         }
@@ -1058,15 +1158,37 @@
   "footer": [
     {
       "id": "",
-      "conpany_info": "",
-      "policy": "",
-      "support": "",
+      "company_name": "CÔNG TY TNHH SẢN XUẤT VÀ THƯƠNG MẠI TUẤN TRANG",
+      "conpany_info": "Giấy chứng nhận đăng ký kinh doanh số 0106062077 do Sở kế hoạch và đầu tư Thành phố Hà Nội cấp ngày 17/12/2012",
+      "address": "Số 147 đường Thanh Lãm, Phường Phú Lương, Thành phố Hà Nội, Việt Nam",
+      "phone": "0972.359.666",
+      "email": "thoitrangorchid@gmail.com",
+      "lawyer": "HÀ QUỐC VIỆT",
+      "policy": [
+        {
+          "policy1":"Chính sách thẻ vip",
+          "policy2":"Chính sách tích điểm - tiêu điểm",
+          "policy3":"Chính sách ưu đãi sinh nhật"
+        }
+      ],
+      "support": [
+        {
+          "support1":"Chính sách bảo hành",
+          "support2":"Chính sách bảo mật thông tin",
+          "support3":"Chính sách đổi trả hàng và hoàn tiền",
+          "support4":"Chính sách hoạt động và quy định chung",
+          "support5":"Chính sách kiểm hàng",
+          "support6":"Chính sách vận chuyển",
+          "support7":"Thông tin về hình thức thanh toán",
+          "support8":"Thông tin về điều kiện giao dịch chung",
+          "support9":"Thông tin sản phẩm"
+        }
+      ],
       "social_media": [
         {
           "id": "",
-          "name": "",
           "url": "",
-          "img": ""
+          "icon": ""
         }
       ]
     }
