@@ -1,0 +1,1196 @@
+{
+  "products": [
+    {
+      "id": "",
+      "name": "OD4B494 - ÁO COTTON",
+      "sku": "OD4B494",
+      "price": 595000,
+      "stock": 50,
+      "quantity": 100,
+      "categoryId": "40",
+      "description": "Thiết kế quần nằm trong BST Thu - Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
+      "image": [
+        {
+          "id": "",
+          "url": ""
+        }
+      ],
+      "video": [
+        {
+          "video_id": "",
+          "video_url": ""
+        }
+      ],
+      "variant": [
+        {
+          "size_id": "1",
+          "color_id": "1"
+        },
+        {
+          "size_id": "2",
+          "color_id": "2"
+        },
+        {
+          "size_id": "3",
+          "color_id": "3"
+        }
+      ],
+      "product_detail": [
+        {
+          "id": "1",
+          "silhouette": "Phom dáng ôm được thiết kế 1 lớp",
+          "sleeve_style": "Tay dài bo gấu",
+          "neckline": "Cổ tim cách điệu",
+          "pant_leg_style": "",
+          "highlight": "Thiết kế cổ tim, phối bo tay tinh tế với điểm nhấn phần thân áo được may kết cấu rút dây tạo nhún cho phép người mặc có thể giãn rút tuỳ theo sở thích.",
+          "material": "Cotton",
+          "color": "Hoạ tiết đen trắng",
+          "notice": " Do điều kiện ánh sáng khác nhau, màu sắc hiển thị của sản phẩm trên Website có thể chênh lệch từ 3-5% so với màu sắc thực tế. Thời trang Orchid mong quý khách thông cảm. Sản phẩm không đi kèm phụ kiện.",
+          "video": [
+            {
+              "video_id": "",
+              "video_url": ""
+            }
+          ],
+          "image": [
+            {
+              "image_id": "",
+              "image_url": ""
+            }
+          ]
+        }
+      ],
+      "desc":[
+        {
+            "warning_info": "Không",
+            "create_year": "2025 - Xu hướng 2026",
+            "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
+            "country": "Việt Nam"
+        }
+      ],
+      "create_At": "",
+      "rate": "",
+      "comments": [
+        {
+          "id": "",
+          "user_id": 1,
+          "content": "",
+          "rate": "",
+          "status": "",
+          "comment_id": "",
+          "img_comment": "",
+          "video_comment": "",
+          "create_At": ""
+        }
+      ]
+    },
+    {
+      "id": "",
+      "name": "OD4S439 - Áo len lông ghi",
+      "sku": "OD4B494",
+      "price": 659000,
+      "stock": 50,
+      "quantity": 100,
+      "categoryId": "40",
+      "description": "Thiết kế áo nằm trong BST Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
+      "image": [
+        {
+          "id": "",
+          "url": ""
+        }
+      ],
+      "video": [
+        {
+          "video_id": "",
+          "video_url": ""
+        }
+      ],
+      "variant": [
+        {
+          "size_id": "1",
+          "color_id": "5"
+        },
+        {
+          "size_id": "2",
+          "color_id": "5"
+        },
+        {
+          "size_id": "3",
+          "color_id": "5"
+        }
+      ],
+      "product_detail": [
+        {
+          "id": "2",
+          "silhouette": "Phom dáng suông được thiết kế 1 lớp",
+          "sleeve_style": "Tay dài bo gấu",
+          "neckline": "Cổ lọ",
+          "pant_leg_style": "",
+          "highlight": " Thiết kế cổ lọ với phần cổ cao giúp giữ ấm cơ thể tối đa kết hợp với kết cấu bo gấu ở tay áo và thân dưới áo không chỉ tăng khả năng giữ thân nhiệt mùa lạnh mà còn tôn vóc dáng thon gọn cho người mặc.",
+          "material": "Len lông thỏ dày dặn, giữ ấm tốt",
+          "color": "Ghi đá",
+          "notice": "Do điều kiện ánh sáng khác nhau, màu sắc hiển thị của sản phẩm trên Website có thể chênh lệch từ 3-5% so với màu sắc thực tế. Thời trang Orchid mong quý khách thông cảm. Sản phẩm không đi kèm phụ kiện.",
+          "video": [
+            {
+              "video_id": "",
+              "video_url": ""
+            }
+          ],
+          "image": [
+            {
+              "image_id": "",
+              "image_url": ""
+            }
+          ]
+        }
+      ],
+      "desc":[
+        {
+            "warning_info": "Không",
+            "create_year": "2025 - Xu hướng 2026",
+            "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
+            "country": "Việt Nam"
+        }
+      ],
+      "create_At": "",
+      "rate": "",
+      "comments": [
+        {
+          "id": "",
+          "user_id": 1,
+          "content": "",
+          "rate": "",
+          "status": "",
+          "comment_id": "",
+          "img_comment": "",
+          "video_comment": "",
+          "create_At": ""
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "",
+      "fullname": "Nguyễn Văn Admin",
+      "email": "admin@gmail.com",
+      "password": "123456admin",
+      "phone": "0123456789",
+      "address": [
+        {
+          "id": "",
+          "place_id": ""
+        }
+      ],
+      "gender": "1",
+      "role": "1",
+      "status": "active",
+      "birthday": "26-11-2000",
+      "create_At": "26-11-2025",
+      "avatar": "",
+      "voucher_id": [],
+      "cart": [
+        {
+          "id": "",
+          "product_id": "",
+          "quantity": "",
+          "total": "",
+          "voucher_id": [],
+          "checked": ""
+        }
+      ],
+      "order": [
+        {
+          "id": "",
+          "cart_id": "",
+          "order_detail": [
+            {
+              "product_id": "",
+              "quantity": "",
+              "total": "",
+              "payment": "",
+              "status": ""
+            }
+          ]
+        }
+      ],
+      "history": [
+        {
+          "id": "",
+          "status": "",
+          "order_id": ""
+        }
+      ]
+    },
+    {
+      "id": "",
+      "fullname": "Nguyễn Văn User",
+      "email": "user@gmail.com",
+      "password": "123456user",
+      "phone": "1234567890",
+      "address": [
+        {
+          "id": "",
+          "place_id": ""
+        }
+      ],
+      "gender": "1",
+      "role": "0",
+      "status": "active",
+      "birthday": "26-11-2000",
+      "create_At": "26-11-2025",
+      "avatar": "",
+      "voucher_id": [],
+      "cart": [
+        {
+          "id": "",
+          "product_id": "",
+          "quantity": "",
+          "total": "",
+          "voucher_id": [],
+          "checked": ""
+        }
+      ],
+      "order": [
+        {
+          "id": "",
+          "cart_id": "",
+          "order_detail": [
+            {
+              "product_id": "",
+              "quantity": "",
+              "total": "",
+              "payment": "",
+              "status": ""
+            }
+          ]
+        }
+      ],
+      "history": [
+        {
+          "id": "",
+          "status": "",
+          "order_id": ""
+        }
+      ]
+    }
+  ],
+  "place": [
+    {
+      "id": "",
+      "name": "",
+      "phone": "",
+      "province": "",
+      "commune": "", 
+      "place_detail": "" 
+    }
+  ],
+  "size": [
+    {
+      "id": "",
+      "name": "S"
+    },
+    {
+      "id": "",
+      "name": "M"
+    },
+    {
+      "id": "",
+      "name": "L"
+    },
+    {
+      "id": "",
+      "name": "XL"
+    }
+  ],
+  "color": [
+    {
+      "id": "1",
+      "name": "Đỏ"
+    },
+    {
+      "id": "2",
+      "name": "Trắng"
+    },
+    {
+      "id": "3",
+      "name": "Đen"
+    },
+    {
+      "id": "4",
+      "name": "Trắng/Đen"
+    },
+    {
+      "id": "5",
+      "name": "Ghi"
+    },
+    {
+      "id": "6",
+      "name": "Đỏ đô"
+    },
+    {
+      "id": "7",
+      "name": "Hồng"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Áo",
+      "parentId": null,
+      "status": "active",
+      "children": [
+        {
+          "id": 2,
+          "name": "Áo đông 2025",
+          "parentId": 1,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 3,
+          "name": "Áo thu 2025",
+          "parentId": 1,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 4,
+          "name": "Áo hè 2025",
+          "parentId": 1,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 5,
+          "name": "Áo đông 2024",
+          "parentId": 1,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 6,
+          "name": "Áo thu 2024",
+          "parentId": 1,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Quần",
+      "parentId": null,
+      "status": "active",
+      "children": [
+        {
+          "id": 8,
+          "name": "Quần đông 2025",
+          "parentId": 7,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 9,
+          "name": "Quần thu 2025",
+          "parentId": 7,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 10,
+          "name": "Quần hè 2025",
+          "parentId": 7,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 11,
+          "name": "Quần đông 2024",
+          "parentId": 7,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 12,
+          "name": "Quần thu 2024",
+          "parentId": 7,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 13,
+          "name": "Quần hè 2024",
+          "parentId": 7,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Chân váy",
+      "parentId": null,
+      "status": "active",
+      "children": [
+        {
+          "id": 15,
+          "name": "Juyp đông 2025",
+          "parentId": 14,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 16,
+          "name": "Juyp thu 2025",
+          "parentId": 14,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 17,
+          "name": "Juyp hè 2025",
+          "parentId": 14,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 18,
+          "name": "Juyp đông 2024",
+          "parentId": 14,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 19,
+          "name": "Juyp thu 2024",
+          "parentId": 14,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 20,
+          "name": "Juyp hè 2024",
+          "parentId": 14,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Đầm",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+           "id": 22,
+          "name": "Đầm đông 2025",
+          "parentId": 21,
+          "status": "active",
+          "children": []
+        },
+        {
+           "id": 23,
+          "name": "Đầm thu 2025",
+          "parentId": 21,
+          "status": "active",
+          "children": []
+        },
+        {
+           "id": 24,
+          "name": "Đầm hè 2025",
+          "parentId": 21,
+          "status": "active",
+          "children": []
+        },
+        {
+           "id": 25,
+          "name": "Đầm đông 2024",
+          "parentId": 21,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+    "id": 26,
+      "name": "Set bộ công sở",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+          "id": 27,
+          "name": "Set bộ đông 2025",
+          "parentId": 26,
+          "status": "active",
+          "children": []      
+        },
+        {
+          "id": 28,
+          "name": "Set bộ thu 2025",
+          "parentId": 26,
+          "status": "active",
+          "children": []      
+        },
+        {
+          "id": 29,
+          "name": "Set bộ hè 2025",
+          "parentId": 26,
+          "status": "active",
+          "children": []      
+        },
+        {
+          "id": 30,
+          "name": "Set bộ đông 2024",
+          "parentId": 26,
+          "status": "active",
+          "children": []      
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Bộ sưu tập biển",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+           "id": 32,
+          "name": "BST biển 2025",
+          "parentId": 31,
+          "status": "active",
+          "children": []
+        },
+        {
+           "id": 33,
+          "name": "BST biển 2024",
+          "parentId": 31,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "BST dạo phố",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+           "id": 35,
+          "name": "BST dạo phố hè 2025",
+          "parentId": 34,
+          "status": "active",
+          "children": []
+        },
+        {
+           "id": 36,
+          "name": "BST dạo phố thu 2024",
+          "parentId": 34,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "name": "BST luxury",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+          "id": 38,
+          "name": "BST hè 2025",
+          "parentId": 37,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "BST dự tiệc",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+          "id": 40,
+          "name": "BST hè 2025",
+          "parentId": 39,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 41,
+          "name": "BST đông 2024",
+          "parentId": 39,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 42,
+          "name": "BST hè 2024",
+          "parentId": 39,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 43,
+          "name": "BST đông 2023",
+          "parentId": 39,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "name": "BST jeans",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+           "id": 45,
+          "name": "BST jeans thu 2025",
+          "parentId": 44,
+          "status": "active",
+          "children": []
+        },
+        {
+           "id": 46,
+          "name": "BST jeans thu 2024",
+          "parentId": 44,
+          "status": "active",
+          "children": []
+        },
+        {
+           "id": 47,
+          "name": "BST jeans hè 2024",
+          "parentId": 44,
+          "status": "active",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "name": "BST mặc nhà, đồ ngủ",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+           "id": 49,
+          "name": "BST mặc nhà thu 2024",
+          "parentId": 48,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 50,
+          "name": "BST đồ ngủ",
+          "parentId": 48,
+          "status": "active",
+          "children": []
+        }      
+      ]
+    },
+    {
+      "id": 51,
+      "name": "BST áo dài",
+      "parentId": null,
+      "status": "active",
+      "children":[
+        {
+           "id": 52,
+          "name": "Áo dài đông 2025",
+          "parentId": 51,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 53,
+          "name": "Áo dài thu 2025",
+          "parentId": 51,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 54,
+          "name": "Áo dài tết 2025",
+          "parentId": 51,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 55,
+          "name": "Áo dài thu 2024",
+          "parentId": 51,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 56,
+          "name": "Áo dài hàng công nghiệp 2024",
+          "parentId": 51,
+          "status": "active",
+          "children": []
+        },
+        {
+          "id": 57,
+          "name": "Áo dài tết 2024",
+          "parentId": 51,
+          "status": "active",
+          "children": []
+        }   
+      ]
+    },
+    {
+      "id": 58,
+      "name": "BST THỂ THAO",
+      "parentId": null,
+      "status": "active",
+      "children": [
+        { 
+          "id": 59, 
+          "name": "BST THU - ĐÔNG 2025", 
+          "parentId": 58, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 60, 
+          "name": "BST THU - ĐÔNG 2024", 
+          "parentId": 58, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 61, 
+          "name": "BST THU 2023", 
+          "parentId": 58, 
+          "status": "active", 
+          "children": [] 
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "name": "ÁO KHOÁC, MĂNG TÔ",
+      "parentId": null,
+      "status": "active",
+      "children": [
+        { 
+          "id": 64, 
+          "name": "MĂNG TÔ ĐÔNG 2025", 
+          "parentId": 63, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 65, 
+          "name": "ÁO KHOÁC ĐÔNG 2025", 
+          "parentId": 63, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 66, 
+          "name": "ÁO KHOÁC THU 2025", 
+          "parentId": 63, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 67, 
+          "name": "ÁO KHOÁC ĐÔNG 2024", 
+          "parentId": 63, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 68, 
+          "name": "ÁO KHOÁC THU 2024", 
+          "parentId": 63, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 69, 
+          "name": "MĂNG TÔ ĐÔNG 2024", 
+          "parentId": 63, 
+          "status": "active", 
+          "children": [] 
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "name": "BST LEN",
+      "parentId": null,
+      "status": "active",
+      "children": [
+        { 
+          "id": 71, 
+          "name": "BST ĐÔNG 2025", 
+          "parentId": 70, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 72, 
+          "name": "BST ĐÔNG 2024", 
+          "parentId": 70, 
+          "status": "active", 
+          "children": [] 
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "name": "BST ÁO PHAO",
+      "parentId": null,
+      "status": "active",
+      "children": [
+        { 
+          "id": 74, 
+          "name": "BST ĐÔNG 2025", 
+          "parentId": 73, 
+          "status": "active", 
+          "children": [] 
+        },
+        { 
+          "id": 75, 
+          "name": "BST ĐÔNG 2024", 
+          "parentId": 73, 
+          "status": "active", 
+          "children": [] 
+        }
+      ]
+    }
+  ],
+  "discount": [
+    {
+      "id": "",
+      "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ÁO KHOÁC",
+      "min_price": "",
+      "max_price": "",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ĐẦM",
+      "min_price": "",
+      "max_price": "",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ĐẦM",
+      "min_price": "",
+      "max_price": "",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN SET BỘ",
+      "min_price": "",
+      "max_price": "",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ÁO DÀI",
+      "min_price": "",
+      "max_price": "",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN QUẦN & CHÂN VÁY",
+      "min_price": "",
+      "max_price": "",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 69K-99K",
+      "min_price": "69000",
+      "max_price": "99000",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 149K-169K",
+      "min_price": "149000",
+      "max_price": "169000",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 199K",
+      "min_price": "199000",
+      "max_price": "190000",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 229K-249K",
+      "min_price": "229000",
+      "max_price": "249000",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 299K",
+      "min_price": "299000",
+      "max_price": "299000",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 329K-349K-389K",
+      "min_price": "329000",
+      "max_price": "389000",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 399K",
+      "min_price": "399000",
+      "max_price": "399000",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    },
+    {
+      "id": "",
+      "name": "BLACK FRIDAY | SALE UPTO 30% BST THU MỚI NHẤT",
+      "min_price": "",
+      "max_price": "",
+      "create_At": "26-11-2025",
+      "expire_At": "26-12-2025", 
+      "status": "active"
+    }
+  ],
+  "voucher": [
+    {
+      "id": "",
+      "name": "",
+      "code_voucher": "",
+      "description": "",
+      "type": "", 
+      "create_At": "",
+      "expire_At": "", 
+      "quantity": "",
+      "price_reduction": "",
+      "percent_reduction": "",
+      "maximum_price_reduction": "",
+      "status": ""
+    }
+  ],
+ "categories_news": [
+    {
+      "id": 1,
+      "name": "CHƯƠNG TRÌNH KHUYẾN MẠI",
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "name": "TIN TỨC KHAI TRƯƠNG",
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "name": "BỘ SƯU TẬP",
+      "status": "active"
+    },
+    {
+      "id": 4,
+      "name": "XU HƯỚNG THỜI TRANG",
+      "status": "active"
+    },
+    {
+      "id": 5,
+      "name": "TIN VẮN TRONG NGÀY",
+      "status": "active"
+    },
+    {
+      "id": 6,
+      "name": "CHÍNH SÁCH KHÁCH HÀNG",
+      "status": "active"
+    }
+  ],
+  "stores": [
+    {
+      "id": "",
+      "name": "",
+      "address": "",
+      "place_id": ""
+    }
+  ],
+  "news": [
+    {
+      "id": "1",
+      "img": "",
+      "title": "Vẻ đẹp tĩnh lặng của mùa Đông qua Mini Collection Stillness of Snow",
+      "content": "Giữa những ngày đông trải dài trên nền tuyết trắng, thế giới dường như bước vào một nhịp điệu chậm rãi hơn. Mọi chuyển động nhỏ đều được ghi lại bằng sự tinh khiết, mọi ánh nhìn đều trở nên trong trẻo đến lạ. Chính khoảnh khắc tĩnh lặng ấy đã truyền cảm hứng để Orchid tạo nên “Stillness of Snow” - Mini Collection tái hiện vẻ đẹp cao cấp của mùa đông theo cách nhẹ nhàng nhất, tinh giản nhất nhưng cũng sâu sắc nhất. ",
+      "content2": "Cân bằng giữa vẻ đẹp tĩnh lặng của mùa đông và sự mềm mại đặc trưng, “Stillness of Snow” gây ấn tượng bằng những thiết kế tối giản nhưng giàu chiều sâu. Mini Collection sử dụng bảng màu tối giản, trầm ấm, lấy cảm hứng từ những lớp tuyết nguyên sơ, tạo nên một tổng thể hài hòa và đầy khí chất. ",
+      "content3": "Điểm nhấn được thể hiện qua các bề mặt chất liệu mềm - xốp - nhẹ, những đường cắt tối giản nhưng tinh tế, cùng kỹ thuật layering mượt mà tạo hiệu ứng “êm như tuyết chạm da”, mang theo tinh thần “quiet luxury” không cần phô trương, nhưng vẫn chạm đến cảm giác cao cấp ngay từ cái nhìn đầu tiên. ",
+      "content4": "Vẻ đẹp mùa đông không nằm ở những sắc màu rực rỡ, mà ở những điều gần như vô hình: là ánh sáng len qua lớp sương lạnh, là hơi ấm giữ dưới lớp vải mềm và là hình bóng dịu dàng của người phụ nữ đứng giữa không gian phủ trắng. ",
+      "categories_news_id": "3",
+      "status": "active",
+      "author": "",
+      "create_At": "26-11-2025",
+      "comments": [
+        {
+          "id": "",
+          "user_id": 1,
+          "content": "",
+          "rate": "",
+          "status": "",
+          "comment_id": "",
+          "img_comment": "",
+          "create_at": ""
+        }
+      ]
+    }
+  ],
+  "franchise": [
+    {
+      "id": "",
+      "image": [
+        {
+          "image_id": "",
+          "image_url": ""
+        }
+      ],
+      "video": [
+        {
+          "video_id": "",
+          "video_url": ""
+        }
+      ]
+    }
+  ],
+  "header": [
+    {
+      "id": "",
+      "logo_brand": "",
+      "categories_id": "",
+      "discount_id": "",
+      "news_id": ""
+    }
+  ],
+  "carousel": [
+    {
+      "id": "",
+      "image": [
+        {
+          "image_id": "",
+          "image_url": ""
+        }
+      ]
+    }
+  ],
+  "collection": [
+    {
+      "id": "1",
+      "image": "",
+      "collection_detail": [
+        {
+          "collection_id": "1",
+          "image": [
+            {
+              "image_id": "",
+              "image_url": ""
+            }
+          ],
+          "title": "FLOW MOTION",
+          "content": "Giữa nhịp sống vội vã, nơi công việc, cảm xúc và những “deadline” đôi khi khiến ta quên mất đi được là chính mình. Bộ sưu tập “Flow Motion” ra đời như một khoảng dừng nhẹ, gửi gắm lời nhắn nhủ: chuyển động không chỉ để vận động, mà để lắng nghe cơ thể, làm mới năng lượng và tìm lại sự cân bằng bên trong. ",
+          "content2": "Lấy cảm hứng từ tinh thần thể thao hiện đại, BST “Flow Motion” mang đến hình ảnh người phụ nữ Orchid năng động mà tinh tế, khỏe khoắn mà đầy cảm xúc. Mỗi thiết kế là sự hòa quyện giữa tính ứng dụng cao và phong thái thời trang để nàng có thể tự do di chuyển giữa công việc - cuộc sống - bản thân mà không đánh mất phong cách riêng. ",
+          "content3": "Khai thác các chất liệu co giãn linh hoạt, giữ nhiệt nhẹ và thoáng như Umi Hàn, xốp gió, len gân, nhung the, từng thiết kế ôm trọn cơ thể nhưng vẫn cho nàng sự tự do trong từng chuyển động. Bảng màu trung tính pha điểm nhấn metallic khơi gợi năng lượng tích cực như ánh sáng len lỏi trong mùa đông, phản chiếu tinh thần sống chủ động và rực rỡ",
+          "content4": "Không dừng lại ở đó, kết cấu xử lý phom dáng tài tình, thể hiện rõ cá tính, đường cắt dứt khoát tạo nên nét khỏe khoắn tự nhiên, tôn vinh tinh thần #move_with_balance năng động, tự tin, và đầy sức sống. ",
+          "content5": "“Flow Motion” không dừng lại là thời trang thể thao, không đơn thuần là vận động, mà là cách nàng sống trọn trong từng chuyển động của mình",
+          "small_title": "ORCHID - DẪN LỐI THỜI TRANG PHÁI ĐẸP",
+          "hotline": "0972.359.666",
+          "fanpage": "https://www.facebook.com/ThoiTrangOrchid/",
+          "social_chanel": [
+            {
+              "lazada_url": "https://s.lazada.vn/s.2ArTZ?cc",
+              "shopee_url": "https://s.shopee.vn/9Uk45PlirC"
+            }
+          ],
+          "entertainment_chanel": [
+            {
+              "youtube_url": "https://www.youtube.com/channel/UC3rqZ2JMisKK6xnf55iPjkg",
+              "tiktok_url": "https://www.tiktok.com/@orchid_fashion"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": [
+    {
+      "id": "",
+      "company_name": "CÔNG TY TNHH SẢN XUẤT VÀ THƯƠNG MẠI TUẤN TRANG",
+      "conpany_info": "Giấy chứng nhận đăng ký kinh doanh số 0106062077 do Sở kế hoạch và đầu tư Thành phố Hà Nội cấp ngày 17/12/2012",
+      "address": "Số 147 đường Thanh Lãm, Phường Phú Lương, Thành phố Hà Nội, Việt Nam",
+      "phone": "0972.359.666",
+      "email": "thoitrangorchid@gmail.com",
+      "lawyer": "HÀ QUỐC VIỆT",
+      "policy": [
+        {
+          "policy1":"Chính sách thẻ vip",
+          "policy2":"Chính sách tích điểm - tiêu điểm",
+          "policy3":"Chính sách ưu đãi sinh nhật"
+        }
+      ],
+      "support": [
+        {
+          "support1":"Chính sách bảo hành",
+          "support2":"Chính sách bảo mật thông tin",
+          "support3":"Chính sách đổi trả hàng và hoàn tiền",
+          "support4":"Chính sách hoạt động và quy định chung",
+          "support5":"Chính sách kiểm hàng",
+          "support6":"Chính sách vận chuyển",
+          "support7":"Thông tin về hình thức thanh toán",
+          "support8":"Thông tin về điều kiện giao dịch chung",
+          "support9":"Thông tin sản phẩm"
+        }
+      ],
+      "social_media": [
+        {
+          "id": "",
+          "url": "",
+          "icon": ""
+        }
+      ]
+    }
+  ]
+}
