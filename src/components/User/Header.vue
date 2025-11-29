@@ -26,11 +26,11 @@
               </button>
             </div>
 
-            <div  class="auth-links">
+            <a href="#" class="cart">
               <i class="bi bi-cart"></i>
-              <span><router-link to="/shoppingCart">Giỏ hàng</router-link></span>
+              <span>Giỏ hàng</span>
               <span class="cart-count">{{ cartCount }}</span>
-            </div>
+            </a>
 
             <div class="auth-links">
               <router-link to="/login">Đăng nhập</router-link>
@@ -51,13 +51,12 @@
         <nav class="navigation">
           <ul class="nav-list">
             <li><router-link to="/">Trang chủ</router-link></li>
-            <li><router-link to="/album">Bộ sưu tập</router-link></li>
-            <li><router-link to="/ProductPageView">Mua sắm</router-link></li>
+            <li><a href="#">Bộ sưu tập</a></li>
+            <li><a href="#">Mua sắm</a></li>
             <li><a href="#">Khuyến mãi</a></li>
             <li><router-link to="/franchise">Nhượng quyền</router-link></li>
-            <li><router-link to="/NewsPageView">Tin tức</router-link></li>
+            <li><a href="#">Tin tức</a></li>
             <li><router-link to="/contact">Liên hệ</router-link></li>
-            <li><router-link to="/profile">Profile</router-link></li>
           </ul>
         </nav>
       </div>
