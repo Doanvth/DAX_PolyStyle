@@ -72,5 +72,4 @@ header.admin-header {
   padding-top: 24px;
 }
 
-
 </style>
