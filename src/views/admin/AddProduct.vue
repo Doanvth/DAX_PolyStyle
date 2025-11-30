@@ -79,7 +79,6 @@
 
 <style scoped>
 .form-container {
-    max-width: 900px;
     margin: 30px auto;
     padding: 0 15px;
     font-family: 'Segoe UI', sans-serif;
