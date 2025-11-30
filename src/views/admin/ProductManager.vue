@@ -1,91 +1,72 @@
 <template>
   <div class="product-management-container">
     <div class="header-actions">
-      <!-- Tiêu đề với phong cách mạnh mẽ hơn (đồng bộ với Revenue/Category) -->
       <h4 class="fw-bold text-primary mb-0">Quản Lý Sản Phẩm</h4>
-      <button class="btn btn-add">Thêm Sản Phẩm Mới</button>
+      <router-link to="addproducts" class="btn btn-add">
+        + Thêm Sản Phẩm Mới
+      </router-link>
     </div>
 
     <div class="table-responsive shadow-sm">
       <table>
         <thead>
           <tr>
-            <th>Ảnh</th>
             <th>ID</th>
+            <th>Ảnh</th>
+            <th>Mã SKU</th>
             <th>Tên Sản Phẩm</th>
-            <th>Giá</th>
+            <th>Giá Bán</th>
             <th>Tồn Kho</th>
             <th>Danh Mục</th>
             <th>Hành Động</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Hàng 1: Sản phẩm dồi dào -->
           <tr>
+            <td>#1</td>
             <td>
-              <img
-                src="https://picsum.photos/50/50?random=101"
-                alt="Áo khoác Blazer"
-                class="product-image"
-              />
+              <img src="https://picsum.photos/50/50?random=1" alt="Product Img" class="product-image" />
             </td>
-            <td>P1001</td>
-            <td class="product-name">Áo Khoác Blazer Mùa Đông</td>
-            <td class="product-price">1.500.000 ₫</td>
-            <td>180</td>
-            <td>Thời Trang Nữ</td>
+            <td>OT001</td>
+            <td class="product-name">
+              Áo thun Orchid Basic
+            </td>
+            <td class="product-price">199.000 ₫</td>
+
             <td>
-              <button class="btn btn-edit">
-                <i class="bi bi-pencil-square"></i>
-              </button>
+              <span class="low-stock">
+                20
+              </span>
+            </td>
+
+            <td>Áo thun</td>
+            <td>
+              <button class="btn btn-edit"><i class="bi bi-pencil-square"></i></button>
               <button class="btn btn-delete">
                 <i class="bi bi-trash"></i>
               </button>
             </td>
           </tr>
-
-          <!-- Hàng 2: Sản phẩm tồn kho thấp -->
           <tr>
+            <td>#2</td>
             <td>
-              <img
-                src="https://picsum.photos/50/50?random=102"
-                alt="Giày sneakers"
-                class="product-image"
-              />
+              <img src="https://via.placeholder.com/50x50?text=NoImg" alt="Product Img" class="product-image" />
             </td>
-            <td>P1002</td>
-            <td class="product-name">Giày Sneakers Thể Thao Z1</td>
-            <td class="product-price">950.000 ₫</td>
-            <td class="low-stock">8</td>
-            <td>Phụ Kiện & Giày Dép</td>
-            <td>
-              <button class="btn btn-edit">
-                <i class="bi bi-pencil-square"></i>
-              </button>
-              <button class="btn btn-delete">
-                <i class="bi bi-trash"></i>
-              </button>
+            <td>QJ002</td>
+            <td class="product-name">
+              Quần Jeans Slim Fit
             </td>
-          </tr>
+            <td class="product-price">450.000 ₫</td>
 
-          <!-- Hàng 3: Sản phẩm hết hàng -->
-          <tr>
             <td>
-              <img
-                src="https://picsum.photos/50/50?random=103"
-                alt="Quần Jeans Slim Fit"
-                class="product-image"
-              />
+              <span class="out-of-stock">
+                0
+              </span>
             </td>
-            <td>P1003</td>
-            <td class="product-name">Quần Jean Slim Fit Cotton</td>
-            <td class="product-price">780.000 ₫</td>
-            <td class="out-of-stock">0</td>
-            <td>Thời Trang Nam</td>
+
+            <td>Quần jeans (Nam)</td>
             <td>
-              <button class="btn btn-edit">
-                <i class="bi bi-pencil-square"></i>
-              </button>
+              <button class="btn btn-edit"><i class="bi bi-pencil-square"></i></button>
               <button class="btn btn-delete">
                 <i class="bi bi-trash"></i>
               </button>
@@ -96,8 +77,6 @@
     </div>
   </div>
 </template>
-
-<script setup></script>
 
 <style scoped>
 .product-management-container {
