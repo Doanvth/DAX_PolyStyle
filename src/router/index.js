@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-// 1. ĐÃ XÓA import HomeView.vue không tồn tại
 
 import Register from "@/views/auth/Register.vue";
 import LoginView from "@/views/auth/Login.vue";
@@ -35,14 +34,20 @@ import ArticleManager from "@/views/admin/ArticleManager.vue";
 import BannerManager from "@/views/admin/BannerManager.vue";
 import RevenueManager from "@/views/admin/RevenueManager.vue";
 import CollectionManager from "@/views/admin/CollectionManager.vue";
+
+import AddCollection from "@/views/admin/AddCollection.vue";
+import AddStore from "@/views/admin/AddStore.vue";
+import AddCategory from "@/views/admin/AddCategory.vue";
+
 import AddArticle from "@/views/admin/AddArticle.vue";
 import AddBanner from "@/views/admin/AddBanner.vue";
 import AddProduct from "@/views/admin/AddProduct.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-     {
-      path: "/shiping-form", 
+    {
+      path: "/shiping-form",
       component: ShipingFormView,
     },
     {
@@ -54,13 +59,28 @@ const router = createRouter({
         { path: "products", name: "products", component: ProductManager },
         { path: 'addproducts',name: "productsAdd", component: AddProduct },
         { path: "category", name: "category", component: CategoryManager },
+        {
+          path: "category/add",
+          name: "category-add",
+          component: AddCategory
+        },
         { path: "user", name: "user", component: UserManager },
         { path: "order", name: "order", component: OrderManager },
         { path: "store", name: "store", component: StoreManager },
         {
+          path: 'store/add',
+          name: 'store-add',
+          component: AddStore
+        },
+        {
           path: "collection",
           name: "collection",
           component: CollectionManager,
+        },
+        {
+          path: "collection/add",
+          name: "collection-add",
+          component: AddCollection,
         },
         { path: "post", name: "post", component: ArticleManager },
         { path: 'posts', name: 'PostCreate', component: AddArticle },
@@ -100,8 +120,8 @@ const router = createRouter({
           component: FranchiseView,
         },
         {
-          path: 'profile', 
-          component: ProfileView, 
+          path: 'profile',
+          component: ProfileView,
           children: [
             {
               path: '',
@@ -109,17 +129,17 @@ const router = createRouter({
               component: UserDetails,
             },
             {
-              path: 'addresses', 
+              path: 'addresses',
               name: 'ProfileAddresses',
               component: UserAddresses,
             },
             {
-              path: 'orders', 
+              path: 'orders',
               name: 'ProfileOrders',
               component: UserOrders,
             },
             {
-              path: 'vouchers', 
+              path: 'vouchers',
               name: 'ProfileVouchers',
               component: UserVouchers,
             },

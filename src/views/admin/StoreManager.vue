@@ -1,12 +1,10 @@
 <template>
   <div class="product-management-container">
     <div class="header-actions">
-      <!-- Tiêu đề với style nổi bật -->
       <h4 class="fw-bold text-primary mb-0">Quản Lý Cửa Hàng</h4>
-      <!-- Nút Cập Nhật chính vẫn giữ lại -->
-      <button class="btn btn-update">
-        <i class="bi bi-pencil-square"></i> Thêm mới
-      </button>
+      <router-link :to="{ name: 'store-add' }" class="btn btn-update">
+        <i class="bi bi-plus-lg"></i> Thêm mới
+      </router-link>
     </div>
 
     <div class="table-responsive shadow-sm">
@@ -27,11 +25,9 @@
             <td>contact@polysmart.com</td>
             <td><span class="status-active">Đang Mở</span></td>
             <td>
-              <!-- Nút Sửa (Icon) -->
               <button class="btn btn-edit-icon">
                 <i class="bi bi-pencil-square"></i>
               </button>
-              <!-- Nút Xóa (Icon) -->
               <button class="btn btn-delete-icon">
                 <i class="bi bi-trash"></i>
               </button>
@@ -44,15 +40,13 @@
 </template>
 <script setup></script>
 <style scoped>
-/* --- THIẾT KẾ ĐẸP HƠN (Đồng bộ với các component khác) --- */
 .product-management-container {
-  padding: 30px; /* Tăng padding */
+  padding: 30px;
   width: 100%;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
 
-/* 1. HEADER */
 .header-actions {
   display: flex;
   justify-content: space-between;
@@ -66,17 +60,16 @@
   text-align: left;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #1e2a78; /* Màu tối đậm cho tiêu đề */
-  border-bottom: 3px solid #6c63ff; /* Đường viền nhấn */
+  color: #1e2a78;
+  border-bottom: 3px solid #6c63ff;
   display: inline-block;
   padding-bottom: 5px;
 }
 
-/* 2. TABLE STYLING */
 .table-responsive {
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08); /* Shadow mạnh hơn */
-  border-radius: 12px; /* Góc bo tròn */
-  overflow: hidden; 
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
   background-color: #fff;
 }
 
@@ -86,7 +79,7 @@ table {
 }
 
 thead th {
-  background-color: #f0f3f5; /* Nền header nhẹ */
+  background-color: #f0f3f5;
   color: #333;
   font-weight: 700;
   text-transform: uppercase;
@@ -95,7 +88,7 @@ thead th {
 
 th,
 td {
-  padding: 14px 15px; /* Tăng padding cho cell */
+  padding: 14px 15px;
   text-align: left;
   border-bottom: 1px solid #eee;
 }
@@ -104,19 +97,16 @@ tbody tr:hover {
   background-color: #f5f5ff;
 }
 
-/* --- Style Dữ liệu và Trạng thái --- */
-.status-active { 
-  font-weight: bold; 
-  color: #4caf50; /* Xanh lá: Đang mở */
+.status-active {
+  font-weight: bold;
+  color: #4caf50;
 }
 
-/* --- Nút --- */
-/* Nút Cập nhật chính */
-.btn-update { 
-  background-color: #6c63ff; 
-  color: white; 
-  padding: 10px 18px; 
-  font-weight: 600; 
+.btn-update {
+  background-color: #6c63ff;
+  color: white;
+  padding: 10px 18px;
+  font-weight: 600;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(108, 99, 255, 0.3);
   transition: all 0.2s ease;
@@ -133,7 +123,6 @@ tbody tr:hover {
   box-shadow: 0 6px 10px rgba(108, 99, 255, 0.4);
 }
 
-/* Base cho nút icon */
 .btn {
 
   padding: 8px 10px;
@@ -152,7 +141,6 @@ tbody tr:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* Nút Sửa/Xóa (Icon) */
 .btn-edit-icon {
   color: #4caf50;
 }
@@ -161,8 +149,15 @@ tbody tr:hover {
   color: #f44336;
 }
 
-/* Các lớp Bootstrap tiêu chuẩn */
-.fw-bold { font-weight: bold; }
-.text-primary { color: #007bff; } 
-.mb-0 { margin-bottom: 0 !important; }
+.fw-bold {
+  font-weight: bold;
+}
+
+.text-primary {
+  color: #007bff;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
 </style>
