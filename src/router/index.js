@@ -35,11 +35,14 @@ import ArticleManager from "@/views/admin/ArticleManager.vue";
 import BannerManager from "@/views/admin/BannerManager.vue";
 import RevenueManager from "@/views/admin/RevenueManager.vue";
 import CollectionManager from "@/views/admin/CollectionManager.vue";
+import AddCollection from "@/views/admin/AddCollection.vue";
+import AddStore from "@/views/admin/AddStore.vue";
+import AddCategory from "@/views/admin/AddCategory.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-     {
-      path: "/shiping-form", 
+    {
+      path: "/shiping-form",
       component: ShipingFormView,
     },
     {
@@ -50,13 +53,28 @@ const router = createRouter({
         { path: "", name: "dasboard", component: Dasboard },
         { path: "products", name: "products", component: ProductManager },
         { path: "category", name: "category", component: CategoryManager },
+        {
+          path: "category/add",
+          name: "category-add",
+          component: AddCategory
+        },
         { path: "user", name: "user", component: UserManager },
         { path: "order", name: "order", component: OrderManager },
         { path: "store", name: "store", component: StoreManager },
         {
+          path: 'store/add',
+          name: 'store-add',
+          component: AddStore
+        },
+        {
           path: "collection",
           name: "collection",
           component: CollectionManager,
+        },
+        {
+          path: "collection/add",
+          name: "collection-add",
+          component: AddCollection,
         },
         { path: "post", name: "post", component: ArticleManager },
         { path: "banner", name: "banner", component: BannerManager },
@@ -94,8 +112,8 @@ const router = createRouter({
           component: FranchiseView,
         },
         {
-          path: 'profile', 
-          component: ProfileView, 
+          path: 'profile',
+          component: ProfileView,
           children: [
             {
               path: '',
@@ -103,17 +121,17 @@ const router = createRouter({
               component: UserDetails,
             },
             {
-              path: 'addresses', 
+              path: 'addresses',
               name: 'ProfileAddresses',
               component: UserAddresses,
             },
             {
-              path: 'orders', 
+              path: 'orders',
               name: 'ProfileOrders',
               component: UserOrders,
             },
             {
-              path: 'vouchers', 
+              path: 'vouchers',
               name: 'ProfileVouchers',
               component: UserVouchers,
             },
