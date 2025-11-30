@@ -47,7 +47,6 @@
 </template>
 <script setup></script>
 <style scoped>
-/* CSS ĐỒNG BỘ */
 .product-management-container {
   padding: 20px;
   width: 100%;
@@ -101,7 +100,6 @@ tbody tr:hover {
   background-color: #f9f9f9;
 }
 
-/* --- Style Tùy chỉnh --- */
 .status-active { 
   font-weight: bold; 
   color: #4caf50; 
@@ -112,7 +110,6 @@ tbody tr:hover {
   font-weight: bold; 
 }
 
-/* Nút */
 .btn {
   background: transparent;
   padding: 8px 10px;
