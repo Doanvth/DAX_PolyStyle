@@ -2,7 +2,9 @@
   <div class="product-management-container">
     <div class="header-actions">
       <h4 class="fw-bold text-primary mb-0">Quản Lý Bài Viết</h4>
-      <button class="btn btn-add">Thêm Bài Viết Mới</button>
+      <router-link to="posts" class="btn btn-add">
+        + Thêm Bài Viết Mới
+      </router-link>
     </div>
 
     <div class="table-responsive">
@@ -10,8 +12,10 @@
         <thead>
           <tr>
             <th>ID</th>
+            <th>Ảnh</th>
             <th>Tiêu Đề</th>
-            <th>Ngày Đăng</th>
+            <th>Danh Mục</th>
+            <th>Ngày Tạo</th>
             <th>Tác Giả</th>
             <th>Trạng Thái</th>
             <th>Hành Động</th>
@@ -19,25 +23,45 @@
         </thead>
         <tbody>
           <tr>
-            <td>POST001</td>
-            <td class="product-name">Review Laptop X 2025</td>
-            <td>20/11/2025</td>
+            <td>1</td>
+            <td>
+              <img src="https://picsum.photos/50/50?random=10" class="post-thumb" />
+            </td>
+            <td class="product-name">Xu hướng thời trang 2025</td>
+            <td>Đời Sống</td>
+            <td>2024-01-15</td>
             <td>Admin</td>
-            <td><span class="status-active">Đã Xuất Bản</span></td>
+            <td>
+              <span class="status-active">
+                Hiển thị
+              </span>
+            </td>
             <td>
               <button class="btn btn-edit"><i class="bi bi-pencil-square"></i></button>
-              <button class="btn btn-delete"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-delete">
+                <i class="bi bi-trash"></i>
+              </button>
             </td>
           </tr>
           <tr>
-            <td>POST002</td>
-            <td class="product-name">Mẹo chọn đồ thể thao</td>
-            <td>15/11/2025</td>
-            <td>Khách Mời</td>
-            <td><span class="low-stock">Bản Nháp</span></td>
+            <td>2</td>
+            <td>
+              <span class="no-img">No Img</span>
+            </td>
+            <td class="product-name">Bí quyết chọn đồ công sở</td>
+            <td>Công Nghệ</td>
+            <td>2024-02-10</td>
+            <td>Editor</td>
+            <td>
+              <span class="low-stock">
+                Ẩn
+              </span>
+            </td>
             <td>
               <button class="btn btn-edit"><i class="bi bi-pencil-square"></i></button>
-              <button class="btn btn-delete"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-delete">
+                <i class="bi bi-trash"></i>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -45,12 +69,10 @@
     </div>
   </div>
 </template>
-<script setup></script>
+
 <style scoped>
 .product-management-container {
   padding: 20px;
-  width: 100%;
-  box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
 
@@ -59,17 +81,15 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding: 0 5px;
 }
 
-.header-actions h4 {
-  margin: 0;
-  text-align: left;
+.text-primary {
+  color: #007bff;
 }
 
-.fw-bold { font-weight: bold; }
-.text-primary { color: #007bff; } 
-.mb-0 { margin-bottom: 0 !important; }
+.fw-bold {
+  font-weight: bold;
+}
 
 .table-responsive {
   overflow-x: auto;
@@ -96,50 +116,58 @@ thead th {
   font-weight: bold;
 }
 
-tbody tr:hover {
-  background-color: #f9f9f9;
+.post-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
-.status-active { 
-  font-weight: bold; 
-  color: #4caf50; 
+.no-img {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: #eee;
+  line-height: 50px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #999;
 }
 
-.low-stock { 
-  color: orange; 
-  font-weight: bold; 
+.status-active {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.low-stock {
+  color: orange;
+  font-weight: bold;
 }
 
 .btn {
-  background: transparent;
-  padding: 8px 10px;
-  margin-right: 5px;
   border: none;
-  border-radius: 4px;
+  background: transparent;
   cursor: pointer;
-  font-size: 16px; 
-  transition: background-color 0.2s;
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
+  padding: 5px;
+  font-size: 16px;
+  margin-right: 5px;
 }
 
-.btn:hover {
-  background-color: rgba(0, 0, 0, 0.05); 
+.btn-add {
+  background-color: #6c63ff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
 }
 
-.btn-add { 
-  background-color: #6c63ff; 
-  color: white; 
-  padding: 10px 15px; 
-  font-weight: bold; 
+.btn-edit {
+  color: #4caf50;
 }
 
-.btn-edit { 
-  color: #4caf50; 
-}
-
-.btn-delete { 
-  color: #f44336; 
+.btn-delete {
+  color: #f44336;
 }
 </style>
