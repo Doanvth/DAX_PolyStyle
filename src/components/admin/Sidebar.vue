@@ -1,5 +1,6 @@
 <template>
   <div class="sidebar d-flex flex-column" :class="{ collapsed: isCollapsed }">
+   
     <div
       class="sidebar-header d-flex align-items-center justify-content-between"
     >
@@ -11,15 +12,14 @@
       <button class="toggle-btn" @click="toggleSidebar">
         <i
           :class="
-            isCollapsed
-              ? 'bi bi-chevron-double-right'
-              : 'bi bi-chevron-double-left'
+            isCollapsed ? 'bi bi-chevron-double-right' : 'bi bi-chevron-double-left'
           "
         ></i>
       </button>
     </div>
 
-    <ul class="list-unstyled sidebar-menu flex-grow-1 mt-3">
+  
+    <ul class="list-unstyled sidebar-menu flex-grow-1 mt-4">
       <router-link to="/admin" class="menu-item" exact-active-class="active">
         <i class="bi bi-speedometer2"></i>
         <span v-if="!isCollapsed">Bảng điều khiển</span>
@@ -44,12 +44,21 @@
       </router-link>
 
       <router-link
-        to="/admin/products"
+        to="/admin/product"
         class="menu-item"
         exact-active-class="active"
       >
         <i class="bi bi-box-seam"></i>
         <span v-if="!isCollapsed">Sản phẩm</span>
+      </router-link>
+
+      <router-link
+        to="/admin/supplier"
+        class="menu-item"
+        exact-active-class="active"
+      >
+       <i class="bi bi-paint-bucket"></i>
+        <span v-if="!isCollapsed">Thuộc tính</span>
       </router-link>
 
       <router-link
@@ -145,10 +154,10 @@ const toggleSidebar = () => {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #212529; 
-  color: #f8f9fa;
+  background-color: #ffffff;
+  color: #1e2a78;
   padding: 16px;
-  border-right: 1px solid #495057; 
+  border-right: 1px solid #e5e8fa;
   transition: width 0.3s ease;
   font-family: "Inter", sans-serif;
 
@@ -180,7 +189,7 @@ const toggleSidebar = () => {
 
       .logo-icon {
         font-size: 26px;
-        color: #ffc107;
+        color: #1e2a78;
         transition: transform 0.3s ease;
       }
 
@@ -191,22 +200,21 @@ const toggleSidebar = () => {
       .logo-text {
         font-weight: 700;
         font-size: 19px;
-        color: #ffc107; 
       }
     }
 
     .toggle-btn {
-      background: rgba(255, 193, 7, 0.15); 
+      background: rgba(30, 42, 120, 0.05);
       border: none;
-      color: #ffc107; 
+      color: #1e2a78;
       border-radius: 50%;
       width: 34px;
       height: 34px;
       transition: all 0.3s ease;
 
       &:hover {
-        background: rgba(255, 193, 7, 0.3);
-        color: #fff;
+        background: rgba(108, 99, 255, 0.15);
+        color: #6c63ff;
       }
     }
   }
@@ -229,7 +237,7 @@ const toggleSidebar = () => {
       padding: 18px 16px;
       border-radius: 10px;
       font-size: 15px;
-      color: #f8f9fa;
+      color: #1e2a78;
       font-weight: 500;
       cursor: pointer;
       text-decoration: none !important;
@@ -238,25 +246,25 @@ const toggleSidebar = () => {
       i {
         font-size: 18px;
         opacity: 0.85;
-        color: #fdb813; 
       }
 
       &:hover {
-        background: rgba(255, 193, 7, 0.1);
-        color: #ffc107;
+        background: rgba(108, 99, 255, 0.08);
+        color: #6c63ff;
 
         i {
-          color: #ffc107; 
+          color: #6c63ff;
         }
       }
     }
 
     .menu-item.active {
-     
-      color: #ffc107;
+      background: #6c63ff;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(108, 99, 255, 0.3);
 
       i {
-        color: #dbb117;
+        color: #fff;
         opacity: 1;
       }
     }
@@ -266,8 +274,8 @@ const toggleSidebar = () => {
     flex-shrink: 0;
 
     .logout-btn {
-      background: rgba(255, 193, 7, 0.15);
-      color: #ffc107;
+      background: rgba(30, 42, 120, 0.05);
+      color: #1e2a78;
       border: none;
       padding: 10px;
       border-radius: 8px;
@@ -275,12 +283,12 @@ const toggleSidebar = () => {
       transition: all 0.3s ease;
 
       &:hover {
-        color: #ffc107;
+        background: #6c63ff;
+        color: #fff;
       }
 
       i {
         font-size: 16px;
-        color: #fdb813;
       }
     }
   }

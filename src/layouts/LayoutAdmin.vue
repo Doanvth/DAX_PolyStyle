@@ -67,7 +67,8 @@ header.admin-header {
   padding: 24px;
   padding-bottom: 80px;
   overflow-y: auto;
-  background: #ffffff;
+  background: #f5f7fb;
+
   height: 100%;
   padding-top: 24px;
 }
