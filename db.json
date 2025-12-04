@@ -60,12 +60,12 @@
           ]
         }
       ],
-      "desc":[
+      "desc": [
         {
-            "warning_info": "Không",
-            "create_year": "2025 - Xu hướng 2026",
-            "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
-            "country": "Việt Nam"
+          "warning_info": "Không",
+          "create_year": "2025 - Xu hướng 2026",
+          "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
+          "country": "Việt Nam"
         }
       ],
       "create_At": "",
@@ -144,12 +144,12 @@
           ]
         }
       ],
-      "desc":[
+      "desc": [
         {
-            "warning_info": "Không",
-            "create_year": "2025 - Xu hướng 2026",
-            "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
-            "country": "Việt Nam"
+          "warning_info": "Không",
+          "create_year": "2025 - Xu hướng 2026",
+          "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
+          "country": "Việt Nam"
         }
       ],
       "create_At": "",
@@ -281,8 +281,8 @@
       "name": "",
       "phone": "",
       "province": "",
-      "commune": "", 
-      "place_detail": "" 
+      "commune": "",
+      "place_detail": ""
     }
   ],
   "size": [
@@ -335,7 +335,7 @@
   ],
   "categories": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Áo",
       "parentId": null,
       "status": "active",
@@ -378,7 +378,7 @@
       ]
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Quần",
       "parentId": null,
       "status": "active",
@@ -428,7 +428,7 @@
       ]
     },
     {
-      "id": 14,
+      "id": "14",
       "name": "Chân váy",
       "parentId": null,
       "status": "active",
@@ -478,34 +478,34 @@
       ]
     },
     {
-      "id": 21,
+      "id": "21",
       "name": "Đầm",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
-           "id": 22,
+          "id": 22,
           "name": "Đầm đông 2025",
           "parentId": 21,
           "status": "active",
           "children": []
         },
         {
-           "id": 23,
+          "id": 23,
           "name": "Đầm thu 2025",
           "parentId": 21,
           "status": "active",
           "children": []
         },
         {
-           "id": 24,
+          "id": 24,
           "name": "Đầm hè 2025",
           "parentId": 21,
           "status": "active",
           "children": []
         },
         {
-           "id": 25,
+          "id": 25,
           "name": "Đầm đông 2024",
           "parentId": 21,
           "status": "active",
@@ -514,56 +514,56 @@
       ]
     },
     {
-    "id": 26,
+      "id": "26",
       "name": "Set bộ công sở",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
           "id": 27,
           "name": "Set bộ đông 2025",
           "parentId": 26,
           "status": "active",
-          "children": []      
+          "children": []
         },
         {
           "id": 28,
           "name": "Set bộ thu 2025",
           "parentId": 26,
           "status": "active",
-          "children": []      
+          "children": []
         },
         {
           "id": 29,
           "name": "Set bộ hè 2025",
           "parentId": 26,
           "status": "active",
-          "children": []      
+          "children": []
         },
         {
           "id": 30,
           "name": "Set bộ đông 2024",
           "parentId": 26,
           "status": "active",
-          "children": []      
+          "children": []
         }
       ]
     },
     {
-      "id": 31,
+      "id": "31",
       "name": "Bộ sưu tập biển",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
-           "id": 32,
+          "id": 32,
           "name": "BST biển 2025",
           "parentId": 31,
           "status": "active",
           "children": []
         },
         {
-           "id": 33,
+          "id": 33,
           "name": "BST biển 2024",
           "parentId": 31,
           "status": "active",
@@ -572,20 +572,20 @@
       ]
     },
     {
-      "id": 34,
+      "id": "34",
       "name": "BST dạo phố",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
-           "id": 35,
+          "id": 35,
           "name": "BST dạo phố hè 2025",
           "parentId": 34,
           "status": "active",
           "children": []
         },
         {
-           "id": 36,
+          "id": 36,
           "name": "BST dạo phố thu 2024",
           "parentId": 34,
           "status": "active",
@@ -594,11 +594,11 @@
       ]
     },
     {
-      "id": 37,
+      "id": "37",
       "name": "BST luxury",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
           "id": 38,
           "name": "BST hè 2025",
@@ -609,11 +609,11 @@
       ]
     },
     {
-      "id": 39,
+      "id": "39",
       "name": "BST dự tiệc",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
           "id": 40,
           "name": "BST hè 2025",
@@ -645,27 +645,27 @@
       ]
     },
     {
-      "id": 44,
+      "id": "44",
       "name": "BST jeans",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
-           "id": 45,
+          "id": 45,
           "name": "BST jeans thu 2025",
           "parentId": 44,
           "status": "active",
           "children": []
         },
         {
-           "id": 46,
+          "id": 46,
           "name": "BST jeans thu 2024",
           "parentId": 44,
           "status": "active",
           "children": []
         },
         {
-           "id": 47,
+          "id": 47,
           "name": "BST jeans hè 2024",
           "parentId": 44,
           "status": "active",
@@ -674,13 +674,13 @@
       ]
     },
     {
-      "id": 48,
+      "id": "48",
       "name": "BST mặc nhà, đồ ngủ",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
-           "id": 49,
+          "id": 49,
           "name": "BST mặc nhà thu 2024",
           "parentId": 48,
           "status": "active",
@@ -692,17 +692,17 @@
           "parentId": 48,
           "status": "active",
           "children": []
-        }      
+        }
       ]
     },
     {
-      "id": 51,
+      "id": "51",
       "name": "BST áo dài",
       "parentId": null,
       "status": "active",
-      "children":[
+      "children": [
         {
-           "id": 52,
+          "id": 52,
           "name": "Áo dài đông 2025",
           "parentId": 51,
           "status": "active",
@@ -742,129 +742,129 @@
           "parentId": 51,
           "status": "active",
           "children": []
-        }   
+        }
       ]
     },
     {
-      "id": 58,
+      "id": "58",
       "name": "BST THỂ THAO",
       "parentId": null,
       "status": "active",
       "children": [
-        { 
-          "id": 59, 
-          "name": "BST THU - ĐÔNG 2025", 
-          "parentId": 58, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 59,
+          "name": "BST THU - ĐÔNG 2025",
+          "parentId": 58,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 60, 
-          "name": "BST THU - ĐÔNG 2024", 
-          "parentId": 58, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 60,
+          "name": "BST THU - ĐÔNG 2024",
+          "parentId": 58,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 61, 
-          "name": "BST THU 2023", 
-          "parentId": 58, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 61,
+          "name": "BST THU 2023",
+          "parentId": 58,
+          "status": "active",
+          "children": []
         }
       ]
     },
     {
-      "id": 63,
+      "id": "63",
       "name": "ÁO KHOÁC, MĂNG TÔ",
       "parentId": null,
       "status": "active",
       "children": [
-        { 
-          "id": 64, 
-          "name": "MĂNG TÔ ĐÔNG 2025", 
-          "parentId": 63, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 64,
+          "name": "MĂNG TÔ ĐÔNG 2025",
+          "parentId": 63,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 65, 
-          "name": "ÁO KHOÁC ĐÔNG 2025", 
-          "parentId": 63, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 65,
+          "name": "ÁO KHOÁC ĐÔNG 2025",
+          "parentId": 63,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 66, 
-          "name": "ÁO KHOÁC THU 2025", 
-          "parentId": 63, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 66,
+          "name": "ÁO KHOÁC THU 2025",
+          "parentId": 63,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 67, 
-          "name": "ÁO KHOÁC ĐÔNG 2024", 
-          "parentId": 63, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 67,
+          "name": "ÁO KHOÁC ĐÔNG 2024",
+          "parentId": 63,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 68, 
-          "name": "ÁO KHOÁC THU 2024", 
-          "parentId": 63, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 68,
+          "name": "ÁO KHOÁC THU 2024",
+          "parentId": 63,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 69, 
-          "name": "MĂNG TÔ ĐÔNG 2024", 
-          "parentId": 63, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 69,
+          "name": "MĂNG TÔ ĐÔNG 2024",
+          "parentId": 63,
+          "status": "active",
+          "children": []
         }
       ]
     },
     {
-      "id": 70,
+      "id": "70",
       "name": "BST LEN",
       "parentId": null,
       "status": "active",
       "children": [
-        { 
-          "id": 71, 
-          "name": "BST ĐÔNG 2025", 
-          "parentId": 70, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 71,
+          "name": "BST ĐÔNG 2025",
+          "parentId": 70,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 72, 
-          "name": "BST ĐÔNG 2024", 
-          "parentId": 70, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 72,
+          "name": "BST ĐÔNG 2024",
+          "parentId": 70,
+          "status": "active",
+          "children": []
         }
       ]
     },
     {
-      "id": 73,
+      "id": "73",
       "name": "BST ÁO PHAO",
       "parentId": null,
       "status": "active",
       "children": [
-        { 
-          "id": 74, 
-          "name": "BST ĐÔNG 2025", 
-          "parentId": 73, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 74,
+          "name": "BST ĐÔNG 2025",
+          "parentId": 73,
+          "status": "active",
+          "children": []
         },
-        { 
-          "id": 75, 
-          "name": "BST ĐÔNG 2024", 
-          "parentId": 73, 
-          "status": "active", 
-          "children": [] 
+        {
+          "id": 75,
+          "name": "BST ĐÔNG 2024",
+          "parentId": 73,
+          "status": "active",
+          "children": []
         }
       ]
     }
@@ -876,7 +876,7 @@
       "min_price": "",
       "max_price": "",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -885,7 +885,7 @@
       "min_price": "",
       "max_price": "",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -894,7 +894,7 @@
       "min_price": "",
       "max_price": "",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -903,7 +903,7 @@
       "min_price": "",
       "max_price": "",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -912,7 +912,7 @@
       "min_price": "",
       "max_price": "",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -921,7 +921,7 @@
       "min_price": "",
       "max_price": "",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -930,7 +930,7 @@
       "min_price": "69000",
       "max_price": "99000",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -939,7 +939,7 @@
       "min_price": "149000",
       "max_price": "169000",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -948,7 +948,7 @@
       "min_price": "199000",
       "max_price": "190000",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -957,7 +957,7 @@
       "min_price": "229000",
       "max_price": "249000",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -966,7 +966,7 @@
       "min_price": "299000",
       "max_price": "299000",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -975,7 +975,7 @@
       "min_price": "329000",
       "max_price": "389000",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -984,7 +984,7 @@
       "min_price": "399000",
       "max_price": "399000",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     },
     {
@@ -993,7 +993,7 @@
       "min_price": "",
       "max_price": "",
       "create_At": "26-11-2025",
-      "expire_At": "26-12-2025", 
+      "expire_At": "26-12-2025",
       "status": "active"
     }
   ],
@@ -1003,9 +1003,9 @@
       "name": "",
       "code_voucher": "",
       "description": "",
-      "type": "", 
+      "type": "",
       "create_At": "",
-      "expire_At": "", 
+      "expire_At": "",
       "quantity": "",
       "price_reduction": "",
       "percent_reduction": "",
@@ -1013,34 +1013,34 @@
       "status": ""
     }
   ],
- "categories_news": [
+  "categories_news": [
     {
-      "id": 1,
+      "id": "1",
       "name": "CHƯƠNG TRÌNH KHUYẾN MẠI",
       "status": "active"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "TIN TỨC KHAI TRƯƠNG",
       "status": "active"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "BỘ SƯU TẬP",
       "status": "active"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "XU HƯỚNG THỜI TRANG",
       "status": "active"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "TIN VẮN TRONG NGÀY",
       "status": "active"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "CHÍNH SÁCH KHÁCH HÀNG",
       "status": "active"
     }
@@ -1115,6 +1115,27 @@
           "image_url": ""
         }
       ]
+    },
+    {
+      "id": "891d",
+      "position": "home_main",
+      "status": "active",
+      "create_at": "2025-12-03",
+      "image": "images/banner/meo.jpg"
+    },
+    {
+      "id": "8849",
+      "position": "home_main",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
+      "status": "active",
+      "create_at": "2025-12-03"
+    },
+    {
+      "id": "ae8c",
+      "position": "home_main",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
+      "status": "active",
+      "create_at": "2025-12-03"
     }
   ],
   "collection": [
@@ -1166,22 +1187,22 @@
       "lawyer": "HÀ QUỐC VIỆT",
       "policy": [
         {
-          "policy1":"Chính sách thẻ vip",
-          "policy2":"Chính sách tích điểm - tiêu điểm",
-          "policy3":"Chính sách ưu đãi sinh nhật"
+          "policy1": "Chính sách thẻ vip",
+          "policy2": "Chính sách tích điểm - tiêu điểm",
+          "policy3": "Chính sách ưu đãi sinh nhật"
         }
       ],
       "support": [
         {
-          "support1":"Chính sách bảo hành",
-          "support2":"Chính sách bảo mật thông tin",
-          "support3":"Chính sách đổi trả hàng và hoàn tiền",
-          "support4":"Chính sách hoạt động và quy định chung",
-          "support5":"Chính sách kiểm hàng",
-          "support6":"Chính sách vận chuyển",
-          "support7":"Thông tin về hình thức thanh toán",
-          "support8":"Thông tin về điều kiện giao dịch chung",
-          "support9":"Thông tin sản phẩm"
+          "support1": "Chính sách bảo hành",
+          "support2": "Chính sách bảo mật thông tin",
+          "support3": "Chính sách đổi trả hàng và hoàn tiền",
+          "support4": "Chính sách hoạt động và quy định chung",
+          "support5": "Chính sách kiểm hàng",
+          "support6": "Chính sách vận chuyển",
+          "support7": "Thông tin về hình thức thanh toán",
+          "support8": "Thông tin về điều kiện giao dịch chung",
+          "support9": "Thông tin sản phẩm"
         }
       ],
       "social_media": [
