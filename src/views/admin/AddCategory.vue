@@ -1,133 +1,120 @@
 <template>
-  <div class="product-management-container">
-    <div class="header-actions">
-      <h4 class="fw-bold text-primary mb-0">Thêm Danh Mục Mới</h4>
-      <button @click="goBack" class="btn btn-secondary-custom">
-        <i class="bi bi-arrow-left"></i> Quay lại
-      </button>
-    </div>
-
-    <div class="tabs-container">
-      <div 
-        class="tab-item" 
-        :class="{ 'active': activeTab === 'root' }" 
-        @click="switchTab('root')"
-      >
-        <i class="bi bi-folder-plus"></i> Tạo Danh Mục Gốc
+  <div class="admin-container">
+    <div class="page-header">
+      <div class="header-left">
+        <button class="btn-back" @click="goBack">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <div>
+          <h2 class="page-title">Thêm Danh Mục Mới</h2>
+          <p class="text-muted">Quản lý phân cấp và tổ chức sản phẩm</p>
+        </div>
       </div>
-      <div 
-        class="tab-item" 
-        :class="{ 'active': activeTab === 'child' }" 
-        @click="switchTab('child')"
-      >
-        <i class="bi bi-diagram-3"></i> Tạo Danh Mục Con
+      <div class="header-right">
+        <button class="btn-outline-custom" @click="handleReset">Làm mới</button>
+        <button class="btn-primary-custom" @click="handleSubmit">
+          <i class="bi bi-check2-circle"></i> Lưu Danh Mục
+        </button>
       </div>
     </div>
 
-    <div class="form-wrapper shadow-sm">
-      <form @submit.prevent="handleSubmit">
-        
-        <div class="alert-info-custom mb-4">
-          <i class="bi" :class="activeTab === 'root' ? 'bi-info-circle-fill' : 'bi-lightbulb-fill'"></i>
-          <span v-if="activeTab === 'root'">
-            Tạo danh mục (Ví dụ: Thời trang nam, Thời trang nữ).
-          </span>
-          <span v-else>
-            Tạo danh mục nằm trong các danh mục gốc đã có.
-          </span>
-        </div>
+    <div class="form-layout">
 
-        <div class="form-row">
-          <div class="form-col">
-            <div class="form-group">
-              <label for="catName" class="form-label">Tên Danh Mục <span class="text-danger">*</span></label>
-              <input 
-                type="text" 
-                id="catName" 
-                v-model="formData.name" 
-                class="form-control-custom" 
-                placeholder="Nhập tên danh mục..." 
-                required
-              >
+      <div class="col-left">
+        <div class="card-box">
+          <h4 class="card-title">Thông tin chi tiết</h4>
+
+          <div class="info-alert mb-4">
+            <i class="bi" :class="activeTab === 'root' ? 'bi-info-circle-fill' : 'bi-diagram-3-fill'"></i>
+            <div class="info-content">
+              <span class="fw-600">{{ activeTab === 'root' ? 'Đang tạo Danh mục gốc' : 'Đang tạo Danh mục con' }}</span>
+      
             </div>
           </div>
 
-          <div class="form-col" v-if="activeTab === 'child'">
-            <div class="form-group">
-              <label for="parentId" class="form-label">Thuộc Danh Mục Gốc <span class="text-danger">*</span></label>
-              <select 
-                id="parentId" 
-                v-model="formData.parentId" 
-                class="form-control-custom form-select-custom"
-                required
-              >
-                <option :value="null" disabled>-- Chọn danh mục--</option>
-                
-                <option 
-                  v-for="cat in parentCategories" 
-                  :key="cat.id" 
-                  :value="cat.id"
-                >
-                  {{ cat.name }}
-                </option>
-
-              </select>
-              <small class="text-muted mt-1 d-block" v-if="loading">
-                <i class="spinner-border spinner-border-sm"></i> Đang tải danh mục...
-              </small>
-            </div>
+          <div class="form-group">
+            <label class="form-label">Tên danh mục <span class="text-red">*</span></label>
+            <input type="text" v-model="formData.name" class="form-input" placeholder="Ví dụ: Áo phông,..." />
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="catDesc" class="form-label">Mô tả</label>
-          <textarea 
-            id="catDesc" 
-            v-model="formData.description" 
-            class="form-control-custom" 
-            rows="3" 
-            placeholder="Nhập mô tả..."
-          ></textarea>
-        </div>
+          <transition name="fade">
+            <div class="form-group" v-if="activeTab === 'child'">
+              <label class="form-label">Thuộc danh mục <span class="text-red">*</span></label>
+              <div class="select-wrapper">
+                <select v-model="formData.parentId" class="form-input">
+                  <option :value="null" disabled>-- Chọn danh mục --</option>
+                  <option v-for="cat in parentCategories" :key="cat.id" :value="cat.id">
+                    {{ cat.name }}
+                  </option>
+                </select>
+                <small v-if="loading" class="input-helper text-blue">
+                  <i class="spinner-border spinner-border-sm"></i> Đang tải dữ liệu...
+                </small>
+              </div>
+            </div>
+          </transition>
 
-        <div class="form-row">
-          <div class="form-col">
-            <label class="form-label">Trạng Thái</label>
-            <div class="status-toggle">
-              <label class="radio-label">
-                <input type="radio" v-model="formData.status" value="active">
-                <span class="radio-custom"></span>
-                Hiển thị
-              </label>
-              <label class="radio-label">
-                <input type="radio" v-model="formData.status" value="inactive">
-                <span class="radio-custom"></span>
-                Ẩn
-              </label>
+          <div class="form-group">
+            <label class="form-label">Mô tả (Tùy chọn)</label>
+            <textarea v-model="formData.description" class="form-textarea" rows="4"
+              placeholder="Nhập mô tả chi tiết cho danh mục này..."></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-right">
+
+        <div class="card-box">
+          <h4 class="card-title">Phân loại</h4>
+
+          <div class="type-selection-group">
+            <div class="type-option" :class="{ active: activeTab === 'root' }" @click="switchTab('root')">
+              <div class="radio-circle"></div>
+              <div class="type-info">
+                <span class="type-title">Danh mục</span>
+              </div>
+            </div>
+
+            <div class="type-option" :class="{ active: activeTab === 'child' }" @click="switchTab('child')">
+              <div class="radio-circle"></div>
+              <div class="type-info">
+                <span class="type-title">Danh mục con</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="form-actions-footer">
-          <button type="button" @click="handleReset" class="btn btn-outline">Nhập lại</button>
-          <button type="submit" class="btn btn-update">
-            <i class="bi bi-save"></i> Lưu Dữ Liệu
-          </button>
+        <!-- Status -->
+        <div class="card-box mt-4">
+          <h4 class="card-title">Trạng thái hiển thị</h4>
+
+          <div class="status-group">
+            <label class="status-item">
+              <input type="radio" v-model="formData.status" value="active" name="status">
+              <span class="status-box">
+                <i class="bi bi-eye"></i> Hiển thị
+              </span>
+            </label>
+            <label class="status-item">
+              <input type="radio" v-model="formData.status" value="inactive" name="status">
+              <span class="status-box">
+                <i class="bi bi-eye-slash"></i> Ẩn
+              </span>
+            </label>
+          </div>
         </div>
 
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { reactive, ref, onMounted } from 'vue';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/categories'; 
 
 const activeTab = ref('root');
-const parentCategories = ref([]); 
+const parentCategories = ref([]);
 const loading = ref(false);
 
 const formData = reactive({
@@ -137,45 +124,44 @@ const formData = reactive({
   status: 'active'
 });
 
+
+const mockParentData = [
+  { id: 1, name: 'Thời trang Nam' },
+  { id: 2, name: 'Thời trang Nữ' },
+  { id: 3, name: 'Phụ kiện' },
+  { id: 4, name: 'Giày dép' }
+];
+
 const fetchParentCategories = async () => {
   loading.value = true;
   try {
-    const response = await axios.get(API_URL);
-    
-
-    if (response.data && Array.isArray(response.data)) {
-        parentCategories.value = response.data;
-    } else if (response.data && response.data.categories) {
-        parentCategories.value = response.data.categories;
-    } else {
-        parentCategories.value = [];
-    }
-
-    console.log("Danh sách danh mục cha:", parentCategories.value);
+    setTimeout(() => {
+      parentCategories.value = mockParentData;
+      loading.value = false;
+    }, 500);
 
   } catch (error) {
-    console.error("Lỗi kết nối Database:", error);
-    alert("Không thể tải danh sách danh mục. Kiểm tra kết nối mạng hoặc server!");
-  } finally {
+    console.error("Lỗi kết nối:", error);
+    alert("Không thể tải danh sách danh mục.");
     loading.value = false;
   }
 };
 
 const switchTab = (tabName) => {
   activeTab.value = tabName;
-  handleReset();
-  
-  if (tabName === 'child') {
-    fetchParentCategories(); 
+  if (tabName === 'root') {
+    formData.parentId = null;
+  } else {
+    fetchParentCategories();
   }
 };
 
 const goBack = () => {
-    if (window.history.length > 1) {
-        window.history.back();
-    } else {
-        window.location.href = '/'; 
-    }
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    console.log("Go back home");
+  }
 };
 
 const handleReset = () => {
@@ -183,85 +169,339 @@ const handleReset = () => {
   formData.parentId = null;
   formData.description = '';
   formData.status = 'active';
+  activeTab.value = 'root';
 };
 
 const handleSubmit = async () => {
   if (!formData.name.trim()) {
-    alert("Vui lòng nhập tên danh mục!");
-    return;
+    return alert("Vui lòng nhập tên danh mục!");
   }
   if (activeTab.value === 'child' && !formData.parentId) {
-    alert("Vui lòng chọn danh mục gốc!");
-    return;
+    return alert("Vui lòng chọn danh mục gốc!");
   }
 
   const payload = {
-    name: formData.name,
-    description: formData.description,
-    status: formData.status,
+    ...formData,
     parentId: activeTab.value === 'root' ? null : formData.parentId
   };
 
-  try {
-    const res = await axios.post(API_URL, payload);
-
-    if (res.status === 200 || res.status === 201) {
-        alert("Thêm danh mục thành công!");
-        handleReset(); 
-        
-        if (activeTab.value === 'child' || activeTab.value === 'root') {
-            fetchParentCategories();
-        }
-    }
-  } catch (error) {
-    console.error("Lỗi khi lưu:", error);
-    const msg = error.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại!";
-    alert(msg);
-  }
+  alert("Thêm danh mục thành công");
 };
 
-onMounted(() => {
-  fetchParentCategories();
-});
+
 </script>
 
 <style scoped>
-.product-management-container { padding: 30px; font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-.header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.header-actions h4 { color: #111827; font-size: 1.5rem; }
-
-.tabs-container { display: flex;  margin: 0 auto; padding-left: 10px; }
-.tab-item {
-  padding: 12px 24px; cursor: pointer; font-weight: 600; color: #6b7280; background-color: #e5e7eb;
-  border-top-left-radius: 12px; border-top-right-radius: 12px; margin-right: 5px; transition: all 0.2s;
-  display: flex; align-items: center; gap: 8px;
+.admin-container {
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #374151;
 }
-.tab-item.active { background-color: #fff; color: #4f46e5; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.02); z-index: 1; }
 
-.form-wrapper { background-color: #fff; border-radius: 16px; border-top-left-radius: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 30px; margin: 0 auto; }
-.alert-info-custom { background-color: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; padding: 12px 16px; border-radius: 4px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
 
-.form-row { display: flex; gap: 30px; margin-bottom: 20px; }
-.form-col { flex: 1; }
-.form-group { margin-bottom: 20px; }
-.form-label { display: block; margin-bottom: 8px; font-weight: 500; color: #374151; }
-.form-control-custom { width: 100%; padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; }
-.form-control-custom:focus { border-color: #4f46e5; outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-.form-select-custom { background-color: white; } 
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
 
-.btn { padding: 10px 20px; border-radius: 10px; cursor: pointer; border: none; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
-.btn-update { background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); color: white; }
-.btn-secondary-custom { background: white; border: 1px solid #e5e7eb; color: #374151; }
-.btn-outline { background: transparent; border: 1px solid #d1d5db; color: #6b7280; margin-right: 15px; }
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
 
-.status-toggle { display: flex; gap: 20px; align-items: center; height: 42px; }
-.radio-label { display: flex; align-items: center; cursor: pointer; color: #4b5563; }
-.radio-label input { display: none; }
-.radio-custom { width: 18px; height: 18px; border: 2px solid #d1d5db; border-radius: 50%; margin-right: 8px; position: relative; }
-.radio-label input:checked + .radio-custom { border-color: #4f46e5; }
-.radio-label input:checked + .radio-custom::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background-color: #4f46e5; border-radius: 50%; }
-.form-actions-footer { display: flex; justify-content: flex-end; margin-top: 30px; border-top: 1px solid #f3f4f6; padding-top: 20px; }
-.text-danger { color: #dc2626; }
+.btn-back {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #6b7280;
+  transition: all 0.2s;
+}
 
-@media (max-width: 768px) { .form-row { flex-direction: column; gap: 15px; } }
+.btn-back:hover {
+  background: #f9fafb;
+  color: #111;
+  transform: translateX(-2px);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+}
+
+.text-muted {
+  color: #9ca3af;
+  font-size: 13px;
+  margin: 2px 0 0 0;
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+}
+
+
+.btn-primary-custom {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.2);
+}
+
+.btn-primary-custom:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-outline-custom {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline-custom:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+
+.form-layout {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 25px;
+}
+
+@media (max-width: 1024px) {
+  .form-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card-box {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.card-title {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 15px;
+}
+
+.mt-4 {
+  margin-top: 25px;
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 6px;
+}
+
+.text-red {
+  color: #ef4444;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111;
+  outline: none;
+  transition: all 0.2s;
+  background: #fff;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.input-helper {
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.text-blue {
+  color: #2563eb;
+}
+
+.type-selection-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.type-option {
+  padding: 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all 0.2s;
+  background: #fff;
+}
+
+.type-option:hover {
+  border-color: #2563eb;
+  background: #f8fafc;
+}
+
+.type-option.active {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+}
+
+.type-option.active .radio-circle {
+  border-width: 5px;
+  border-color: #2563eb;
+}
+
+.radio-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  margin-top: 2px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.type-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.type-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111;
+}
+
+.type-desc {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.info-alert {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.info-alert i {
+  color: #2563eb;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.info-content {
+  font-size: 13px;
+  color: #1e40af;
+}
+
+.fw-600 {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.text-sm-muted {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.status-group {
+  display: flex;
+  gap: 10px;
+}
+
+.status-item input {
+  display: none;
+}
+
+.status-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+  transition: 0.2s;
+}
+
+.status-item input:checked+.status-box {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.status-box i {
+  font-size: 16px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

@@ -41,6 +41,9 @@ import AddArticle from "@/views/admin/AddArticle.vue";
 import AddBanner from "@/views/admin/AddBanner.vue";
 import AddProduct from "@/views/admin/AddProduct.vue";
 
+
+import AddDiscount from "@/views/admin/AddDiscount.vue";
+import DiscountManage from "@/views/admin/DiscountManager.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -54,16 +57,21 @@ const router = createRouter({
       component: LayoutAdmin,
       children: [
         { path: "", name: "dasboard", component: Dasboard },
+
         { path: "products", name: "products", component: ProductManager },
-        { path: 'addproducts',name: "productsAdd", component: AddProduct },
+        { path: 'addproducts', name: "productsAdd", component: AddProduct },
+
         { path: "category", name: "category", component: CategoryManager },
         {
           path: "category/add",
           name: "category-add",
           component: AddCategory
         },
+
         { path: "user", name: "user", component: UserManager },
+
         { path: "order", name: "order", component: OrderManager },
+
         { path: "store", name: "store", component: StoreManager },
         {
           path: 'store/add',
@@ -81,10 +89,22 @@ const router = createRouter({
           component: AddCollection,
         },
         { path: "post", name: "post", component: ArticleManager },
-        { path: 'posts', name: 'PostCreate', component: AddArticle },
+        { path: 'addposts', name: 'PostCreate', component: AddArticle },
+        {
+          path: 'posts/edit/:id',
+          name: 'PostEdit',
+          component: AddArticle
+        },
         { path: "banner", name: "banner", component: BannerManager },
         { path: 'addbanners', component: AddBanner },
+        {
+          path: 'banner/edit/:id',
+          name: 'BannerEdit',
+          component: AddBanner
+        },
         { path: "revenue", name: "revenue", component: RevenueManager },
+        { path: "discountManagers", name: "discountManagers", component: DiscountManage },
+        { path: "adddiscounts", name: "addDiscounts", component: AddDiscount }
       ],
     },
 
