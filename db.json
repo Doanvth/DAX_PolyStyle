@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": "",
+      "id": "1",
       "name": "OD4B494 - ÁO COTTON",
       "sku": "OD4B494",
       "price": 595000,
@@ -11,14 +11,30 @@
       "description": "Thiết kế quần nằm trong BST Thu - Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
       "image": [
         {
-          "id": "",
-          "url": ""
+          "id": "1",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_GiUODr31wK.jpeg?v=1762932249"
+        },
+        {
+          "id": "2",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_OYcgs9xkIu.jpeg?v=1762932308"
+        },
+        {
+          "id": "3",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_x5PL4qBRVs.jpeg?v=1762932317"
+        },
+        {
+          "id": "4",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_xQ7j7sgUg9.jpeg?v=1762932330"
+        },
+        {
+          "id": "5",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_IPSJ8pM5D7.jpeg?v=1762932338"
         }
       ],
       "video": [
         {
-          "video_id": "",
-          "video_url": ""
+          "video_id": "1",
+          "video_url": "https://www.youtube.com/shorts/JO0Gh2xSHdQ?feature=share"
         }
       ],
       "variant": [
@@ -48,14 +64,18 @@
           "notice": " Do điều kiện ánh sáng khác nhau, màu sắc hiển thị của sản phẩm trên Website có thể chênh lệch từ 3-5% so với màu sắc thực tế. Thời trang Orchid mong quý khách thông cảm. Sản phẩm không đi kèm phụ kiện.",
           "video": [
             {
-              "video_id": "",
-              "video_url": ""
+              "video_id": "1",
+              "video_url": "https://www.youtube.com/shorts/JO0Gh2xSHdQ?feature=share"
             }
           ],
           "image": [
             {
-              "image_id": "",
-              "image_url": ""
+              "image_id": "1",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/ps/content/20251113_sjgIQLXE.JPG"
+            },
+            {
+              "image_id": "2",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/ps/content/20251113_nDFBKAM4.JPG"
             }
           ]
         }
@@ -92,17 +112,30 @@
       "stock": 50,
       "quantity": 100,
       "categoryId": "40",
+      "discount_id": "",
       "description": "Thiết kế áo nằm trong BST Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
       "image": [
         {
-          "id": "",
-          "url": ""
+          "id": "1",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_6SoOgiIzdT.jpeg?v=1762932660"
+        },
+        {
+          "id": "2",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_BpESjpX4k6.jpeg?v=1762932665"
+        },
+        {
+          "id": "3",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_skThWTPQhn.jpeg?v=1762932675"
+        },
+        {
+          "id": "4",
+          "url": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_P2MkCKha0S.jpeg?v=1762932681"
         }
       ],
       "video": [
         {
-          "video_id": "",
-          "video_url": ""
+          "video_id": "1",
+          "video_url": "https://www.youtube.com/shorts/EoDtljIQN_M?feature=share"
         }
       ],
       "variant": [
@@ -132,14 +165,18 @@
           "notice": "Do điều kiện ánh sáng khác nhau, màu sắc hiển thị của sản phẩm trên Website có thể chênh lệch từ 3-5% so với màu sắc thực tế. Thời trang Orchid mong quý khách thông cảm. Sản phẩm không đi kèm phụ kiện.",
           "video": [
             {
-              "video_id": "",
-              "video_url": ""
+              "video_id": "1",
+              "video_url": "https://www.youtube.com/shorts/EoDtljIQN_M?feature=share"
             }
           ],
           "image": [
             {
-              "image_id": "",
-              "image_url": ""
+              "image_id": "1",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/ps/content/20251113_yq6Y0PGO.JPG"
+            },
+            {
+              "image_id": "2",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/ps/content/20251113_5k3nUaBH.JPG"
             }
           ]
         }
@@ -263,7 +300,11 @@
               "payment": "",
               "status": ""
             }
-          ]
+          ],
+          "create_at": "",
+          "status": "",
+          "payment_method": "",
+          "total": ""
         }
       ],
       "history": [
@@ -871,127 +912,127 @@
   ],
   "discount": [
     {
-      "id": "",
+      "id": "1",
       "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ÁO KHOÁC",
-      "min_price": "",
-      "max_price": "",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "2",
       "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ĐẦM",
-      "min_price": "",
-      "max_price": "",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "3",
       "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ĐẦM",
-      "min_price": "",
-      "max_price": "",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "4",
       "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN SET BỘ",
-      "min_price": "",
-      "max_price": "",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "5",
       "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN ÁO DÀI",
-      "min_price": "",
-      "max_price": "",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "6",
       "name": "BLACK FRIDAY | ƯU ĐÃI ĐỘC QUYỀN QUẦN & CHÂN VÁY",
-      "min_price": "",
-      "max_price": "",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "7",
       "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 69K-99K",
-      "min_price": "69000",
-      "max_price": "99000",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "8",
       "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 149K-169K",
-      "min_price": "149000",
-      "max_price": "169000",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "9",
       "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 199K",
-      "min_price": "199000",
-      "max_price": "190000",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "10",
       "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 229K-249K",
-      "min_price": "229000",
-      "max_price": "249000",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "11",
       "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 299K",
-      "min_price": "299000",
-      "max_price": "299000",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "12",
       "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 329K-349K-389K",
-      "min_price": "329000",
-      "max_price": "389000",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "13",
       "name": "SPECIAL DISCOUNT | ĐỒNG GIÁ 399K",
-      "min_price": "399000",
-      "max_price": "399000",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
     },
     {
-      "id": "",
+      "id": "14",
       "name": "BLACK FRIDAY | SALE UPTO 30% BST THU MỚI NHẤT",
-      "min_price": "",
-      "max_price": "",
+      "discount_type": "",
+      "discount_value": "",
       "create_At": "26-11-2025",
       "expire_At": "26-12-2025", 
       "status": "active"
@@ -1050,7 +1091,9 @@
       "id": "",
       "name": "",
       "address": "",
-      "place_id": ""
+      "place_id": "",
+      "email": "",
+      "status": ""
     }
   ],
   "news": [
@@ -1080,27 +1123,10 @@
       ]
     }
   ],
-  "franchise": [
-    {
-      "id": "",
-      "image": [
-        {
-          "image_id": "",
-          "image_url": ""
-        }
-      ],
-      "video": [
-        {
-          "video_id": "",
-          "video_url": ""
-        }
-      ]
-    }
-  ],
   "header": [
     {
-      "id": "",
-      "logo_brand": "",
+      "id": "1",
+      "logo_brand": "https://pos.nvncdn.com/af3c03-152482/store/20230630_WvfWdAkN.png?v=1688107804",
       "categories_id": "",
       "discount_id": "",
       "news_id": ""
@@ -1108,26 +1134,101 @@
   ],
   "carousel": [
     {
-      "id": "",
+      "id": "1",
       "image": [
         {
-          "image_id": "",
-          "image_url": ""
+          "image_id": "1",
+          "image_url": "https://pos.nvncdn.com/af3c03-152482/bn/20251203_WyhCDz4c.jpg?v=1764747448"
         }
-      ]
+      ],
+      "status": "active",
+      "create_At": "12-4-2025",
+      "position": "HomePage"  
     }
   ],
   "collection": [
     {
       "id": "1",
-      "image": "",
+      "image": "https://pos.nvncdn.com/af3c03-152482/album/20251027_f1lAVaZF.jpeg?v=1761555358",
       "collection_detail": [
         {
           "collection_id": "1",
           "image": [
             {
-              "image_id": "",
-              "image_url": ""
+              "image_id": "1",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_2Mkw2fgQ.jpg"
+            },
+            {
+              "image_id": "2",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_1xrjng4y.jpg"
+            },
+            {
+              "image_id": "3",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_Dcsj6i5q.jpg"
+            },
+            {
+              "image_id": "4",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_yzox7HIY.jpg"
+            },
+            {
+              "image_id": "5",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_ql8xSAZG.jpg"
+            },
+            {
+              "image_id": "6",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_eNvrfcXn.jpg"
+            },
+            {
+              "image_id": "7",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_xnTd9FRo.jpg"
+            },
+            {
+              "image_id": "8",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_jBLonuAP.jpg"
+            },
+            {
+              "image_id": "9",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_jBLonuAP.jpg"
+            },
+            {
+              "image_id": "10",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_2enOqjkY.jpg"
+            },
+            {
+              "image_id": "11",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_kH1exChW.jpg"
+            },
+            {
+              "image_id": "12",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_adWHNr1d.jpg"
+            },
+            {
+              "image_id": "13",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_PgQbugQL.jpg"
+            },
+            {
+              "image_id": "14",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_iHrrlyKY.jpg"
+            },
+            {
+              "image_id": "15",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_SnxkCUhj.jpg"
+            },
+            {
+              "image_id": "16",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_EAePLw7h.jpg"
+            },
+            {
+              "image_id": "17",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_Qcu7rQ56.jpg"
+            },
+            {
+              "image_id": "18",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_gCI1tamg.jpg"
+            },
+            {
+              "image_id": "19",
+              "image_url": "https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_3hnChe4U.jpg"
             }
           ],
           "title": "FLOW MOTION",
