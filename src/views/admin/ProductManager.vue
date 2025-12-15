@@ -41,9 +41,9 @@
         </div>
         <select v-model="selectedCategory" class="filter-select">
           <option value="">Tất cả danh mục</option>
-          <option value="Thời trang">Thời trang</option>
-          <option value="Điện tử">Điện tử</option>
-          <option value="Gia dụng">Gia dụng</option>
+          <option value="Thời trang Nam">Thời trang Nam</option>
+          <option value="Thời trang Nữ">Thời trang Nữ</option>
+          <option value="Phụ kiện">Phụ kiện</option>
         </select>
         <div class="checkbox-wrapper">
           <input type="checkbox" id="lowStockOnly" v-model="filterLowStock">
@@ -52,9 +52,9 @@
       </div>
 
       <div class="right-actions">
-        <button class="btn-primary-custom" @click="$router.push({ name: 'productsAdd' })">
+        <router-link :to="{ name: 'productsAdd' }" class="btn-primary-custom">
           <i class="bi bi-plus-lg"></i> Thêm sản phẩm
-        </button>
+        </router-link>
 
         <button class="btn-outline-custom"><i class="bi bi-file-earmark-excel"></i> Xuất Excel</button>
       </div>
@@ -71,7 +71,7 @@
             <th width="10%" class="text-center">Tổng Kho</th>
             <th width="15%">Phân loại</th>
             <th width="10%">Trạng thái</th>
-            <th width="5%" class="text-center">#</th>
+            <th width="15%" class="text-center">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -84,7 +84,7 @@
               </td>
 
               <td>
-                <img :src="product.image" class="product-thumb" alt="img" />
+                <img :src="product.image" class="product-thumb" alt="img" @error="e => e.target.src='https://placehold.co/40x40?text=IMG'"/>
               </td>
 
               <td>
@@ -125,7 +125,12 @@
               </td>
 
               <td class="text-center">
-                <button class="btn-icon" title="Chỉnh sửa"><i class="bi bi-pencil-square text-blue"></i></button>
+                <button class="btn-icon" title="Chỉnh sửa" @click="editProduct(product.id)">
+                  <i class="bi bi-pencil-square text-blue"></i>
+                </button>
+                <button class="btn-icon" title="Xóa" @click="deleteProduct(product.id)">
+                  <i class="bi bi-trash text-red"></i>
+                </button>
               </td>
             </tr>
 
@@ -209,6 +214,9 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const generateProducts = () => {
   const data = [];
@@ -264,7 +272,6 @@ const selectedCategory = ref("");
 const filterLowStock = ref(false);
 const currentPage = ref(1);
 const itemsPerPage = 10;
-
 
 const filteredProducts = computed(() => {
   let result = products.value;
@@ -330,6 +337,16 @@ const hasLowStockVariant = (product) => {
   return product.variants.some(v => v.stock < 5);
 };
 
+const editProduct = (id) => {
+  router.push({ name: 'productsAdd' });
+};
+
+const deleteProduct = (id) => {
+  if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+    products.value = products.value.filter(p => p.id !== id);
+  }
+};
+
 </script>
 
 <style scoped>
@@ -385,25 +402,10 @@ const hasLowStockVariant = (product) => {
   font-size: 12px;
 }
 
-.blue .icon {
-  background: #eff6ff;
-  color: #3b82f6;
-}
-
-.green .icon {
-  background: #ecfdf5;
-  color: #10b981;
-}
-
-.orange .icon {
-  background: #fff7ed;
-  color: #f97316;
-}
-
-.purple .icon {
-  background: #f3e8ff;
-  color: #a855f7;
-}
+.blue .icon { background: #eff6ff; color: #3b82f6; }
+.green .icon { background: #ecfdf5; color: #10b981; }
+.orange .icon { background: #fff7ed; color: #f97316; }
+.purple .icon { background: #f3e8ff; color: #a855f7; }
 
 .toolbar-top {
   display: flex;
@@ -591,25 +593,10 @@ td {
   text-align: center;
 }
 
-.stock-badge.out {
-  background: #fee2e2;
-  color: #ef4444;
-}
-
-.stock-badge.low {
-  background: #ffedd5;
-  color: #f97316;
-}
-
-.stock-text {
-  font-weight: 600;
-  color: #374151;
-}
-
-.text-warning {
-  color: #f59e0b;
-  font-size: 12px;
-}
+.stock-badge.out { background: #fee2e2; color: #ef4444; }
+.stock-badge.low { background: #ffedd5; color: #f97316; }
+.stock-text { font-weight: 600; color: #374151; }
+.text-warning { color: #f59e0b; font-size: 12px; }
 
 
 .btn-expand {
@@ -626,198 +613,47 @@ td {
   transition: 0.2s;
 }
 
-.btn-expand:hover {
-  background: #f3f4f6;
-  color: #2563eb;
-}
+.btn-expand:hover { background: #f3f4f6; color: #2563eb; }
 
-.expanded-row td {
-  background-color: #f8fafc;
-  border-bottom: none;
-}
+.expanded-row td { background-color: #f8fafc; border-bottom: none; }
+.detail-row td { padding: 0; border-bottom: 1px solid #e2e8f0; background-color: #f8fafc; }
 
-.detail-row td {
-  padding: 0;
-  border-bottom: 1px solid #e2e8f0;
-  background-color: #f8fafc;
-}
+.detail-container { padding: 10px 20px 20px 60px; }
+.detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.detail-header h5 { margin: 0; font-size: 13px; color: #475569; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 
-.detail-container {
-  padding: 10px 20px 20px 60px;
-}
-
-.detail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.detail-header h5 {
-  margin: 0;
-  font-size: 13px;
-  color: #475569;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.variant-table-wrapper {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.variant-table {
-  width: 100%;
-}
-
-.variant-table th {
-  background: #f1f5f9;
-  font-size: 11px;
-  color: #64748b;
-  padding: 8px 12px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.variant-table td {
-  padding: 6px 12px;
-  border-bottom: 1px solid #f1f5f9;
-  font-size: 13px;
-  background: white;
-}
-
-.variant-table tr:last-child td {
-  border-bottom: none;
-}
+.variant-table-wrapper { background: white; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; }
+.variant-table { width: 100%; }
+.variant-table th { background: #f1f5f9; font-size: 11px; color: #64748b; padding: 8px 12px; border-bottom: 1px solid #e2e8f0; }
+.variant-table td { padding: 6px 12px; border-bottom: 1px solid #f1f5f9; font-size: 13px; background: white; }
+.variant-table tr:last-child td { border-bottom: none; }
 
 .badge-size {
-  background: #e0e7ff;
-  color: #3730a3;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 11px;
-  min-width: 24px;
-  display: inline-block;
-  text-align: center;
+  background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; min-width: 24px; display: inline-block; text-align: center;
 }
 
-.badge-color {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-}
-
-.color-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.font-monospace {
-  font-family: monospace;
-  font-size: 11px;
-}
+.badge-color { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.color-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.1); }
+.font-monospace { font-family: monospace; font-size: 11px; }
 
 .quick-stock-edit input {
-  width: 60px;
-  padding: 4px;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  text-align: center;
-  font-size: 12px;
-  outline: none;
-  transition: 0.2s;
+  width: 60px; padding: 4px; border: 1px solid #e2e8f0; border-radius: 4px; text-align: center; font-size: 12px; outline: none; transition: 0.2s;
 }
+.quick-stock-edit input:focus { border-color: #2563eb; }
 
-.quick-stock-edit input:focus {
-  border-color: #2563eb;
-}
+.text-red { color: #ef4444; }
+.status-toggle { cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 12px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.bg-success { background: #10b981; }
+.bg-gray { background: #9ca3af; }
 
-.text-red {
-  color: #ef4444;
-}
+.pagination-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; margin-top: 10px; }
+.page-btn { width: 28px; height: 28px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.status-toggle {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.bg-success {
-  background: #10b981;
-}
-
-.bg-gray {
-  background: #9ca3af;
-}
-
-.pagination-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 5px;
-  margin-top: 10px;
-}
-
-.page-btn {
-  width: 28px;
-  height: 28px;
-  border: 1px solid #d1d5db;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-icon-sm {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.text-blue {
-  color: #2563eb;
-}
-
-.btn-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #6b7280;
-  font-size: 15px;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px;
-  color: #9ca3af;
-}
-
-.page-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px; 
-}
+.btn-icon-sm { background: none; border: none; cursor: pointer; font-size: 14px; }
+.text-blue { color: #2563eb; }
+.btn-icon { background: none; border: none; cursor: pointer; color: #6b7280; font-size: 15px; margin-right: 5px; }
+.empty-state { text-align: center; padding: 40px; color: #9ca3af; }
+.page-controls { display: flex; align-items: center; gap: 10px; }
 </style>

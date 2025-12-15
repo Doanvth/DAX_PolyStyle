@@ -83,14 +83,12 @@ const handleSubmit = () => {
 </script>
 
 <style scoped>
-/* ====== KHUNG NGOÀI ====== */
 .wide-container {
   max-width: 1500px;
   margin: 0 auto;
   padding: 0 60px;
 }
 
-/* ====== TIÊU ĐỀ CHÍNH ====== */
 .section-title {
   font-weight: bold;
   font-size: 24px;
@@ -99,7 +97,6 @@ const handleSubmit = () => {
   margin-bottom: 15px;
 }
 
-/* ====== FORM ====== */
 .form-title {
   font-size: 16px;
   color: #222;
@@ -111,32 +108,38 @@ const handleSubmit = () => {
   margin: 8px 0 20px;
 }
 
-/* Input fields */
 .input-group-text {
   background-color: #fff;
-  border-right: 0;
+  border: 1px solid #ccc;
+  border-right: 0;       
   color: #333;
   font-size: 15px;
 }
+
 .form-control {
-  border-left: 0;
+  border: 1px solid #ccc; 
+  border-left: 0;       
   font-size: 14px;
   padding: 8px;
   color: #333;
 }
+
 .form-control:focus {
   box-shadow: none;
-  border-color: #bbb;
+  border-color: #bbb; 
 }
 
-/* Textarea */
+textarea.form-control {
+  border-left: 1px solid #ccc !important; 
+}
+
+
 .message-box {
   height: 205px;
   font-size: 14px;
   resize: none;
 }
 
-/* Nút gửi */
 .btn-submit {
   background-color: #333;
   color: #fff;

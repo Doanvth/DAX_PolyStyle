@@ -16,17 +16,13 @@
 
           <div class="search-cart">
             <div class="search-box">
-              <input
-                type="text"
-                placeholder="Tìm kiếm..."
-                v-model="searchQuery"
-              />
+              <input type="text" placeholder="Tìm kiếm..." v-model="searchQuery" />
               <button type="button" @click="onSearch">
                 <i class="bi bi-search"></i>
               </button>
             </div>
 
-            <div  class="auth-links">
+            <div class="auth-links">
               <i class="bi bi-cart"></i>
               <span><router-link to="/shoppingCart">Giỏ hàng</router-link></span>
               <span class="cart-count">{{ cartCount }}</span>
@@ -45,7 +41,9 @@
     <div class="main-header">
       <div class="container header-flex">
         <div class="logo">
-          <img src="/src/assets/images/logo.png" alt="Logo" />
+          <router-link to="/">
+            <img src="/src/assets/images/logo.png" alt="Logo" />
+          </router-link>
         </div>
 
         <nav class="navigation">
@@ -98,7 +96,7 @@ export default {
 .top-header {
   background-color: #f8f8f8;
   padding: 10px 0;
-  font-size: 14px; 
+  font-size: 14px;
 }
 
 .top-header-content {
@@ -117,6 +115,7 @@ export default {
   color: #333;
   text-decoration: none;
 }
+
 .phone a:hover {
   color: #f00;
 }
@@ -124,6 +123,7 @@ export default {
 .showroom-info {
   color: #333;
 }
+
 .search-cart {
   display: flex;
   align-items: center;
@@ -159,6 +159,7 @@ export default {
   color: #333;
   text-decoration: none;
 }
+
 .cart:hover {
   color: #f00;
 }

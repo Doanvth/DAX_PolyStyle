@@ -2,18 +2,18 @@
   <div class="admin-container">
     <div class="page-header">
       <div class="header-left">
-        <button class="btn-back" @click="$router.go(-1)">
+        <button class="btn-back" @click="goBack">
           <i class="bi bi-arrow-left"></i>
         </button>
         <div>
-          <h2 class="page-title">Thêm Sản Phẩm Mới</h2>
+          <h2 class="page-title">{{ isEditMode ? 'Cập Nhật Sản Phẩm' : 'Thêm Sản Phẩm Mới' }}</h2>
           <p class="text-muted">Quản lý thông tin và thiết lập sản phẩm</p>
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-outline-custom" @click="$router.go(-1)">Hủy bỏ</button>
+        <button class="btn-outline-custom" @click="goBack">Hủy bỏ</button>
         <button class="btn-primary-custom" @click="handleSubmit">
-          <i class="bi bi-check2-circle"></i> Lưu Sản Phẩm
+          <i class="bi bi-check2-circle"></i> {{ isEditMode ? 'Lưu Thay Đổi' : 'Tạo Sản Phẩm' }}
         </button>
       </div>
     </div>
@@ -53,10 +53,12 @@
               <i class="bi bi-camera"></i>
               <span>Tải ảnh</span>
             </div>
+          
             <div class="media-item" v-for="(img, index) in product.image" :key="'img' + index">
               <img v-if="img.preview" :src="img.preview" class="media-img" />
               <div v-else class="empty-media"><i class="bi bi-image"></i></div>
               <button class="btn-remove-media" @click="removeImage(index)"><i class="bi bi-x"></i></button>
+
               <input type="file" accept="image/*" style="display:none" :ref="'fileInput' + index"
                 @change="(e) => onSelectImage(e, index)">
             </div>
@@ -100,6 +102,7 @@
                 <option value="1">Đỏ</option>
                 <option value="3">Đen</option>
                 <option value="5">Ghi</option>
+                <option value="2">Trắng</option>
               </select>
               <input type="number" class="form-input sm" v-model="item.quantity" placeholder="0" />
               <button class="btn-icon-trash" @click="removeVariant(index)"><i class="bi bi-x-lg"></i></button>
@@ -159,6 +162,7 @@
               <option value="" disabled>-- Chọn danh mục --</option>
               <option value="40">BST Hè 2025</option>
               <option value="2">Áo Đông 2025</option>
+              <option value="1">Quần Jeans</option>
             </select>
           </div>
 
@@ -216,7 +220,13 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+
+const isEditMode = computed(() => !!route.params.id);
 
 const discountList = [
   { id: "KM01", name: "SALE 50% - Black Friday" },
@@ -246,12 +256,30 @@ const product = reactive({
   ],
   desc: [
     {
-      warning_info: "", create_year: "", manufacturing_unit: "", country: "Việt Nam",
+      warning_info: "", create_year: "2025", manufacturing_unit: "Xưởng May A", country: "Việt Nam",
     },
   ],
   create_At: new Date().toLocaleDateString("vi-VN"),
-  rate: "",
-  comments: [],
+});
+
+onMounted(() => {
+  if (isEditMode.value) {
+    const productId = route.params.id;
+    console.log("Đang chỉnh sửa sản phẩm có ID:", productId);
+    
+    product.name = "Áo Polo Nam Classic " + productId;
+    product.sku = "PL-2025-" + productId;
+    product.price = 450000;
+    product.stock = 100;
+    product.quantity = 100;
+    product.categoryId = "40";
+    product.description = "Mô tả sản phẩm đang được chỉnh sửa...";
+    
+    product.image = [
+      { id: "img1", url: "demo.jpg", preview: "https://placehold.co/100x100?text=Prod" },
+      { id: "img2", url: "", preview: "" }
+    ];
+  }
 });
 
 const addVariant = () => product.variant.push({ size_id: "1", color_id: "1", quantity: 0 });
@@ -259,7 +287,10 @@ const removeVariant = (index) => product.variant.splice(index, 1);
 
 const addImage = () => product.image.push({ id: "", url: "", preview: "" });
 const removeImage = (index) => product.image.splice(index, 1);
-const triggerFileUpload = () => addImage();
+
+const triggerFileUpload = () => {
+    addImage();
+};
 const onSelectImage = (event, index) => {
   const file = event.target.files[0];
   if (file) product.image[index].preview = URL.createObjectURL(file);
@@ -269,12 +300,19 @@ const addVideo = () => product.video.push({ video_id: "", video_url: "" });
 const removeVideo = (index) => product.video.splice(index, 1);
 
 const handleSubmit = () => {
-  // Validate simple
   if (!product.name || !product.sku || !product.price) return alert("Vui lòng nhập các thông tin bắt buộc!");
 
-  console.log("Submitting Product:", JSON.parse(JSON.stringify(product)));
-  alert("Đã lưu sản phẩm thành công!");
+  if (isEditMode.value) {
+     console.log("Dữ liệu cập nhật:", JSON.parse(JSON.stringify(product)));
+     alert("Cập nhật sản phẩm thành công!");
+  } else {
+     console.log("Dữ liệu tạo mới:", JSON.parse(JSON.stringify(product)));
+     alert("Tạo sản phẩm mới thành công!");
+  }
 };
+
+const goBack = () => router.go(-1);
+
 </script>
 
 <style scoped>

@@ -1,31 +1,27 @@
 <template>
   <div class="admin-container">
-    <!-- HEADER ACTION -->
     <div class="page-header">
       <div class="header-left">
-        <button class="btn-back" @click="$router.go(-1)">
+        <button class="btn-back" @click="goBack">
           <i class="bi bi-arrow-left"></i>
         </button>
         <div>
-          <h2 class="page-title">Tạo chiến dịch mới</h2>
+          <h2 class="page-title">{{ isEditMode ? 'Cập Nhật Chiến Dịch' : 'Tạo Chiến Dịch Mới' }}</h2>
           <p class="text-muted">Thiết lập chương trình khuyến mãi cho cửa hàng</p>
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-outline-custom" @click="$router.go(-1)">Hủy bỏ</button>
+        <button class="btn-outline-custom" @click="goBack">Hủy bỏ</button>
         <button class="btn-primary-custom" @click="saveCampaign">
-          <i class="bi bi-check2-circle"></i> Lưu & Kích hoạt
+          <i class="bi bi-check2-circle"></i> {{ isEditMode ? 'Lưu Thay Đổi' : 'Lưu & Kích Hoạt' }}
         </button>
       </div>
     </div>
 
-    <!-- FORM CONTAINER -->
     <div class="form-layout">
       
-      <!-- LEFT COLUMN: GENERAL INFO -->
       <div class="col-left">
         
-        <!-- 1. Thông tin chung -->
         <div class="card-box">
           <h4 class="card-title">Thông tin chung</h4>
           
@@ -51,7 +47,6 @@
           </div>
         </div>
 
-        <!-- 2. Cấu hình giảm giá -->
         <div class="card-box mt-4">
           <h4 class="card-title">Thiết lập mức giảm</h4>
           
@@ -95,16 +90,25 @@
           </div>
         </div>
 
+        <div class="card-box mt-4">
+            <h4 class="card-title">Banner chương trình</h4>
+            <div class="upload-zone">
+                <div class="upload-content">
+                    <i class="bi bi-cloud-upload"></i>
+                    <p>Kéo thả ảnh hoặc <span>bấm để chọn</span></p>
+                    <small>JPG, PNG, GIF (Max 2MB)</small>
+                </div>
+            </div>
+        </div>
+
       </div>
 
-      <!-- RIGHT COLUMN: SCOPE & TARGET -->
       <div class="col-right">
         
         <div class="card-box">
           <h4 class="card-title">Phạm vi áp dụng</h4>
           <p class="section-desc">Chọn đối tượng sản phẩm được áp dụng chương trình này.</p>
 
-          <!-- Scope Selection List -->
           <div class="scope-list">
             <div class="scope-item" 
                  :class="{ active: form.scope === 'all' }" 
@@ -140,53 +144,36 @@
             </div>
           </div>
 
-          <!-- Dynamic Content Based on Scope -->
-          <transition name="fade">
-            <div v-if="form.scope === 'category'" class="scope-config-area">
-                <label class="form-label">Chọn danh mục</label>
-                <div class="checkbox-group">
-                    <label class="checkbox-item"><input type="checkbox"> Thời trang Nam</label>
-                    <label class="checkbox-item"><input type="checkbox"> Thời trang Nữ</label>
-                    <label class="checkbox-item"><input type="checkbox"> Phụ kiện</label>
-                    <label class="checkbox-item"><input type="checkbox"> Giày dép</label>
-                </div>
-            </div>
-          </transition>
+          <div v-if="form.scope === 'category'" class="scope-config-area">
+              <label class="form-label">Chọn danh mục</label>
+              <div class="checkbox-group">
+                  <label class="checkbox-item"><input type="checkbox"> Thời trang Nam</label>
+                  <label class="checkbox-item"><input type="checkbox"> Thời trang Nữ</label>
+                  <label class="checkbox-item"><input type="checkbox"> Phụ kiện</label>
+                  <label class="checkbox-item"><input type="checkbox"> Giày dép</label>
+              </div>
+          </div>
 
-          <transition name="fade">
-            <div v-if="form.scope === 'product'" class="scope-config-area">
-                <label class="form-label">Thêm sản phẩm</label>
-                <div class="search-add-wrapper">
-                    <input type="text" placeholder="Tìm tên hoặc SKU..." class="form-input sm">
-                    <button class="btn-icon-add"><i class="bi bi-search"></i></button>
-                </div>
+          <div v-if="form.scope === 'product'" class="scope-config-area">
+              <label class="form-label">Thêm sản phẩm</label>
+              <div class="search-add-wrapper">
+                  <input type="text" placeholder="Tìm tên hoặc SKU..." class="form-input sm">
+                  <button class="btn-icon-add"><i class="bi bi-search"></i></button>
+              </div>
 
-                <!-- Selected List Mockup -->
-                <div class="selected-products-list">
-                    <div class="product-mini-item" v-for="(prod, i) in mockProducts" :key="i">
-                        <img :src="prod.img">
-                        <div class="prod-info">
-                            <span class="name">{{ prod.name }}</span>
-                            <span class="sku">{{ prod.sku }}</span>
-                        </div>
-                        <button class="btn-remove" @click="removeProduct(i)"><i class="bi bi-x"></i></button>
-                    </div>
-                </div>
-            </div>
-          </transition>
+              <!-- Selected List Mockup -->
+              <div class="selected-products-list">
+                  <div class="product-mini-item" v-for="(prod, i) in mockProducts" :key="i">
+                      <img :src="prod.img" @error="e => e.target.src='https://placehold.co/32x32?text=P'">
+                      <div class="prod-info">
+                          <span class="name">{{ prod.name }}</span>
+                          <span class="sku">{{ prod.sku }}</span>
+                      </div>
+                      <button class="btn-remove" @click="removeProduct(i)"><i class="bi bi-x"></i></button>
+                  </div>
+              </div>
+          </div>
 
-        </div>
-
-        <!-- Banner Upload -->
-        <div class="card-box mt-4">
-            <h4 class="card-title">Banner chương trình</h4>
-            <div class="upload-zone">
-                <div class="upload-content">
-                    <i class="bi bi-cloud-upload"></i>
-                    <p>Kéo thả ảnh hoặc <span>bấm để chọn</span></p>
-                    <small>JPG, PNG, GIF (Max 2MB)</small>
-                </div>
-            </div>
         </div>
 
       </div>
@@ -195,17 +182,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+const isEditMode = computed(() => !!route.params.id);
 
 const form = ref({
   name: '',
   description: '',
   startDate: '',
   endDate: '',
-  type: 'percent', // 'percent' | 'fixed'
+  type: 'percent', 
   value: null,
   maxDiscount: null,
-  scope: 'all', // 'all' | 'category' | 'product'
+  scope: 'all', 
 });
 
 const mockProducts = ref([
@@ -214,20 +206,40 @@ const mockProducts = ref([
     { name: 'Váy Hoa Nhí Vintage', sku: 'VAY-05', img: 'https://placehold.co/40x40' }
 ]);
 
+onMounted(() => {
+  if(isEditMode.value) {
+    const id = route.params.id;
+    console.log("Đang lấy dữ liệu chiến dịch để sửa, ID:", id);
+    form.value.name = "Chiến dịch Mùa Hè (Đang sửa)";
+    form.value.value = 20;
+    form.value.type = 'percent';
+    form.value.scope = 'category';
+    form.value.startDate = "2025-06-01T00:00";
+    form.value.endDate = "2025-06-30T23:59";
+  }
+});
+
 const removeProduct = (index) => {
     mockProducts.value.splice(index, 1);
 };
 
 const saveCampaign = () => {
-    // Validate simple
-    if(!form.value.name) return alert('Vui lòng nhập tên chiến dịch!');
-    console.log('Submitting:', form.value);
-    alert('Đã lưu chiến dịch thành công!');
+   // Validate
+   if(!form.value.name) return alert('Vui lòng nhập tên chiến dịch!');
+   
+   if(isEditMode.value) {
+      console.log('Đang cập nhật:', form.value);
+      alert('Cập nhật chiến dịch thành công!');
+   } else {
+      console.log('Đang tạo mới:', form.value);
+      alert('Đã lưu chiến dịch thành công!');
+   }
 };
+
+const goBack = () => router.go(-1);
 </script>
 
 <style scoped>
-/* --- BASE --- */
 .admin-container {
   padding: 20px;
   min-height: 100vh;
@@ -236,7 +248,6 @@ const saveCampaign = () => {
   color: #374151;
 }
 
-/* --- HEADER --- */
 .page-header {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
 }
@@ -264,7 +275,6 @@ const saveCampaign = () => {
 }
 .btn-outline-custom:hover { background: #f9fafb; border-color: #9ca3af; }
 
-/* --- FORM LAYOUT --- */
 .form-layout { display: grid; grid-template-columns: 2fr 1.2fr; gap: 25px; }
 @media (max-width: 1024px) { .form-layout { grid-template-columns: 1fr; } }
 
@@ -272,7 +282,6 @@ const saveCampaign = () => {
 .card-title { margin: 0 0 20px 0; font-size: 16px; font-weight: 700; color: #1f2937; border-bottom: 1px solid #f3f4f6; padding-bottom: 15px; }
 .mt-4 { margin-top: 25px; }
 
-/* INPUTS */
 .form-group { margin-bottom: 20px; }
 .form-label { display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 6px; }
 .text-red { color: #ef4444; }
@@ -294,7 +303,6 @@ const saveCampaign = () => {
   color: #6b7280; font-weight: 600; font-size: 13px;
 }
 
-/* DISCOUNT TYPE */
 .discount-type-group { display: flex; gap: 15px; margin-bottom: 20px; }
 .type-option {
   flex: 1; padding: 15px; border: 1px solid #e5e7eb; border-radius: 10px;
@@ -311,7 +319,6 @@ const saveCampaign = () => {
 .type-title { font-weight: 600; font-size: 14px; color: #111; }
 .type-desc { font-size: 12px; color: #6b7280; margin-top: 2px; }
 
-/* SCOPE SELECTION */
 .section-desc { font-size: 13px; color: #6b7280; margin-bottom: 15px; margin-top: -10px; }
 .scope-list { display: flex; flex-direction: column; gap: 10px; }
 .scope-item {
@@ -332,12 +339,10 @@ const saveCampaign = () => {
 .check-mark { font-size: 18px; color: #2563eb; display: none; }
 .scope-item.active .check-mark { display: block; }
 
-/* SCOPE CONFIG AREA */
 .scope-config-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e5e7eb; }
 .checkbox-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .checkbox-item { font-size: 13px; color: #374151; display: flex; align-items: center; gap: 6px; cursor: pointer; }
 
-/* PRODUCT SELECTOR */
 .search-add-wrapper { display: flex; gap: 8px; margin-bottom: 10px; }
 .form-input.sm { font-size: 13px; padding: 8px 10px; }
 .btn-icon-add { 
@@ -356,7 +361,6 @@ const saveCampaign = () => {
 .btn-remove { background: none; border: none; color: #ef4444; cursor: pointer; padding: 4px; }
 .btn-remove:hover { background: #fee2e2; border-radius: 4px; }
 
-/* UPLOAD */
 .upload-zone {
     border: 2px dashed #d1d5db; border-radius: 8px; height: 140px;
     display: flex; align-items: center; justify-content: center;
@@ -367,8 +371,4 @@ const saveCampaign = () => {
 .upload-content i { font-size: 32px; display: block; margin-bottom: 5px; color: #9ca3af; }
 .upload-content p span { color: #2563eb; font-weight: 600; }
 .upload-content small { font-size: 11px; color: #9ca3af; display: block; margin-top: 4px; }
-
-/* TRANSITION */
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

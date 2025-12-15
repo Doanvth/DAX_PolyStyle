@@ -400,8 +400,13 @@ const formatCurrency = (val) => {
   text-align: center;
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
+  
+  /* THÊM CÁC DÒNG DƯỚI ĐÂY */
+  height: 100%;      /* Giúp viền dọc kéo dài hết chiều cao */
+  width: 100%;       /* Đảm bảo chiếm hết không gian flex */
+  outline: none;     /* Bỏ viền xanh mặc định khi click vào */
+  background: transparent;
 }
-
 /* Meta Info */
 .meta-info p {
   font-size: 13px;

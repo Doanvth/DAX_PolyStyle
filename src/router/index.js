@@ -36,14 +36,16 @@ import CollectionManager from "@/views/admin/CollectionManager.vue";
 import AddCollection from "@/views/admin/AddCollection.vue";
 import AddStore from "@/views/admin/AddStore.vue";
 import AddCategory from "@/views/admin/AddCategory.vue";
-
+import AddUser from "@/views/admin/AddUser.vue";
 import AddArticle from "@/views/admin/AddArticle.vue";
 import AddBanner from "@/views/admin/AddBanner.vue";
 import AddProduct from "@/views/admin/AddProduct.vue";
-
+import ArticleCategoryManager from "@/views/admin/ArticleCategoryManager.vue";
+import AddArticleCategory from "@/views/admin/AddArticleCategory.vue";
 
 import AddDiscount from "@/views/admin/AddDiscount.vue";
 import DiscountManage from "@/views/admin/DiscountManager.vue";
+import NewsDetailView from "../views/User/NewsDetailView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -69,9 +71,8 @@ const router = createRouter({
         },
 
         { path: "user", name: "user", component: UserManager },
-
+        { path: "user/add", name: "user-add", component: AddUser },
         { path: "order", name: "order", component: OrderManager },
-
         { path: "store", name: "store", component: StoreManager },
         {
           path: 'store/add',
@@ -104,7 +105,9 @@ const router = createRouter({
         },
         { path: "revenue", name: "revenue", component: RevenueManager },
         { path: "discountManagers", name: "discountManagers", component: DiscountManage },
-        { path: "adddiscounts", name: "addDiscounts", component: AddDiscount }
+        { path: "adddiscounts", name: "addDiscounts", component: AddDiscount },
+        { path: "article-category", name: "article-category", component: ArticleCategoryManager },
+        { path: "article-category/add", name: "article-category-add", component: AddArticleCategory },
       ],
     },
 
@@ -202,6 +205,11 @@ const router = createRouter({
           path: "OrderSuccessPage",
           name: "OrderSuccessPages",
           component: OrderSuccessPage,
+        },
+        {
+          path: "/news/:id",
+          name: "NewsDetail",
+          component: NewsDetailView,
         },
       ],
     },

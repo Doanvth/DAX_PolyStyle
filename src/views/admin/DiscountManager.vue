@@ -61,11 +61,9 @@
       </div>
       
       <div class="right-actions">
-        <router-link   to="addDiscounts" class="btn-primary-custom">
+        <router-link :to="{ name: 'addDiscounts' }" class="btn-primary-custom">
           <i class="bi bi-plus-lg"></i> Tạo chiến dịch mới
         </router-link>
-
-        
       </div>
     </div>
 
@@ -122,7 +120,7 @@
             </td>
 
             <td class="text-center">
-              <button class="btn-icon" title="Chi tiết" @click="openModal(camp)">
+              <button class="btn-icon" title="Chi tiết" @click="editCampaign(camp.id)">
                 <i class="bi bi-pencil-square text-blue"></i>
               </button>
             </td>
@@ -153,57 +151,15 @@
       </div>
     </div>
 
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="modal-title-group">
-            <h3>{{ selectedCamp.name }}</h3>
-            <span class="status-badge" :class="getStatusClass(selectedCamp.status)">
-                {{ getStatusLabel(selectedCamp.status) }}
-            </span>
-          </div>
-          <button class="close-btn" @click="closeModal"><i class="bi bi-x-lg"></i></button>
-        </div>
-
-        <div class="modal-body">
-            <div class="modal-info-grid">
-                <div class="info-item full">
-                    <label>Thời gian diễn ra</label>
-                    <p class="fw-bold">{{ selectedCamp.startDate }} - {{ selectedCamp.endDate }}</p>
-                </div>
-                <div class="info-item">
-                    <label>Loại khuyến mãi</label>
-                    <p>{{ selectedCamp.type === 'percent' ? 'Giảm giá theo phần trăm' : 'Giảm giá tiền mặt cố định' }}</p>
-                </div>
-                <div class="info-item">
-                    <label>Mức giảm</label>
-                    <p class="text-blue fw-bold">{{ selectedCamp.type === 'percent' ? selectedCamp.value + '%' : formatCurrency(selectedCamp.value) }}</p>
-                </div>
-                <div class="info-item">
-                    <label>Phạm vi áp dụng</label>
-                    <p>{{ selectedCamp.scope }}</p>
-                </div>
-                <div class="info-item">
-                    <label>Đối tượng</label>
-                    <p>{{ selectedCamp.targetCount }} mục (Danh mục/Sản phẩm)</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn-outline-custom" @click="closeModal">Đóng</button>
-          <button class="btn-primary-custom">Chỉnh sửa chương trình</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
-// --- 1. MOCK DATA ---
+const router = useRouter();
+
 const generateData = () => {
   const data = [];
   const scopes = ['Toàn bộ cửa hàng', 'Theo Danh mục', 'Sản phẩm chọn lọc'];
@@ -221,7 +177,6 @@ const generateData = () => {
       value: isPercent ? (Math.floor(Math.random() * 50) + 10) : (Math.floor(Math.random() * 20) + 1) * 10000,
       scope: scope,
       targetCount: scope === 'Toàn bộ cửa hàng' ? 'Tất cả' : Math.floor(Math.random() * 50) + 5,
-      // Date format string text
       startDate: `01/12/2025 00:00`,
       endDate: `05/12/2025 23:59`,
       status: status
@@ -232,14 +187,11 @@ const generateData = () => {
 
 const campaigns = ref(generateData());
 
-// --- 2. STATE ---
 const searchQuery = ref("");
 const selectedScope = ref("");
 const currentTab = ref("all");
 const currentPage = ref(1);
 const itemsPerPage = 8;
-const showModal = ref(false);
-const selectedCamp = ref({});
 
 const tabs = [
   { label: 'Tất cả', value: 'all' },
@@ -248,7 +200,6 @@ const tabs = [
   { label: 'Đã xong', value: 'expired' }
 ];
 
-// --- 3. COMPUTED ---
 const filteredCampaigns = computed(() => {
   let result = campaigns.value;
 
@@ -283,7 +234,6 @@ const stats = computed(() => {
   };
 });
 
-// --- 4. HELPERS ---
 const setFilter = (tab) => {
   currentTab.value = tab;
   currentPage.value = 1;
@@ -318,16 +268,13 @@ const getScopeClass = (scope) => {
     return 'scope-prod';
 };
 
-const openModal = (camp) => {
-    selectedCamp.value = camp;
-    showModal.value = true;
+const editCampaign = (id) => {
+    router.push({ name: 'addDiscounts' });
 };
-const closeModal = () => showModal.value = false;
 
 </script>
 
 <style scoped>
-/* --- BASE --- */
 .admin-container {
   padding: 20px;
   min-height: 100vh;
@@ -337,7 +284,6 @@ const closeModal = () => showModal.value = false;
   font-size: 13px;
 }
 
-/* --- STATS --- */
 .dashboard-header { margin-bottom: 20px; }
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
 
@@ -358,7 +304,6 @@ const closeModal = () => showModal.value = false;
 .orange .icon { background: #fff7ed; color: #f97316; }
 .gray .icon { background: #f3f4f6; color: #6b7280; }
 
-/* --- TABS --- */
 .status-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
 .tab-btn {
   background: white; border: 1px solid #e5e7eb; padding: 6px 12px;
@@ -370,7 +315,6 @@ const closeModal = () => showModal.value = false;
 .count-badge { background: #f3f4f6; padding: 1px 6px; border-radius: 10px; font-size: 11px; color: #4b5563; }
 .tab-btn.active .count-badge { background: rgba(255,255,255,0.2); color: white; }
 
-/* --- TOOLBAR --- */
 .toolbar-top { display: flex; justify-content: space-between; margin-bottom: 12px; }
 .left-actions, .right-actions { display: flex; gap: 10px; }
 .search-box { position: relative; width: 300px; }
@@ -387,31 +331,26 @@ const closeModal = () => showModal.value = false;
   border-radius: 6px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 13px; text-decoration: none;
 }
 
-/* --- TABLE --- */
 .table-container { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 table { width: 100%; border-collapse: collapse; }
 th { background: #f9fafb; padding: 10px 12px; text-align: left; font-weight: 600; color: #4b5563; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; }
 td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
 tr:hover td { background-color: #f9fafb; }
 
-/* Campaign Info */
 .camp-info { display: flex; flex-direction: column; }
 .camp-name { font-weight: 600; color: #111; font-size: 13px; margin-bottom: 3px; }
 .camp-type { font-size: 11px; display: flex; align-items: center; gap: 4px; }
 
-/* Discount Value */
 .discount-value { font-weight: 700; color: #2563eb; font-size: 14px; }
 
-/* Scope Badge */
 .scope-badge { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-block; }
 .scope-all { background: #f3e8ff; color: #7e22ce; }
 .scope-cat { background: #e0e7ff; color: #3730a3; }
 .scope-prod { background: #ffedd5; color: #9a3412; }
 
-/* DATE CELL: NO WRAP */
 .date-cell { 
-    white-space: nowrap; /* Không xuống dòng */
-    width: 1%; /* Co nhỏ nhất có thể, nhưng nowrap sẽ đẩy nó ra */
+    white-space: nowrap;
+    width: 1%; 
 }
 .date-wrapper {
     display: inline-flex; align-items: center;
@@ -419,7 +358,6 @@ tr:hover td { background-color: #f9fafb; }
     font-family: monospace; font-size: 12px; color: #374151; font-weight: 600;
 }
 
-/* Status Badges */
 .status-badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
 .badge-active { background: #dcfce7; color: #166534; }
 .badge-upcoming { background: #ffedd5; color: #9a3412; }
@@ -432,7 +370,6 @@ tr:hover td { background-color: #f9fafb; }
 .text-xs { font-size: 11px; }
 .text-center { text-align: center; }
 
-/* --- PAGINATION --- */
 .pagination-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-top: 1px solid #f3f4f6; }
 .page-info { color: #6b7280; font-size: 13px; }
 .page-controls { display: flex; align-items: center; gap: 8px; }
@@ -441,24 +378,4 @@ tr:hover td { background-color: #f9fafb; }
 .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .current-page { font-weight: 600; color: #374151; font-size: 13px; }
 .empty-state { text-align: center; padding: 40px; color: #9ca3af; }
-
-/* --- MODAL --- */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; }
-.modal-content { background: white; width: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); animation: slideDown 0.2s ease-out; }
-
-.modal-header { padding: 15px 20px; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center; }
-.modal-title-group h3 { margin: 0; font-size: 16px; font-weight: 700; color: #111; margin-bottom: 4px; }
-.close-btn { background: none; border: none; font-size: 18px; color: #9ca3af; cursor: pointer; }
-
-.modal-body { padding: 20px; }
-.modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.info-item label { font-size: 11px; text-transform: uppercase; color: #9ca3af; font-weight: 600; display: block; margin-bottom: 4px; }
-.info-item p { margin: 0; font-size: 13px; color: #374151; font-weight: 500; }
-.info-item.full { grid-column: 1 / -1; }
-.fw-bold { font-weight: 700; }
-
-.modal-footer { padding: 15px 20px; background: #f9fafb; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #f3f4f6; }
-.btn-outline-custom { background: white; border: 1px solid #d1d5db; color: #374151; padding: 7px 14px; border-radius: 6px; cursor: pointer; }
-
-@keyframes slideDown { from { transform: translateY(-15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>

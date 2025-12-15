@@ -236,8 +236,6 @@
 <script setup>
 import { ref, computed, reactive } from 'vue';
 
-// --- DATA ---
-// Mock Data Categories
 const categories = ref([
   {
     id: 101, name: 'Thời trang Nam', slug: 'thoi-trang-nam', status: 'active', productCount: 150, isOpen: true, children: [
@@ -262,8 +260,7 @@ const sizes = ref([
   { id: 4, name: 'Size Đại', code: 'XL', count: 10 },
 ]);
 
-// --- STATE MANAGEMENT ---
-const activeManagerTab = ref('category'); // 'category', 'color', 'size'
+const activeManagerTab = ref('category'); 
 const searchQuery = ref("");
 const currentStatus = ref("all");
 
@@ -279,7 +276,6 @@ const filterTabs = [
   { label: 'Đang ẩn', value: 'inactive' }
 ];
 
-// --- MODAL STATE ---
 const showModal = ref(false);
 const isEditMode = ref(false);
 const formData = reactive({
@@ -290,16 +286,13 @@ const formData = reactive({
   code: ''
 });
 
-// --- COMPUTED ---
 const getTabName = computed(() => {
   if (activeManagerTab.value === 'category') return 'danh mục';
   if (activeManagerTab.value === 'color') return 'màu sắc';
   return 'kích cỡ';
 });
 
-// Filter Categories
 const filteredCategories = computed(() => {
-  // Logic filter giữ nguyên như cũ
     return categories.value.filter(parent => {
         const key = searchQuery.value.toLowerCase();
         const parentNameMatch = parent.name.toLowerCase().includes(key);
@@ -307,12 +300,10 @@ const filteredCategories = computed(() => {
     });
 });
 
-// Filter Colors
 const filteredColors = computed(() => {
   return colors.value.filter(c => c.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
 });
 
-// Filter Sizes
 const filteredSizes = computed(() => {
   return sizes.value.filter(s =>
     s.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -322,24 +313,20 @@ const filteredSizes = computed(() => {
 
 const stats = computed(() => ({ total: 10, parents: 5, children: 5, inactive: 1 }));
 
-// --- ACTIONS ---
 const setFilter = (val) => currentStatus.value = val;
 const toggleCategory = (cat) => cat.isOpen = !cat.isOpen;
 const toggleStatus = (item) => item.status = item.status === 'active' ? 'inactive' : 'active';
 const expandAll = () => categories.value.forEach(c => c.isOpen = true);
 
-// MODAL ACTIONS
 const openModal = (item = null) => {
   isEditMode.value = !!item;
   if (item) {
     formData.id = item.id;
     formData.name = item.name;
-    // Map fields based on current tab
     if (activeManagerTab.value === 'category') formData.slug = item.slug;
     if (activeManagerTab.value === 'color') formData.hex = item.hex;
     if (activeManagerTab.value === 'size') formData.code = item.code;
   } else {
-    // Reset form
     formData.id = null;
     formData.name = '';
     formData.slug = '';
@@ -352,11 +339,9 @@ const openModal = (item = null) => {
 const closeModal = () => showModal.value = false;
 
 const saveData = () => {
-  // Logic lưu data giả lập
   const newItem = {
     id: formData.id || Date.now(),
     name: formData.name,
-    // Các trường khác tùy tab
     ...(activeManagerTab.value === 'category' && { slug: formData.slug || formData.name.toLowerCase(), status: 'active', children: [] }),
     ...(activeManagerTab.value === 'color' && { hex: formData.hex }),
     ...(activeManagerTab.value === 'size' && { code: formData.code }),
@@ -476,7 +461,6 @@ const deleteItem = (id) => {
   color: #6b7280;
 }
 
-/* --- MANAGER TABS (NEW) --- */
 .manager-tabs {
   display: flex;
   gap: 10px;
@@ -601,7 +585,6 @@ const deleteItem = (id) => {
   gap: 6px;
 }
 
-/* Table Styles */
 .table-container {
   background: white;
   border-radius: 8px;
@@ -671,7 +654,6 @@ td {
   margin: 0 4px;
 }
 
-/* Tree Styles */
 .tree-cell {
   display: flex;
   align-items: center;
@@ -706,7 +688,6 @@ td {
   border-bottom-left-radius: 8px;
 }
 
-/* Status Toggle */
 .status-toggle {
   cursor: pointer;
   display: flex;

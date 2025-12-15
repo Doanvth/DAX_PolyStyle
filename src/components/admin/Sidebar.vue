@@ -1,10 +1,8 @@
 <template>
   <div class="sidebar d-flex flex-column" :class="{ collapsed: isCollapsed }">
-    <!-- Header -->
     <div class="sidebar-header d-flex align-items-center justify-content-between">
       <div class="sidebar-logo d-flex align-items-center justify-content-center gap-2">
-        <!-- Icon Logo -->
-        <i class="bi bi-box-seam-fill logo-icon" v-if="isCollapsed"></i> 
+        <i class="bi bi-box-seam-fill logo-icon" v-if="isCollapsed"></i>
         <span class="logo-text" v-if="!isCollapsed">ADMIN POLY</span>
       </div>
       <button class="toggle-btn" @click="toggleSidebar">
@@ -12,67 +10,14 @@
       </button>
     </div>
 
-
     <ul class="list-unstyled sidebar-menu flex-grow-1 mt-3">
-      
-
-      <router-link to="/admin" class="menu-item" active-class="active" exact>
-        <i class="bi bi-speedometer2"></i>
-        <span v-if="!isCollapsed">Bảng điều khiển</span>
-      </router-link>
-
-
-      <router-link to="/admin/products" class="menu-item" active-class="active">
-        <i class="bi bi-box-seam"></i>
-        <span v-if="!isCollapsed">Sản phẩm</span>
-      </router-link>
-
- 
-      <router-link to="/admin/category" class="menu-item" active-class="active">
-        <i class="bi bi-tags"></i>
-        <span v-if="!isCollapsed">Danh mục</span>
-      </router-link>
-
-      <router-link to="/admin/order" class="menu-item" active-class="active">
-        <i class="bi bi-receipt"></i>
-        <span v-if="!isCollapsed">Đơn hàng</span>
-      </router-link>
-
-      <router-link to="/admin/user" class="menu-item" active-class="active">
-        <i class="bi bi-people"></i>
-        <span v-if="!isCollapsed">Khách hàng</span>
-      </router-link>
-
-      <router-link to="/admin/discountManagers" class="menu-item" active-class="active">
-        <i class="bi bi-ticket-perforated"></i>
-        <span v-if="!isCollapsed">Khuyến mãi</span>
-      </router-link>
-
-      <router-link to="/admin/store" class="menu-item" active-class="active">
-        <i class="bi bi-shop"></i>
-        <span v-if="!isCollapsed">Cửa hàng</span>
-      </router-link>
-
-      <router-link to="/admin/collection" class="menu-item" active-class="active">
-        <i class="bi bi-collection"></i>
-        <span v-if="!isCollapsed">Bộ sưu tập</span>
-      </router-link>
-
-      <router-link to="/admin/post" class="menu-item" active-class="active">
-        <i class="bi bi-journal-text"></i>
-        <span v-if="!isCollapsed">Bài viết</span>
-      </router-link>
-
-      <router-link to="/admin/banner" class="menu-item" active-class="active">
-        <i class="bi bi-badge-ad"></i>
-        <span v-if="!isCollapsed">Biểu ngữ</span>
-      </router-link>
-
-      <router-link to="/admin/revenue" class="menu-item" active-class="active">
-        <i class="bi bi-bar-chart"></i>
-        <span v-if="!isCollapsed">Doanh thu</span>
-      </router-link>
-
+      <li v-for="item in menuItems" :key="item.path">
+        <router-link :to="item.path" class="menu-item" :class="{ active: isActive(item.path) }"
+          :title="isCollapsed ? item.label : ''">
+          <i :class="item.icon"></i>
+          <span v-if="!isCollapsed">{{ item.label }}</span>
+        </router-link>
+      </li>
     </ul>
 
     <div class="sidebar-logout mt-auto">
@@ -86,11 +31,30 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const props = defineProps({ collapsed: Boolean });
 const emit = defineEmits(["toggle"]);
+const route = useRoute();
 
 const isCollapsed = ref(props.collapsed);
+
+const menuItems = [
+  { path: '/admin', icon: 'bi bi-speedometer2', label: 'Bảng điều khiển' },
+  { path: '/admin/products', icon: 'bi bi-box-seam', label: 'Sản phẩm' },
+  { path: '/admin/category', icon: 'bi bi-tags', label: 'Danh mục SP' },
+  { path: '/admin/order', icon: 'bi bi-receipt', label: 'Đơn hàng' },
+  { path: '/admin/user', icon: 'bi bi-people', label: 'Khách hàng' },
+  { path: '/admin/discountManagers', icon: 'bi bi-ticket-perforated', label: 'Khuyến mãi' },
+  { path: '/admin/store', icon: 'bi bi-shop', label: 'Cửa hàng' },
+  { path: '/admin/collection', icon: 'bi bi-collection', label: 'Bộ sưu tập' },
+
+  { path: '/admin/article-category', icon: 'bi bi-bookmark', label: 'Danh mục bài viết' },
+
+  { path: '/admin/post', icon: 'bi bi-journal-text', label: 'Bài viết' },
+  { path: '/admin/banner', icon: 'bi bi-badge-ad', label: 'Biểu ngữ' },
+  { path: '/admin/revenue', icon: 'bi bi-bar-chart', label: 'Doanh thu' },
+];
 
 watch(
   () => props.collapsed,
@@ -100,6 +64,34 @@ watch(
 const toggleSidebar = () => {
   emit("toggle");
 };
+
+const isActive = (menuPath) => {
+  const currentPath = route.path.toLowerCase();
+  const targetPath = menuPath.toLowerCase();
+
+  if (targetPath === '/admin') {
+    return currentPath === '/admin';
+  }
+
+  const mappings = {
+    '/admin/products': ['/admin/addproducts', '/admin/product', '/admin/products'],
+    '/admin/discountmanagers': ['/admin/adddiscounts', '/admin/discountmanagers', '/admin/discounts'],
+    '/admin/post': ['/admin/addposts', '/admin/posts', '/admin/post'],
+    '/admin/banner': ['/admin/addbanners', '/admin/banner'],
+    '/admin/store': ['/admin/store', '/admin/addstore'],
+    '/admin/category': ['/admin/category', '/admin/addcategory'], 
+    '/admin/collection': ['/admin/collection', '/admin/addcollection'],
+
+    '/admin/article-category': ['/admin/article-category', '/admin/article-category/add']
+  };
+
+  if (mappings[targetPath]) {
+    const isMatch = mappings[targetPath].some(alias => currentPath.startsWith(alias.toLowerCase()));
+    if (isMatch) return true;
+  }
+
+  return currentPath.startsWith(targetPath);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -108,23 +100,26 @@ const toggleSidebar = () => {
 ::-webkit-scrollbar {
   width: 5px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #495057;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #6c757d;
 }
 
 .sidebar {
-  width: 260px; 
+  width: 260px;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #1e1e2d; 
+  background-color: #1e1e2d;
   color: #a2a3b7;
   padding: 20px 15px;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
@@ -148,14 +143,37 @@ const toggleSidebar = () => {
     .menu-item {
       justify-content: center;
       padding: 12px;
-      
-      i { margin-right: 0; font-size: 20px; }
+
+      i {
+        margin-right: 0;
+        font-size: 20px;
+      }
     }
-    
+
     .sidebar-header {
+      justify-content: center;
+
+      .toggle-btn {
+        position: absolute;
+        right: -12px;
+        top: 25px;
+        width: 24px;
+        height: 24px;
+        background: #3699ff;
+        color: white;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        .toggle-btn { position: absolute; right: -12px; top: 25px; width: 24px; height: 24px; background: #3699ff; color: white; display: flex; align-items: center; justify-content: center; i { font-size: 12px; } }
-        .sidebar-logo { display: none; }
+        border-radius: 50%;
+
+        i {
+          font-size: 12px;
+        }
+      }
+
+      .sidebar-logo {
+        display: none;
+      }
     }
   }
 
@@ -210,7 +228,11 @@ const toggleSidebar = () => {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 5px; 
+    padding-right: 5px;
+
+    li {
+      margin-bottom: 5px;
+    }
 
     .menu-item {
       display: flex;
@@ -223,30 +245,32 @@ const toggleSidebar = () => {
       cursor: pointer;
       text-decoration: none !important;
       transition: all 0.25s ease;
-      margin-bottom: 5px;
 
       i {
         font-size: 18px;
         margin-right: 12px;
-        color: #5e6278; 
+        color: #5e6278;
         transition: color 0.2s;
       }
 
       &:hover {
         background: rgba(255, 255, 255, 0.03);
         color: #ffffff;
-        i { color: #3699ff; }
+
+        i {
+          color: #3699ff;
+        }
       }
 
       &.active {
-        background: #1b1b29; 
+        background: #1b1b29;
         color: #ffffff;
         background: rgba(54, 153, 255, 0.1);
-        
+
         i {
-          color: #3699ff; 
+          color: #3699ff;
         }
-        
+
         font-weight: 600;
       }
     }
@@ -260,7 +284,7 @@ const toggleSidebar = () => {
 
     .logout-btn {
       background: rgba(246, 78, 96, 0.1);
-      color: #f64e60; 
+      color: #f64e60;
       border: none;
       padding: 12px;
       border-radius: 8px;

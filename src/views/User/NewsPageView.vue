@@ -9,11 +9,17 @@
         class="news-card"
       >
         <div class="card-image">
-          <img :src="item.image" :alt="item.title" />
+          <router-link :to="{ name: 'NewsDetail', params: { id: item.id } }">
+            <img :src="item.image" :alt="item.title" />
+          </router-link>
         </div>
 
         <div class="card-body">
-          <h3 class="news-title">{{ item.title }}</h3>
+          <h3 class="news-title">
+            <router-link :to="{ name: 'NewsDetail', params: { id: item.id } }">
+              {{ item.title }}
+            </router-link>
+          </h3>
           <p class="news-date">{{ item.date }}</p>
           <p class="news-desc">{{ item.desc }}</p>
         </div>
@@ -30,7 +36,12 @@
             Chia sẻ
           </button>
           
-          <a href="#" class="btn-detail">Chi tiết</a>
+          <router-link 
+            :to="{ name: 'NewsDetail', params: { id: item.id } }" 
+            class="btn-detail"
+          >
+            Chi tiết
+          </router-link>
         </div>
       </div>
     </div>
@@ -73,14 +84,14 @@ const newsList = ref([]);
 const itemsPerPage = 9; // Hiển thị 9 tin (3 hàng x 3 cột) mỗi trang
 const currentPage = ref(1);
 
-// Các link ảnh bạn cung cấp
+// Các link ảnh giả lập
 const images = [
-  "https://pos.nvncdn.com/af3c03-152482/art/20251124_oi4eDX4M.jpeg?v=1763957929", // Ảnh xe máy mưa
-  "https://pos.nvncdn.com/af3c03-152482/art/20251122_FG6zAMZg.jpeg?v=1763779580", // Ảnh đi bộ
-  "https://pos.nvncdn.com/af3c03-152482/art/20251121_9ZJAaxeK.jpeg?v=1763694098"  // Ảnh retro
+  "https://pos.nvncdn.com/af3c03-152482/art/20251124_oi4eDX4M.jpeg?v=1763957929", 
+  "https://pos.nvncdn.com/af3c03-152482/art/20251122_FG6zAMZg.jpeg?v=1763779580", 
+  "https://pos.nvncdn.com/af3c03-152482/art/20251121_9ZJAaxeK.jpeg?v=1763694098"
 ];
 
-// Hàm tạo dữ liệu giả lập giống ảnh
+// Hàm tạo dữ liệu giả lập
 const generateData = () => {
   const titles = [
     "Dự báo thời tiết từ ngày 22 - 29/11: Không khí lạnh về, gây rét",
@@ -108,7 +119,7 @@ const generateData = () => {
     data.push({
       id: i,
       title: randTitle,
-      date: `2${i % 9}-11-2025`, // Giả lập ngày tháng 11/2025
+      date: `2${i % 9}-11-2025`, 
       desc: randDesc,
       image: randImg
     });
@@ -129,13 +140,14 @@ const paginatedNews = computed(() => {
   return newsList.value.slice(start, end);
 });
 
-// Logic hiển thị nút phân trang (nếu quá nhiều trang thì chỉ hiện một số)
+// Logic hiển thị nút phân trang 
 const visiblePages = computed(() => {
   let pages = [];
+  // Ở đây demo hiển thị tất cả các trang. Thực tế nếu > 10 trang nên có logic rút gọn (...)
   for (let i = 1; i <= totalPages.value; i++) {
     pages.push(i);
   }
-  return pages; // Ở đây mình return hết, nếu muốn rút gọn (1,2...5,6) cần logic phức tạp hơn chút
+  return pages;
 });
 
 const changePage = (page) => {
@@ -147,7 +159,7 @@ const changePage = (page) => {
 </script>
 
 <style scoped>
-/* Google Font tương tự */
+/* Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
 .container {
@@ -170,14 +182,14 @@ const changePage = (page) => {
 /* --- GRID LAYOUT --- */
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cột */
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   margin-bottom: 50px;
 }
 
 /* --- CARD STYLE --- */
 .news-card {
-  border: 1px solid #eee; /* Viền mờ bao quanh */
+  border: 1px solid #eee;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -192,6 +204,7 @@ const changePage = (page) => {
   width: 100%;
   aspect-ratio: 16/9;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .card-image img {
@@ -207,7 +220,7 @@ const changePage = (page) => {
 
 .card-body {
   padding: 20px;
-  flex: 1; /* Để đẩy footer xuống đáy */
+  flex: 1; 
 }
 
 .news-title {
@@ -220,6 +233,17 @@ const changePage = (page) => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Style cho link trong tiêu đề */
+.news-title a {
+  text-decoration: none;
+  color: inherit; /* Giữ màu đen của thẻ h3 */
+  transition: color 0.2s;
+}
+
+.news-title a:hover {
+  color: #d0021b; /* Màu đỏ khi hover */
 }
 
 .news-date {
@@ -272,11 +296,12 @@ const changePage = (page) => {
   font-size: 12px;
   color: #777;
   text-decoration: none;
+  transition: color 0.2s;
 }
 
 .btn-detail:hover {
   text-decoration: underline;
-  color: #000;
+  color: #d0021b; /* Đổi màu đỏ khi hover */
 }
 
 /* --- PAGINATION --- */
