@@ -153,7 +153,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="color in filteredColors" :key="color.id" class="row-parent">
+          <tr v-if="loadingData && activeManagerTab === 'color'">
+              <td colspan="4" class="empty-state">
+                <i class="bi bi-arrow-clockwise animate-spin"></i> Đang tải dữ liệu màu sắc...
+              </td>
+          </tr>
+          <tr v-else v-for="color in filteredColors" :key="color.id" class="row-parent">
             <td class="fw-bold">{{ color.name }}</td>
             <td class="font-monospace text-muted">{{ color.hex }}</td>
             <td>
@@ -164,7 +169,7 @@
               <button class="btn-icon" @click="deleteItem(color.id)"><i class="bi bi-trash text-red"></i></button>
             </td>
           </tr>
-          <tr v-if="filteredColors.length === 0">
+          <tr v-if="!loadingData && filteredColors.length === 0 && activeManagerTab === 'color'">
             <td colspan="4" class="empty-state">Không tìm thấy màu sắc nào</td>
           </tr>
         </tbody>
@@ -179,7 +184,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="size in filteredSizes" :key="size.id" class="row-parent">
+          <tr v-if="loadingData && activeManagerTab === 'size'">
+              <td colspan="3" class="empty-state">
+                <i class="bi bi-arrow-clockwise animate-spin"></i> Đang tải dữ liệu kích cỡ...
+              </td>
+          </tr>
+          <tr v-else v-for="size in filteredSizes" :key="size.id" class="row-parent">
             <td class="fw-bold">{{ size.name }}</td>
             <td><span class="badge-code">{{ size.code }}</span></td>
             <td class="text-center">
@@ -187,7 +197,7 @@
               <button class="btn-icon" @click="deleteItem(size.id)"><i class="bi bi-trash text-red"></i></button>
             </td>
           </tr>
-          <tr v-if="filteredSizes.length === 0">
+          <tr v-if="!loadingData && filteredSizes.length === 0 && activeManagerTab === 'size'">
             <td colspan="3" class="empty-state">Không tìm thấy kích cỡ nào</td>
           </tr>
         </tbody>
@@ -202,8 +212,28 @@
         </div>
 
         <div class="modal-body">
+          
+          <div v-if="activeManagerTab === 'category'" class="form-group">
+            <label>Tên danh mục</label>
+            <input v-model="formData.name" type="text" class="form-input" placeholder="Ví dụ: Áo phông">
 
-          <div v-if="activeManagerTab === 'color'" class="form-group">
+            <label class="mt-2">Trạng thái</label>
+            <div class="status-group-modal">
+                <label class="status-item">
+                    <input type="radio" v-model="formData.status" value="active" name="status-modal">
+                    <span class="status-box">
+                        <i class="bi bi-eye"></i> Hiển thị
+                    </span>
+                </label>
+                <label class="status-item">
+                    <input type="radio" v-model="formData.status" value="inactive" name="status-modal">
+                    <span class="status-box">
+                        <i class="bi bi-eye-slash"></i> Ẩn
+                    </span>
+                </label>
+            </div>
+          </div>
+          <div v-else-if="activeManagerTab === 'color'" class="form-group">
             <label>Tên màu</label>
             <input v-model="formData.name" type="text" class="form-input" placeholder="Ví dụ: Đỏ đô">
 
@@ -214,7 +244,7 @@
             </div>
           </div>
 
-          <div v-if="activeManagerTab === 'size'" class="form-group">
+          <div v-else-if="activeManagerTab === 'size'" class="form-group">
             <label>Tên hiển thị</label>
             <input v-model="formData.name" type="text" class="form-input" placeholder="Ví dụ: Lớn, Nhỏ, 42...">
 
@@ -234,38 +264,27 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, onMounted, watch } from 'vue';
+import Swal from 'sweetalert2'; 
+
+// ----------------------------------------------------
+// THIẾT LẬP CẤU HÌNH API
+const API_URL = 'http://localhost:3000'; 
+const CATEGORY_API_URL = `${API_URL}/categories`;
+const COLOR_API_URL = `${API_URL}/color`; 
+const SIZE_API_URL = `${API_URL}/size`; 
+// ----------------------------------------------------
 
 // --- DATA ---
-// Mock Data Categories
-const categories = ref([
-  {
-    id: 101, name: 'Thời trang Nam', slug: 'thoi-trang-nam', status: 'active', productCount: 150, isOpen: true, children: [
-      { id: 102, name: 'Áo Thun', slug: 'ao-thun-nam', status: 'active', productCount: 50 },
-      { id: 103, name: 'Quần Jean', slug: 'quan-jean-nam', status: 'active', productCount: 45 }
-    ]
-  },
-  { id: 201, name: 'Thời trang Nữ', slug: 'thoi-trang-nu', status: 'active', productCount: 200, isOpen: false, children: [] }
-]);
-
-const colors = ref([
-  { id: 1, name: 'Đỏ', hex: '#FF0000', count: 12 },
-  { id: 2, name: 'Xanh Dương', hex: '#0000FF', count: 8 },
-  { id: 3, name: 'Đen', hex: '#000000', count: 50 },
-  { id: 4, name: 'Trắng', hex: '#FFFFFF', count: 30 },
-]);
-
-const sizes = ref([
-  { id: 1, name: 'Size Nhỏ', code: 'S', count: 20 },
-  { id: 2, name: 'Size Trung Bình', code: 'M', count: 45 },
-  { id: 3, name: 'Size Lớn', code: 'L', count: 30 },
-  { id: 4, name: 'Size Đại', code: 'XL', count: 10 },
-]);
+const categories = ref([]); 
+const colors = ref([]); 
+const sizes = ref([]); 
 
 // --- STATE MANAGEMENT ---
-const activeManagerTab = ref('category'); // 'category', 'color', 'size'
+const activeManagerTab = ref('category');
 const searchQuery = ref("");
 const currentStatus = ref("all");
+const loadingData = ref(false); 
 
 const managerTabs = [
   { id: 'category', label: 'Danh mục', icon: 'bi bi-list-ul' },
@@ -286,8 +305,11 @@ const formData = reactive({
   id: null,
   name: '',
   slug: '',
-  hex: '#000000',
-  code: ''
+  hex: '#000000', 
+  code: '', // Sử dụng cho Kích cỡ
+  status: 'active',
+  parentId: null,
+  description: ''
 });
 
 // --- COMPUTED ---
@@ -297,22 +319,71 @@ const getTabName = computed(() => {
   return 'kích cỡ';
 });
 
-// Filter Categories
-const filteredCategories = computed(() => {
-  // Logic filter giữ nguyên như cũ
-    return categories.value.filter(parent => {
-        const key = searchQuery.value.toLowerCase();
-        const parentNameMatch = parent.name.toLowerCase().includes(key);
-        return parentNameMatch; 
+/**
+ * Hàm giúp tổ chức danh mục dạng cây (Parent-Child)
+ */
+const buildCategoryTree = (list) => {
+    const map = {};
+    const processedList = [];
+
+    // Bước 1: Chuẩn hóa ID thành chuỗi để làm key Map
+    list.forEach(item => {
+        const itemIdString = String(item.id);
+        const node = { 
+            ...item, 
+            id: itemIdString, // Chuẩn hóa ID thành chuỗi
+            children: item.children || [], 
+            isOpen: item.isOpen !== undefined ? item.isOpen : true, 
+            status: item.status || 'active'
+        };
+        map[itemIdString] = node;
+        processedList.push(node);
     });
+
+    const tree = [];
+    // Bước 2: Xây dựng mối quan hệ cha con (Sử dụng parentIdString để tra cứu)
+    processedList.forEach(node => {
+        const parentIdString = node.parentId !== null && node.parentId !== undefined ? String(node.parentId) : null;
+        
+        // Kiểm tra cha tồn tại trong map
+        if (parentIdString && map[parentIdString]) {
+            // Đây là danh mục con (đẩy vào mảng children của cha)
+            if (!map[parentIdString].children.some(child => child.id === node.id)) {
+                 map[parentIdString].children.push(node);
+            }
+        } else {
+            // Đây là danh mục gốc (đẩy vào mảng tree chính)
+            tree.push(node);
+        }
+    });
+    return tree; // Chỉ trả về các danh mục gốc
+};
+
+
+// Filter Categories 
+const filteredCategories = computed(() => {
+  let list = categories.value;
+    
+  if (currentStatus.value !== 'all') {
+      list = list.filter(parent => parent.status === currentStatus.value);
+  }
+
+  const key = searchQuery.value.toLowerCase();
+  if (key) {
+      list = list.filter(parent => {
+          const parentMatch = parent.name.toLowerCase().includes(key);
+          const childMatch = parent.children.some(child => child.name.toLowerCase().includes(key));
+          return parentMatch || childMatch;
+      });
+  }
+  
+  return list;
 });
 
-// Filter Colors
 const filteredColors = computed(() => {
-  return colors.value.filter(c => c.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+  return colors.value.filter(c => c.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || c.hex.toLowerCase().includes(searchQuery.value.toLowerCase()));
 });
 
-// Filter Sizes
 const filteredSizes = computed(() => {
   return sizes.value.filter(s =>
     s.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -320,88 +391,373 @@ const filteredSizes = computed(() => {
   );
 });
 
-const stats = computed(() => ({ total: 10, parents: 5, children: 5, inactive: 1 }));
+const stats = computed(() => ({ 
+    total: categories.value.length + colors.value.length + sizes.value.length, 
+    parents: categories.value.filter(c => c.children.length > 0).length, 
+    children: categories.value.reduce((acc, cat) => acc + cat.children.length, 0),
+    inactive: categories.value.filter(c => c.status === 'inactive').length,
+}));
+
+// --- HÀM GỌI API THỰC TẾ ---
+
+/** Hàm lấy danh sách danh mục */
+const fetchCategories = async () => {
+    loadingData.value = true;
+    try {
+        const response = await fetch(CATEGORY_API_URL);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const rawData = await response.json();
+        categories.value = buildCategoryTree(rawData); 
+    } catch (error) {
+        console.error("Lỗi khi tải danh mục (API):", error);
+    } finally {
+        loadingData.value = false;
+    }
+};
+
+/** Hàm lấy danh sách màu sắc */
+const fetchColors = async () => {
+    try {
+        const response = await fetch(COLOR_API_URL);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const rawData = await response.json();
+        colors.value = rawData; 
+    } catch (error) {
+        console.error("Lỗi khi tải màu sắc (API):", error);
+    }
+};
+
+/** Hàm lấy danh sách kích cỡ */
+const fetchSizes = async () => {
+    try {
+        const response = await fetch(SIZE_API_URL);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const rawData = await response.json();
+        sizes.value = rawData; 
+    } catch (error) {
+        console.error("Lỗi khi tải kích cỡ (API):", error);
+        Swal.fire('Lỗi', 'Không thể tải danh sách kích cỡ từ server.', 'error');
+    }
+};
+
+
+/** Hàm API DELETE cho Danh mục */
+const deleteCategoryApi = async (id) => {
+    const response = await fetch(`${CATEGORY_API_URL}/${id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error(`Lỗi Server (Status: ${response.status})`);
+    return { success: true };
+};
+
+/** Hàm API DELETE cho Màu sắc */
+const deleteColorApi = async (id) => {
+    const response = await fetch(`${COLOR_API_URL}/${id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error(`Lỗi Server (Status: ${response.status})`);
+    return { success: true };
+};
+
+/**
+ * Hàm API DELETE cho Kích cỡ
+ */
+const deleteSizeApi = async (id) => {
+    const response = await fetch(`${SIZE_API_URL}/${id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error(`Lỗi Server (Status: ${response.status})`);
+    return { success: true };
+};
+
+
+/** * Hàm API PUT cho Danh mục 
+ * ĐÃ SỬA LỖI 404: Đảm bảo itemId được chuẩn hóa và tồn tại
+ */
+const updateCategoryApi = async (data) => {
+    
+    // BẮT LỖI 404: Đảm bảo ID hợp lệ (không null/undefined) và chuẩn hóa
+    if (!data.id) {
+        // Lỗi nghiêm trọng, không nên xảy ra nếu openModal hoạt động đúng
+        throw new Error("ID danh mục không hợp lệ để cập nhật.");
+    }
+    
+    // LUÔN CHUẨN HÓA ID THÀNH CHUỖI ĐỂ TẠO URL PUT
+    const itemId = String(data.id);
+    
+    // Chuẩn hóa parentId sang chuỗi (nếu không null)
+    const normalizedParentId = data.parentId !== null ? String(data.parentId) : null;
+
+
+    // Chỉ trích xuất các trường cần thiết (dạng phẳng) để gửi lên API
+    const dataToSend = {
+        id: itemId, // Gửi ID chuẩn hóa (String)
+        name: data.name,
+        status: data.status,
+        slug: data.slug || undefined,
+        description: data.description || "",
+        parentId: normalizedParentId, // Gửi parentId chuẩn hóa
+    };
+
+    // SỬA URL: Dùng ID đã được chuẩn hóa (itemId)
+    const response = await fetch(`${CATEGORY_API_URL}/${itemId}`, { 
+        method: 'PUT', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify(dataToSend),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        // Thêm log URL để kiểm tra khi debug
+        console.error("PUT URL thất bại:", `${CATEGORY_API_URL}/${itemId}`); 
+        throw new Error(`Lỗi Server (Status: ${response.status}): ${errorData.message || 'Không thể cập nhật danh mục'}`);
+    }
+    return { success: true, data: await response.json() };
+};
+
+/** Hàm API POST cho Màu sắc */
+const createColorApi = async (data) => {
+    const response = await fetch(COLOR_API_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: data.name, hex: data.hex }),
+    });
+    if (!response.ok) throw new Error(`Lỗi Server (Status: ${response.status})`);
+    return { success: true, data: await response.json() };
+};
+
+/** Hàm API PUT cho Màu sắc */
+const updateColorApi = async (data) => { 
+    const response = await fetch(`${COLOR_API_URL}/${data.id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: data.name, hex: data.hex }),
+    });
+    if (!response.ok) throw new Error(`Lỗi Server (Status: ${response.status})`);
+    return { success: true, data: await response.json() };
+};
+
+/**
+ * Hàm API POST cho Kích cỡ
+ */
+const createSizeApi = async (data) => {
+    // Thêm validation code
+    if (!data.code || !data.code.trim()) {
+        throw new Error("Mã kích cỡ không được để trống.");
+    }
+    const response = await fetch(SIZE_API_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: data.name, code: data.code }),
+    });
+    if (!response.ok) throw new Error(`Lỗi Server (Status: ${response.status})`);
+    return { success: true, data: await response.json() };
+};
+
+/**
+ * Hàm API PUT cho Kích cỡ
+ */
+const updateSizeApi = async (data) => { 
+    // Thêm validation code
+    if (!data.code || !data.code.trim()) {
+        throw new Error("Mã kích cỡ không được để trống.");
+    }
+    const response = await fetch(`${SIZE_API_URL}/${data.id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: data.name, code: data.code }),
+    });
+    if (!response.ok) throw new Error(`Lỗi Server (Status: ${response.status})`);
+    return { success: true, data: await response.json() };
+};
+
 
 // --- ACTIONS ---
 const setFilter = (val) => currentStatus.value = val;
 const toggleCategory = (cat) => cat.isOpen = !cat.isOpen;
-const toggleStatus = (item) => item.status = item.status === 'active' ? 'inactive' : 'active';
+const toggleStatus = (item) => item.status = item.status === 'active' ? 'inactive' : 'active'; 
 const expandAll = () => categories.value.forEach(c => c.isOpen = true);
 
 // MODAL ACTIONS
 const openModal = (item = null) => {
   isEditMode.value = !!item;
+  
+  // RESET FORM DATA TRƯỚC
+  formData.id = null;
+  formData.name = '';
+  formData.slug = '';
+  formData.hex = '#000000';
+  formData.code = '';
+  formData.status = 'active';
+  formData.parentId = null; 
+  formData.description = ''; 
+
   if (item) {
-    formData.id = item.id;
+    // KHI MỞ MODAL: LUÔN CHUẨN HÓA ID CỦA ITEM ĐỂ ĐẢM BẢO KHÔNG BỊ UNDEFINED/NULL
+    formData.id = item.id !== null && item.id !== undefined ? String(item.id) : null;
     formData.name = item.name;
-    // Map fields based on current tab
-    if (activeManagerTab.value === 'category') formData.slug = item.slug;
-    if (activeManagerTab.value === 'color') formData.hex = item.hex;
-    if (activeManagerTab.value === 'size') formData.code = item.code;
-  } else {
-    // Reset form
-    formData.id = null;
-    formData.name = '';
-    formData.slug = '';
-    formData.hex = '#000000';
-    formData.code = '';
+    
+    // Gán dữ liệu cho form tùy theo tab
+    if (activeManagerTab.value === 'category') {
+        formData.slug = item.slug || '';
+        formData.status = item.status || 'active';
+        // Lấy parentId và description từ item để gửi lại trong PUT request
+        formData.parentId = item.parentId || null; 
+        formData.description = item.description || ''; 
+    } else if (activeManagerTab.value === 'color') {
+        formData.hex = item.hex; 
+    } else if (activeManagerTab.value === 'size') {
+        formData.code = item.code; 
+    }
   }
   showModal.value = true;
 };
 
 const closeModal = () => showModal.value = false;
 
-const saveData = () => {
-  // Logic lưu data giả lập
-  const newItem = {
-    id: formData.id || Date.now(),
-    name: formData.name,
-    // Các trường khác tùy tab
-    ...(activeManagerTab.value === 'category' && { slug: formData.slug || formData.name.toLowerCase(), status: 'active', children: [] }),
-    ...(activeManagerTab.value === 'color' && { hex: formData.hex }),
-    ...(activeManagerTab.value === 'size' && { code: formData.code }),
-    count: 0
-  };
+/**
+ * Hàm xử lý lưu data: Thêm mới (POST) hoặc Cập nhật (PUT)
+ * DÒNG 632: Gọi await updateCategoryApi(payload);
+ */
+const saveData = async () => {
+    
+    // 1. KIỂM TRA VALIDATION CHUNG
+    if (!formData.name.trim()) {
+        return Swal.fire('Lỗi', `Tên ${getTabName.value} không được để trống.`, 'error');
+    }
+    // Kiểm tra validation code cho Kích cỡ ngay trong hàm saveData
+    if (activeManagerTab.value === 'size' && !formData.code.trim()) {
+        return Swal.fire('Lỗi', `Mã kích cỡ không được để trống.`, 'error');
+    }
+    
+    loadingData.value = true;
+    
+    try {
+        if (activeManagerTab.value === 'category') {
+            if (isEditMode.value) {
+                
+                // KIỂM TRA QUAN TRỌNG: Đảm bảo ID tồn tại trước khi tạo payload
+                if (!formData.id) {
+                    throw new Error("Không thể cập nhật. ID danh mục bị thiếu.");
+                }
 
-  if (activeManagerTab.value === 'category') {
-    if (isEditMode.value) {
-      const idx = categories.value.findIndex(c => c.id === formData.id);
-      if (idx !== -1) categories.value[idx] = { ...categories.value[idx], ...newItem };
-    } else {
-      categories.value.push(newItem);
-    }
-  } else if (activeManagerTab.value === 'color') {
-    if (isEditMode.value) {
-      const idx = colors.value.findIndex(c => c.id === formData.id);
-      if (idx !== -1) colors.value[idx] = newItem;
-    } else {
-      colors.value.push(newItem);
-    }
-  } else {
-    if (isEditMode.value) {
-      const idx = sizes.value.findIndex(c => c.id === formData.id);
-      if (idx !== -1) sizes.value[idx] = newItem;
-    } else {
-      sizes.value.push(newItem);
-    }
-  }
+                // CHUẨN HÓA LOGIC CHỈ GỬI CÁC TRƯỜNG CẦN THIẾT
+                const payload = { 
+                    id: formData.id, // Đã là String từ openModal
+                    name: formData.name, 
+                    status: formData.status, 
+                    slug: formData.slug,
+                    parentId: formData.parentId, 
+                    description: formData.description, 
+                };
+                
+                // DÒNG 632: CALL API PUT
+                await updateCategoryApi(payload);
+                
+                Swal.fire('Thành công!', 'Cập nhật danh mục thành công.', 'success');
+                await fetchCategories(); 
+            }
+        } else if (activeManagerTab.value === 'color') {
+            const payload = { id: formData.id, name: formData.name, hex: formData.hex };
+            if (isEditMode.value) {
+                await updateColorApi(payload);
+                Swal.fire('Thành công!', 'Đã cập nhật màu sắc thành công.', 'success');
+            } else {
+                await createColorApi(payload);
+                Swal.fire('Thành công!', 'Đã thêm màu sắc mới thành công.', 'success');
+            }
+            await fetchColors(); 
+        } else if (activeManagerTab.value === 'size') {
+            // --- XỬ LÝ KÍCH CỠ (SIZE) ---
+            const payload = { id: formData.id, name: formData.name, code: formData.code };
+            
+            if (isEditMode.value) {
+                // UPDATE (PUT)
+                await updateSizeApi(payload);
+                Swal.fire('Thành công!', 'Đã cập nhật kích cỡ thành công.', 'success');
+            } else {
+                // CREATE (POST)
+                await createSizeApi(payload);
+                Swal.fire('Thành công!', 'Đã thêm kích cỡ mới thành công.', 'success');
+            }
+            // Sau khi thêm/sửa, load lại danh sách kích cỡ để cập nhật giao diện
+            await fetchSizes(); 
+        }
+        
+        closeModal();
 
-  closeModal();
+    } catch (error) {
+        console.error(`Lỗi ${isEditMode.value ? 'cập nhật' : 'thêm mới'} :`, error);
+        // Cập nhật thông báo lỗi để bao gồm lỗi validation code nếu có
+        Swal.fire('Lỗi!', error.message.includes('Mã kích cỡ') ? error.message : (error.message || 'Lỗi hệ thống khi lưu dữ liệu.'), 'error');
+    } finally {
+        loadingData.value = false;
+    }
 };
 
-const deleteItem = (id) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa?')) return;
-  if (activeManagerTab.value === 'category') {
-    categories.value = categories.value.filter(c => c.id !== id);
-  } else if (activeManagerTab.value === 'color') {
-    colors.value = colors.value.filter(c => c.id !== id);
-  } else {
-    sizes.value = sizes.value.filter(c => c.id !== id);
-  }
+/**
+ * Xử lý sự kiện xóa item (danh mục, màu sắc, kích cỡ)
+ */
+const deleteItem = async (id) => {
+    // 1. Logic xóa danh mục
+    if (activeManagerTab.value === 'category') {
+        const result = await Swal.fire({
+            title: 'Bạn có chắc chắn?', text: "Danh mục này sẽ bị xóa vĩnh viễn!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Đồng ý, xóa nó!', cancelButtonText: 'Hủy bỏ'
+        });
+
+        if (result.isConfirmed) {
+            loadingData.value = true;
+            try {
+                await deleteCategoryApi(id);
+                await fetchCategories(); 
+                Swal.fire('Đã xóa!', 'Danh mục đã được xóa thành công.', 'success');
+            } catch (error) {
+                console.error('Lỗi xóa danh mục:', error);
+                Swal.fire('Lỗi!', error.message || 'Không thể xóa danh mục do lỗi hệ thống.', 'error');
+            } finally { loadingData.value = false; }
+        }
+    } else if (activeManagerTab.value === 'color') {
+        // 2. Logic xóa màu sắc
+        const result = await Swal.fire({
+            title: 'Bạn có chắc chắn?', text: "Màu sắc này sẽ bị xóa vĩnh viễn!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Đồng ý, xóa nó!', cancelButtonText: 'Hủy bỏ'
+        });
+        
+        if (result.isConfirmed) {
+            loadingData.value = true;
+            try {
+                await deleteColorApi(id);
+                await fetchColors();
+                Swal.fire('Đã xóa!', 'Màu sắc đã được xóa thành công.', 'success');
+            } catch (error) {
+                console.error('Lỗi xóa màu sắc:', error);
+                Swal.fire('Lỗi!', error.message || 'Không thể xóa màu sắc do lỗi hệ thống.', 'error');
+            } finally { loadingData.value = false; }
+        }
+    } else if (activeManagerTab.value === 'size') {
+        // 3. Logic xóa kích cỡ (SIZE)
+        const result = await Swal.fire({
+            title: 'Bạn có chắc chắn?', text: "Kích cỡ này sẽ bị xóa vĩnh viễn!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Đồng ý, xóa nó!', cancelButtonText: 'Hủy bỏ'
+        });
+        
+        if (result.isConfirmed) {
+            loadingData.value = true;
+            try {
+                await deleteSizeApi(id); // Gọi hàm xóa API
+                await fetchSizes(); // Tải lại danh sách
+                Swal.fire('Đã xóa!', 'Kích cỡ đã được xóa thành công.', 'success');
+            } catch (error) {
+                console.error('Lỗi xóa kích cỡ:', error);
+                Swal.fire('Lỗi!', error.message || 'Không thể xóa kích cỡ do lỗi hệ thống.', 'error');
+            } finally { loadingData.value = false; }
+        }
+    }
 };
 
+// --- LIFECYCLE HOOK ---
+onMounted(() => {
+    fetchCategories(); 
+    fetchColors(); 
+    fetchSizes(); 
+});
+
+// WATCHER: Chỉ hiển thị loadingData khi tab active trùng với tab đang fetch (Tùy chọn)
+watch(activeManagerTab, (newTab) => {
+    // Tải dữ liệu khi chuyển tab nếu dữ liệu chưa có
+    if (newTab === 'category' && !categories.value.length) {
+        fetchCategories();
+    } else if (newTab === 'color' && !colors.value.length) {
+        fetchColors();
+    } else if (newTab === 'size' && !sizes.value.length) {
+        fetchSizes();
+    }
+});
 </script>
-
 <style scoped>
 /* Reuse existing styles */
 .admin-container {
@@ -413,8 +769,76 @@ const deleteItem = (id) => {
   font-size: 13px;
 }
 
+.status-group-modal {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.status-group-modal .status-item input {
+    display: none;
+}
+
+.status-group-modal .status-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4b5563;
+    transition: 0.2s;
+}
+
+.status-group-modal .status-item input:checked+.status-box {
+    border-color: #2563eb;
+    background: #eff6ff;
+    color: #2563eb;
+}
+/* ... */
+/* Biểu tượng loading/spinner cho Bootstrap Icons */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 .dashboard-header {
   margin-bottom: 20px;
+}
+
+.status-group-modal {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.status-group-modal .status-item input {
+    display: none;
+}
+
+.status-group-modal .status-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4b5563;
+    transition: 0.2s;
+}
+
+.status-group-modal .status-item input:checked+.status-box {
+    border-color: #2563eb;
+    background: #eff6ff;
+    color: #2563eb;
 }
 
 .stats-grid {

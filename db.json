@@ -287,145 +287,50 @@
   ],
   "size": [
     {
-      "id": "",
-      "name": "S"
+      "id": "a0b2",
+      "name": "XL",
+      "code": "XL"
     },
     {
-      "id": "",
-      "name": "M"
+      "id": "f55c",
+      "name": "S",
+      "code": "S"
     },
     {
-      "id": "",
-      "name": "L"
+      "id": "3a61",
+      "name": "M",
+      "code": "M"
     },
     {
-      "id": "",
-      "name": "XL"
+      "id": "0a3e",
+      "name": "XXL",
+      "code": "XXL"
+    },
+    {
+      "id": "6e05",
+      "name": "XXXL",
+      "code": "XXXL"
     }
   ],
   "color": [
     {
-      "id": "1",
-      "name": "Đỏ"
+      "name": "Đỏ sẫm",
+      "hex": "#FF0000",
+      "id": "1"
     },
     {
-      "id": "2",
-      "name": "Trắng"
-    },
-    {
-      "id": "3",
-      "name": "Đen"
-    },
-    {
-      "id": "4",
-      "name": "Trắng/Đen"
-    },
-    {
-      "id": "5",
-      "name": "Ghi"
-    },
-    {
-      "id": "6",
-      "name": "Đỏ đô"
-    },
-    {
-      "id": "7",
-      "name": "Hồng"
+      "id": "a3cf",
+      "name": "Xanh ngọc",
+      "hex": "#0be57f"
     }
   ],
   "categories": [
     {
-      "id": "1",
-      "name": "Áo",
-      "parentId": null,
-      "status": "active",
-      "children": [
-        {
-          "id": 2,
-          "name": "Áo đông 2025",
-          "parentId": 1,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 3,
-          "name": "Áo thu 2025",
-          "parentId": 1,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 4,
-          "name": "Áo hè 2025",
-          "parentId": 1,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 5,
-          "name": "Áo đông 2024",
-          "parentId": 1,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 6,
-          "name": "Áo thu 2024",
-          "parentId": 1,
-          "status": "active",
-          "children": []
-        }
-      ]
-    },
-    {
       "id": "7",
       "name": "Quần",
-      "parentId": null,
       "status": "active",
-      "children": [
-        {
-          "id": 8,
-          "name": "Quần đông 2025",
-          "parentId": 7,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 9,
-          "name": "Quần thu 2025",
-          "parentId": 7,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 10,
-          "name": "Quần hè 2025",
-          "parentId": 7,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 11,
-          "name": "Quần đông 2024",
-          "parentId": 7,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 12,
-          "name": "Quần thu 2024",
-          "parentId": 7,
-          "status": "active",
-          "children": []
-        },
-        {
-          "id": 13,
-          "name": "Quần hè 2024",
-          "parentId": 7,
-          "status": "active",
-          "children": []
-        }
-      ]
+      "description": "",
+      "parentId": null
     },
     {
       "id": "14",
