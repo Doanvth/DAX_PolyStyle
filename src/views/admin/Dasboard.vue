@@ -1,6 +1,5 @@
 <template>
   <div class="admin-container">
-
     <div class="dashboard-header">
       <div class="header-left">
         <h2 class="dashboard-title">Tổng Quan Kinh Doanh</h2>
@@ -8,11 +7,12 @@
       </div>
       <div class="header-right">
         <select class="period-select">
-          <option>Tháng này</option>
-          <option>Quý này</option>
+          <option>Tháng Này</option>
+          <option>Quý Này</option>
           <option>Năm nay</option>
+
         </select>
-        <button class="btn-primary-custom">
+        <button class="btn-primary-custom" @click="exportToExcel">
           <i class="bi bi-download"></i> Xuất báo cáo
         </button>
       </div>
@@ -24,13 +24,12 @@
           <i class="bi bi-currency-dollar"></i>
         </div>
         <div class="stat-info">
-          <p class="stat-label">Doanh thu tháng</p>
-          <h3 class="stat-value">1.25 Tỷ ₫</h3>
+          <p class="stat-label">Tổng doanh thu</p>
+          <h3 class="stat-value">{{ formatCurrency(totalRevenue) }}</h3>
           <span class="stat-trend up">
-            <i class="bi bi-arrow-up-short"></i> 12.5%
+            <i class="bi bi-arrow-up-short"></i> Ổn định
           </span>
         </div>
-        <div class="mini-chart-bg"></div>
       </div>
 
       <div class="stat-card">
@@ -38,10 +37,10 @@
           <i class="bi bi-bag-check-fill"></i>
         </div>
         <div class="stat-info">
-          <p class="stat-label">Đơn hàng mới</p>
-          <h3 class="stat-value">2,450</h3>
-          <span class="stat-trend down">
-            <i class="bi bi-arrow-down-short"></i> 3.2%
+          <p class="stat-label">Tổng đơn hàng</p>
+          <h3 class="stat-value">{{ totalOrders.toLocaleString() }}</h3>
+          <span class="stat-trend up">
+            Mới cập nhật
           </span>
         </div>
       </div>
@@ -52,10 +51,8 @@
         </div>
         <div class="stat-info">
           <p class="stat-label">Cần nhập hàng</p>
-          <h3 class="stat-value">35 SP</h3>
-          <span class="stat-trend neutral">
-            Kho thấp
-          </span>
+          <h3 class="stat-value">{{ lowStockProducts }} SP</h3>
+          <span class="stat-trend neutral">Kho thấp</span>
         </div>
       </div>
 
@@ -64,10 +61,10 @@
           <i class="bi bi-people-fill"></i>
         </div>
         <div class="stat-info">
-          <p class="stat-label">Khách hàng mới</p>
-          <h3 class="stat-value">+480</h3>
+          <p class="stat-label">Khách hàng</p>
+          <h3 class="stat-value">{{ newUsersCount }}</h3>
           <span class="stat-trend up">
-            <i class="bi bi-arrow-up-short"></i> 8.4%
+            <i class="bi bi-arrow-up-short"></i> Đang tăng
           </span>
         </div>
       </div>
@@ -78,16 +75,14 @@
         <div class="card-header-flex">
           <h5 class="card-title">Biểu đồ doanh thu 12 tháng</h5>
           <div class="chart-legend">
-            <span class="dot-revenue"></span> Doanh thu
+            <span class="dot-revenue"></span> Doanh thu (VND)
           </div>
         </div>
 
         <div class="bar-chart-wrapper">
           <div class="y-axis">
-            <span>2 Tỷ</span>
-            <span>1.5 Tỷ</span>
-            <span>1 Tỷ</span>
-            <span>500 Tr</span>
+            <span>Cao nhất</span>
+            <span>Trung bình</span>
             <span>0</span>
           </div>
           <div class="bars-area">
@@ -102,7 +97,7 @@
       </div>
 
       <div class="card-box category-container">
-        <h5 class="card-title">Xu hướng danh mục</h5>
+        <h5 class="card-title">Phân bổ sản phẩm</h5>
         <div class="category-list">
           <div v-for="cat in categoryTrends" :key="cat.name" class="cat-item">
             <div class="cat-header">
@@ -121,11 +116,9 @@
     </div>
 
     <div class="dashboard-grid-bottom">
-
       <div class="card-box">
         <div class="card-header-flex">
-          <h5 class="card-title">Top Sản Phẩm Bán Chạy</h5>
-          <a href="#" class="view-all">Xem tất cả</a>
+          <h5 class="card-title">Top Sản Phẩm Theo Doanh Số</h5>
         </div>
         <div class="table-responsive">
           <table class="simple-table">
@@ -134,7 +127,7 @@
                 <th>Sản phẩm</th>
                 <th>Danh mục</th>
                 <th class="text-right">Đã bán</th>
-                <th class="text-right">Doanh thu</th>
+                <th class="text-right">Doanh thu tạm tính</th>
               </tr>
             </thead>
             <tbody>
@@ -142,7 +135,7 @@
                 <td>
                   <div class="prod-cell">
                     <span class="rank-badge" :class="'rank-' + (idx + 1)">{{ idx + 1 }}</span>
-                    <img :src="prod.image" class="prod-img">
+                    <img :src="prod.image" class="prod-img" onerror="this.src='https:/placehold.co/40'">
                     <span class="fw-bold">{{ prod.name }}</span>
                   </div>
                 </td>
@@ -167,50 +160,162 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import rawData from '../../../db.json';
+import * as XLSX from 'xlsx';
 
-// Dữ liệu biểu đồ doanh thu
-const revenueData = ref([
-  { month: 'T1', value: '800Tr', percent: 40 },
-  { month: 'T2', value: '950Tr', percent: 48 },
-  { month: 'T3', value: '1.1Tỷ', percent: 55 },
-  { month: 'T4', value: '1.0Tỷ', percent: 50 },
-  { month: 'T5', value: '1.4Tỷ', percent: 70 },
-  { month: 'T6', value: '1.8Tỷ', percent: 90 },
-  { month: 'T7', value: '1.6Tỷ', percent: 80 },
-  { month: 'T8', value: '1.2Tỷ', percent: 60 },
-  { month: 'T9', value: '1.5Tỷ', percent: 75 },
-  { month: 'T10', value: '1.9Tỷ', percent: 95 },
-  { month: 'T11', value: '1.3Tỷ', percent: 65 },
-  { month: 'T12', value: '2.0Tỷ', percent: 100 },
-]);
 
-const bestSellingProducts = ref([
-  { id: 1, name: 'Váy Maxi Hoa Nhí', category: 'Nữ', sales: 1200, revenue: '360Tr', image: 'https://placehold.co/40x40/pink/white?text=V' },
-  { id: 2, name: 'Áo Sơ Mi Linen', category: 'Nam', sales: 980, revenue: '290Tr', image: 'https://placehold.co/40x40/blue/white?text=A' },
-  { id: 3, name: 'Túi Xách Da', category: 'Phụ Kiện', sales: 750, revenue: '500Tr', image: 'https://placehold.co/40x40/orange/white?text=T' },
-  { id: 4, name: 'Giày Sandal', category: 'Giày', sales: 620, revenue: '180Tr', image: 'https://placehold.co/40x40/green/white?text=G' },
-]);
+const exportToExcel = () => {
+  try {
+    const overviewData = [
+      { "Hạng mục": "Tổng doanh thu", "Giá trị": formatCurrency(totalRevenue.value) },
+      { "Hạng mục": "Tổng đơn hàng", "Giá trị": totalOrders.value },
+      { "Hạng mục": "Sản phẩm sắp hết hàng", "Giá trị": lowStockProducts.value },
+      { "Hạng mục": "Tổng khách hàng", "Giá trị": newUsersCount.value },
+      { "Hạng mục": "", "Giá trị": "" }, // Dòng trống ngăn cách
+      { "Hạng mục": "DANH SÁCH SẢN PHẨM BÁN CHẠY", "Giá trị": "" }
+    ];
 
-const categoryTrends = ref([
-  { name: 'Thời Trang Nữ', value: 75, trend: 'up', icon: 'bi-gender-female' },
-  { name: 'Thời Trang Nam', value: 45, trend: 'neutral', icon: 'bi-gender-male' },
-  { name: 'Phụ Kiện', value: 30, trend: 'down', icon: 'bi-handbag' },
-  { name: 'Giày Dép', value: 60, trend: 'up', icon: 'bi-asterisk' },
-]);
+    const productData = bestSellingProducts.value.map((prod, index) => ({
+      "Hạng mục": `Top ${index + 1}: ${prod.name}`,
+      "Giá trị": `Đã bán: ${prod.sales} | Doanh thu: ${prod.revenue}`
+    }));
 
-const recentActivities = ref([
-  { text: 'Đơn hàng <b>#34567</b> đã được tạo bởi <b>Nguyễn Văn A</b>.', type: 'success', time: '5 phút trước' },
-  { text: 'Sản phẩm <b>Váy Maxi Hoa Nhí</b> sắp hết hàng (Còn 5).', type: 'warning', time: '1 giờ trước' },
-  { text: 'Khách hàng <b>Trần Thị B</b> đăng ký tài khoản mới.', type: 'info', time: '3 giờ trước' },
-  { text: 'Đơn hàng <b>#34500</b> bị hủy hoàn tiền.', type: 'danger', time: 'Hôm qua' },
-]);
+    const finalData = [...overviewData, ...productData];
+
+    const worksheet = XLSX.utils.json_to_sheet(finalData);
+    
+    worksheet['!cols'] = [{ wch: 40 }, { wch: 50 }];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "BaoCaoKinhDoanh");
+    
+    const dateStr = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(workbook, `Bao_Cao_Tong_Quan_${dateStr}.xlsx`);
+    
+    alert("Xuất báo cáo thành công!");
+  } catch (error) {
+    console.error("Lỗi khi xuất file:", error);
+    alert("Có lỗi xảy ra khi xuất báo cáo.");
+  }
+};
+
+const db = ref(rawData);
+
+const totalRevenue = computed(() => {
+  let total = 0;
+  db.value?.users?.forEach(user => {
+    user.order?.forEach(ord => {
+      ord.order_detail?.forEach(detail => {
+        total += Number(detail.total) || 0;
+      });
+    });
+  });
+  return total;
+});
+
+const totalOrders = computed(() => {
+  return db.value?.users?.reduce((sum, user) => sum + (user.order?.length || 0), 0) || 0;
+});
+
+const lowStockProducts = computed(() => {
+  return db.value?.products?.filter(p => p.stock < 10).length || 0;
+});
+
+const newUsersCount = computed(() => db.value?.users?.length || 0);
+
+// --- 2. BIỂU ĐỒ DOANH THU (12 THÁNG) ---
+const revenueData = computed(() => {
+  const months = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+  const monthlyRevenue = new Array(12).fill(0);
+
+  db.value?.users?.forEach(user => {
+    user.order?.forEach(ord => {
+      const dateParts = ord.create_At?.split('-');
+      if (dateParts && dateParts.length >= 2) {
+        const monthIndex = parseInt(dateParts[1]) - 1;
+        ord.order_detail?.forEach(detail => {
+          monthlyRevenue[monthIndex] += Number(detail.total) || 0;
+        });
+      }
+    });
+  });
+
+  const maxVal = Math.max(...monthlyRevenue) || 1;
+
+  return months.map((m, index) => {
+    const val = monthlyRevenue[index];
+    return {
+      month: m,
+      value: val >= 1000000 ? (val / 1000000).toFixed(0) + 'Tr' : val,
+      percent: (val / maxVal) * 100
+    };
+  });
+});
+
+// --- 3. SẢN PHẨM BÁN CHẠY ---
+const bestSellingProducts = computed(() => {
+  if (!db.value?.products) return [];
+  return db.value.products.slice(0, 5).map(p => {
+    let salesCount = 0;
+    db.value.users?.forEach(u => {
+      u.order?.forEach(o => {
+        o.order_detail?.forEach(d => {
+          if (d.product_id == p.id) salesCount += Number(d.quantity);
+        });
+      });
+    });
+
+    return {
+      id: p.id,
+      name: p.name,
+      category: db.value.categories?.find(c => c.id == p.categoryId)?.name || 'Khác',
+      sales: salesCount,
+      revenue: new Intl.NumberFormat('vi-VN').format(p.price * salesCount) + ' ₫',
+      image: p.image?.[0]?.url || 'https://placehold.co/40'
+    };
+  }).sort((a, b) => b.sales - a.sales);
+});
+
+// --- 4. DANH MỤC ---
+const categoryTrends = computed(() => {
+  if (!db.value?.categories) return [];
+  const totalProducts = db.value.products?.length || 1;
+  return db.value.categories.slice(0, 4).map(c => {
+    const count = db.value.products?.filter(p => p.categoryId == c.id).length || 0;
+    return {
+      name: c.name,
+      value: Math.round((count / totalProducts) * 100),
+      trend: 'up',
+      icon: 'bi-tag-fill'
+    };
+  });
+});
+
+// --- 5. HOẠT ĐỘNG ---
+const recentActivities = computed(() => {
+  const activities = [];
+  db.value?.users?.forEach(user => {
+    user.order?.slice(-1).forEach(ord => {
+      activities.push({
+        text: `Đơn hàng <b>#${ord.id}</b> vừa được khởi tạo bởi hệ thống.`,
+        type: 'success',
+        time: ord.create_At
+      });
+    });
+  });
+  return activities.reverse().slice(0, 4);
+});
+
+// Hàm hỗ trợ format tiền
+const formatCurrency = (val) => {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+};
 </script>
 
 <style scoped>
