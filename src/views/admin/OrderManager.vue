@@ -48,10 +48,9 @@
           <input v-model="searchQuery" type="text" placeholder="Tìm tên khách, SĐT, mã đơn..." />
         </div>
       </div>
-
       <div class="right-actions">
-        <button class="btn-outline-custom"><i class="bi bi-printer"></i> In danh sách</button>
-        <button class="btn-primary-custom"><i class="bi bi-file-earmark-excel"></i> Xuất Excel</button>
+        <button class="btn-outline-custom" @click="printList"><i class="bi bi-printer"></i> In danh sách</button>
+        <button class="btn-primary-custom" @click="exportExcel"><i class="bi bi-file-earmark-excel"></i> Xuất Excel</button>
       </div>
     </div>
 
@@ -59,76 +58,67 @@
       <table>
         <thead>
           <tr>
-            <th width="10%">Mã Đơn</th>
-            <th width="25%">Khách hàng</th>
+            <th width="12%">Mã Đơn</th>
+            <th width="20%">Khách hàng</th>
             <th width="15%">Ngày đặt</th>
             <th width="15%">Tổng tiền</th>
-            <th width="20%">Trạng Thái</th>
-            <th width="10%">Thanh toán</th>
+            <th width="18%">Trạng Thái Vận Chuyển</th>
+            <th width="15%">Thanh toán</th>
             <th width="5%" class="text-center">#</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="order in paginatedOrders" :key="order.id">
-            <td class="text-muted text-xs font-mono">#{{ order.id }}</td>
-
+            <td class="font-mono text-blue fw-600">#{{ order.id }}</td>
             <td>
               <div class="product-info">
                 <span class="product-name">{{ order.customerName }}</span>
                 <div class="sub-info">
-                  <span class="sku-badge"><i class="bi bi-telephone"></i> {{ order.phone }}</span>
+                  <span class="sku-badge"><i class="bi bi-telephone text-xs"></i> {{ order.phone }}</span>
                 </div>
               </div>
             </td>
-
             <td class="text-sm text-gray-700">{{ order.date }}</td>
-
             <td>
               <div class="price-group">
                 <span class="current-price">{{ formatCurrency(order.totalAmount) }}</span>
                 <span class="text-xs text-muted">{{ order.itemsCount }} sản phẩm</span>
               </div>
             </td>
-
             <td>
               <div class="status-select-wrapper">
                 <select v-model="order.status" class="status-select" :class="getStatusColorClass(order.status)"
                   @change="handleStatusChange(order)">
-                  <option value="pending">Chờ xử lý</option>
-                  <option value="shipping">Đang giao</option>
-                  <option value="active">Hoàn thành</option>
-                  <option value="cancel">Đã hủy</option>
+                  <option value="pending">⏳ Chờ xử lý</option>
+                  <option value="shipping">🚚 Đang giao</option>
+                  <option value="active">✅ Hoàn thành</option>
+                  <option value="cancel">❌ Đã hủy</option>
                 </select>
-                <i class="bi bi-caret-down-fill select-arrow"></i>
               </div>
             </td>
-
             <td>
-              <span class="badge-payment" :class="order.paymentStatus === 'Paid' ? 'paid' : 'unpaid'">
-                {{ order.paymentStatus === 'Paid' ? 'Đã Thanh Toán' : 'Chưa Thanh Toán' }}
+              <span class="badge-payment" :class="order.paymentStatus.toLowerCase().replace(' ', '-')">
+                <i class="bi" :class="getPaymentIcon(order.paymentStatus)"></i>
+                {{ getPaymentLabel(order.paymentStatus) }}
               </span>
             </td>
-
             <td class="text-center">
               <button class="btn-icon" title="Xem chi tiết" @click="openModal(order)">
-                <i class="bi bi-eye text-blue"></i>
+                <i class="bi bi-eye-fill"></i>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
-
       <div v-if="filteredOrders.length === 0" class="empty-state">
         <i class="bi bi-inbox"></i>
-        <p>Không tìm thấy đơn hàng nào.</p>
+        <p>Không tìm thấy dữ liệu phù hợp.</p>
       </div>
     </div>
 
     <div class="pagination-footer" v-if="filteredOrders.length > 0">
       <div class="page-info">
-        Hiển thị <b>{{ (currentPage - 1) * itemsPerPage + 1 }}</b> -
-        <b>{{ Math.min(currentPage * itemsPerPage, filteredOrders.length) }}</b>
-        trong tổng <b>{{ filteredOrders.length }}</b> đơn hàng
+        Hiển thị <b>{{ (currentPage - 1) * itemsPerPage + 1 }}</b> - <b>{{ Math.min(currentPage * itemsPerPage, filteredOrders.length) }}</b> của <b>{{ filteredOrders.length }}</b> đơn hàng
       </div>
       <div class="page-controls">
         <button class="page-btn" :disabled="currentPage === 1" @click="currentPage--">
@@ -145,36 +135,40 @@
       <div class="modal-content large">
         <div class="modal-header">
           <div class="modal-title-group">
-            <h3>Đơn hàng #{{ selectedOrder.id }}</h3>
-            <span class="date-badge">{{ selectedOrder.date }}</span>
+            <h3>Chi tiết đơn hàng #{{ selectedOrder.id }}</h3>
+            <span class="date-badge">Ngày đặt: {{ selectedOrder.date }}</span>
           </div>
           <button class="close-btn" @click="closeModal"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <div class="modal-body">
+        <div class="modal-body" id="print-area">
+          <div class="print-header-only">
+             <h2>SHOP THỜI TRANG ORCHIDE</h2>
+             <p>Thời gian xuất: {{ getCurrentFullTime() }}</p>
+             <hr>
+          </div>
+
           <div class="info-grid-row">
             <div class="info-box">
               <div class="box-header"><i class="bi bi-person"></i> Khách hàng</div>
               <div class="box-content">
                 <p class="fw-bold">{{ selectedOrder.customerName }}</p>
                 <p>{{ selectedOrder.phone }}</p>
-                <p class="text-xs text-muted">ID Khách: #CUS-992</p>
               </div>
             </div>
             <div class="info-box">
               <div class="box-header"><i class="bi bi-geo-alt"></i> Giao nhận</div>
               <div class="box-content">
                 <p>{{ selectedOrder.address }}</p>
-                <p class="text-blue fw-500">Phí vận chuyển: Miễn phí</p>
               </div>
             </div>
             <div class="info-box">
               <div class="box-header"><i class="bi bi-credit-card"></i> Thanh toán</div>
               <div class="box-content">
-                <p>COD - Thanh toán khi nhận hàng</p>
-                <p :class="selectedOrder.paymentStatus === 'Paid' ? 'text-green' : 'text-orange'">
-                  {{ selectedOrder.paymentStatus === 'Paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}
-                </p>
+                <p>Trạng thái: <b :class="selectedOrder.paymentStatus === 'Paid' ? 'text-green' : 'text-orange'">
+                  {{ getPaymentLabel(selectedOrder.paymentStatus) }}
+                </b></p>
+                <p v-if="selectedOrder.paymentStatus === 'Pending Refund'" class="text-red fw-bold">⚠️ Cần hoàn tiền gấp</p>
               </div>
             </div>
           </div>
@@ -191,12 +185,7 @@
               </thead>
               <tbody>
                 <tr v-for="(item, idx) in selectedOrder.products" :key="idx">
-                  <td>
-                    <div class="item-mini">
-                      <img src="https://placehold.co/40x40" alt="img">
-                      <span>{{ item.name }}</span>
-                    </div>
-                  </td>
+                  <td>{{ item.name }}</td>
                   <td class="text-center">x{{ item.quantity }}</td>
                   <td class="text-right">{{ formatCurrency(item.price) }}</td>
                   <td class="text-right fw-500">{{ formatCurrency(item.price * item.quantity) }}</td>
@@ -206,48 +195,61 @@
           </div>
 
           <div class="order-summary">
-            <div class="summary-row">
-              <span>Tạm tính:</span>
-              <span>{{ formatCurrency(selectedOrder.totalAmount) }}</span>
-            </div>
-            <div class="summary-row">
-              <span>Giảm giá:</span>
-              <span>-0 ₫</span>
-            </div>
             <div class="summary-row total">
-              <span>Tổng cộng:</span>
+              <span>TỔNG CỘNG:</span>
               <span class="total-price">{{ formatCurrency(selectedOrder.totalAmount) }}</span>
             </div>
           </div>
         </div>
-
         <div class="modal-footer">
           <button class="btn-outline-custom" @click="closeModal">Đóng</button>
-          <button class="btn-primary-custom"><i class="bi bi-printer"></i> In hóa đơn</button>
+          <button class="btn-primary-custom" @click="printInvoice"><i class="bi bi-printer"></i> In hóa đơn</button>
         </div>
       </div>
     </div>
-
   </div>
 </template>
-
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
+// --- IMPORT PDF ---
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable"; 
+
+// --- HÀM XỬ LÝ LỖI FONT TIẾNG VIỆT (QUAN TRỌNG) ---
+// Hàm này chuyển đổi văn bản có dấu thành không dấu để jsPDF hiển thị đúng
+const removeVietnameseTones = (str) => {
+  if (!str) return "";
+  str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+  str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+  str = str.replace(/đ/g, "d");
+  str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+  str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+  str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+  str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+  str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+  str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+  str = str.replace(/Đ/g, "D");
+  return str;
+};
+
+// --- DỮ LIỆU GỐC ---
 const generateData = () => {
   const data = [];
   const statuses = ['pending', 'shipping', 'active', 'cancel'];
-  const names = ['Nguyễn Văn A', 'Trần Thị B', 'Lê Văn C', 'Phạm Thị D', 'Hoàng E'];
-  const productNames = ['Áo Thun Polo Premium', 'Quần Jean Slimfit', 'Áo Khoác Gió 2 Lớp', 'Váy Hoa Nhí Vintage', 'Giày Sneaker Basic'];
+  const productNames = ['Vay Hoa Nhi Vintage', 'Ao Thun Polo Premium', 'Ao Khoac Gio 2 Lop', 'Quan Jean Slimfit', 'Giay Sneaker Basic'];
+  const names = ['Nguyen Van A', 'Tran Thi B', 'Le Van C', 'Pham Thi D', 'Hoang E'];
 
   for (let i = 1; i <= 30; i++) {
-    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-    const randomName = names[Math.floor(Math.random() * names.length)];
-
     const products = [];
-    const numItems = Math.floor(Math.random() * 3) + 1;
     let total = 0;
-
+    const numItems = Math.floor(Math.random() * 3) + 1;
     for (let j = 0; j < numItems; j++) {
       const price = (Math.floor(Math.random() * 5) + 2) * 100000;
       const qty = Math.floor(Math.random() * 2) + 1;
@@ -257,13 +259,13 @@ const generateData = () => {
 
     data.push({
       id: `ORD${(1000 + i)}`,
-      customerName: `${randomName} (${i})`,
-      phone: `09${Math.floor(Math.random() * 100000000)}`,
-      address: `Số ${i} Đường 3/2, Quận Ninh Kiều, Cần Thơ`,
-      date: `${Math.floor(Math.random() * 28) + 1}/12/2025`,
+      customerName: names[i % 5],
+      phone: `09${Math.floor(10000000 + Math.random() * 90000000)}`,
+      address: `So ${i} Duong 3/2, Can Tho`,
+      date: `2025-12-${(i % 28 + 1).toString().padStart(2, '0')}`,
       itemsCount: products.reduce((acc, cur) => acc + cur.quantity, 0),
       totalAmount: total,
-      status: randomStatus,
+      status: statuses[Math.floor(Math.random() * statuses.length)],
       paymentStatus: Math.random() > 0.4 ? 'Paid' : 'Unpaid',
       products: products
     });
@@ -272,36 +274,209 @@ const generateData = () => {
 };
 
 const orders = ref(generateData());
-
 const searchQuery = ref("");
 const currentStatus = ref("all");
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const showModal = ref(false);
-const selectedOrder = ref({});
+const selectedOrder = ref({ products: [] });
 
 const tabs = [
   { label: 'Tất cả', value: 'all' },
-  { label: 'Chờ xử lý', value: 'pending' },
-  { label: 'Đang giao', value: 'shipping' },
-  { label: 'Hoàn thành', value: 'active' },
-  { label: 'Đã hủy', value: 'cancel' }
+  { label: '⏳ Chờ xử lý', value: 'pending' },
+  { label: '🚚 Đang giao', value: 'shipping' },
+  { label: '✅ Hoàn thành', value: 'active' },
+  { label: '❌ Đã hủy', value: 'cancel' }
 ];
 
+const stats = computed(() => {
+  return {
+    totalOrders: orders.value.length,
+    totalRevenue: orders.value.reduce((sum, o) => 
+      (o.status === 'active' && o.paymentStatus === 'Paid') ? sum + o.totalAmount : sum, 0),
+    pendingOrders: orders.value.filter(o => o.status === 'pending').length,
+    shippingOrders: orders.value.filter(o => o.status === 'shipping').length
+  };
+});
+
+// --- CHỨC NĂNG 1: IN DANH SÁCH TỔNG HỢP (PDF) ---
+const printList = () => {
+  try {
+    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    // Chuyển tiêu đề sang không dấu
+    doc.text(removeVietnameseTones("DANH SACH HOA DON - SHOP THOI TRANG ORCHID"), 105, 15, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("Orchid Fashion", 15, 25);
+    doc.text("Dia chi: 123 Duong 3/2, Ninh Kieu, Can Tho", 15, 30);
+    doc.text("SDT: 0987.654.321", 15, 35);
+    doc.text(`Ngay xuat: ${getCurrentFullTime()}`, 15, 40);
+
+    const tableRows = [];
+    let totalGrandRevenue = 0;
+
+    filteredOrders.value.forEach((order) => {
+      order.products.forEach((p, index) => {
+        tableRows.push([
+          index === 0 ? order.id : "", 
+          index === 0 ? order.date : "",
+          index === 0 ? removeVietnameseTones(order.customerName) : "", // Xử lý tên KH
+          removeVietnameseTones(p.name), // Xử lý tên SP
+          p.quantity,
+          formatCurrency(p.price).replace('₫', 'VND'),
+          formatCurrency(p.price * p.quantity).replace('₫', 'VND'),
+          removeVietnameseTones(getPaymentLabel(order.paymentStatus)) // Xử lý trạng thái
+        ]);
+      });
+      totalGrandRevenue += order.totalAmount;
+    });
+
+    autoTable(doc, {
+      startY: 50,
+      head: [['Ma HD', 'Ngay lap', 'Khach hang', 'San pham', 'SL', 'Don gia', 'Thanh tien', 'Trang thai']],
+      body: tableRows,
+      theme: 'striped',
+      headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold' },
+      styles: { fontSize: 8, font: "helvetica" },
+      didDrawPage: (data) => {
+        doc.setFontSize(8);
+        doc.text("Page " + doc.internal.getNumberOfPages(), data.settings.margin.left, doc.internal.pageSize.height - 10);
+        doc.text("Bao cao tu dong - Orchid Fashion", 140, doc.internal.pageSize.height - 10);
+      }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 10;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Tong so hoa don: ${filteredOrders.value.length}`, 15, finalY);
+    doc.text(`Tong doanh thu: ${formatCurrency(totalGrandRevenue).replace('₫', 'VND')}`, 15, finalY + 7);
+
+    doc.save("Danh_sach_hoa_don_Orchid.pdf");
+  } catch (error) {
+    console.error("Lỗi in PDF:", error);
+    alert("Có lỗi xảy ra khi tạo file PDF.");
+  }
+};
+
+// --- CHỨC NĂNG 2: IN CHI TIẾT 1 HÓA ĐƠN (PDF) ---
+const printInvoice = () => {
+  try {
+    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+    const order = selectedOrder.value;
+
+    doc.setFont("times", "italic");
+    doc.setFontSize(22);
+    doc.text("Orchid", 15, 15);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("HOA DON MUA HANG", 105, 25, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("Orchid Fashion", 15, 35);
+    doc.text("Dia chi: 123 Duong 3/2, Can Tho", 15, 40);
+    doc.text("SDT: 0987.654.321", 15, 45);
+    
+    doc.text(`Ma hoa don: #${order.id}`, 140, 35);
+    doc.text(`Ngay lap: ${order.date}`, 140, 40);
+    doc.text(`Khach hang: ${removeVietnameseTones(order.customerName)}`, 140, 45); // Xử lý tên KH
+    doc.text(`SDT: ${order.phone}`, 140, 50);
+    doc.text(`Dia chi: ${removeVietnameseTones(order.address)}`, 140, 55); // Xử lý địa chỉ
+
+    const items = order.products.map((p, index) => [
+      index + 1,
+      removeVietnameseTones(p.name), // Xử lý tên SP
+      `x${p.quantity}`,
+      formatCurrency(p.price).replace('₫', 'VND'),
+      formatCurrency(p.price * p.quantity).replace('₫', 'VND')
+    ]);
+
+    autoTable(doc, {
+      startY: 65,
+      head: [['STT', 'Ten san pham', 'So luong', 'Don gia', 'Thanh tien']],
+      body: items,
+      theme: 'grid',
+      headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0] },
+      styles: { font: "helvetica", fontSize: 9 },
+      columnStyles: { 0: { width: 10 }, 4: { halign: 'right' } }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 10;
+    doc.setFont("helvetica", "bold");
+    doc.text(`Tong tien hang: ${formatCurrency(order.totalAmount).replace('₫', 'VND')}`, 140, finalY, { align: "right" });
+    doc.text(`Phi van chuyen: 0 VND`, 140, finalY + 5, { align: "right" });
+    doc.setFontSize(12);
+    doc.text(`TONG THANH TOAN: ${formatCurrency(order.totalAmount).replace('₫', 'VND')}`, 140, finalY + 12, { align: "right" });
+
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(10);
+    doc.text("Cam on quy khach da mua sam tai Orchid Fashion!", 105, finalY + 25, { align: "center" });
+
+    doc.save(`Hoa_Don_${order.id}.pdf`);
+  } catch (error) {
+    console.error("Lỗi in hóa đơn:", error);
+    alert("Không thể in hóa đơn chi tiết.");
+  }
+};
+
+// --- LOGIC XUẤT EXCEL (Giữ nguyên) ---
+const exportExcel = async () => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Export');
+  worksheet.columns = [
+    { header: 'Ma Don', key: 'id' },
+    { header: 'Khach hang', key: 'name' },
+    { header: 'Tong tien', key: 'amount' }
+  ];
+  filteredOrders.value.forEach(o => worksheet.addRow({ id: o.id, name: o.customerName, amount: o.totalAmount }));
+  const buffer = await workbook.xlsx.writeBuffer();
+  saveAs(new Blob([buffer]), 'Orders.xlsx');
+};
+
+const handleStatusChange = (order) => {
+  if (order.status === 'cancel' && order.paymentStatus === 'Paid') {
+    order.paymentStatus = 'Pending Refund';
+  } else if (order.status === 'active') {
+    order.paymentStatus = 'Paid';
+  }
+};
+
+const getCurrentFullTime = () => {
+  const now = new Date();
+  return `${now.getHours()}h${now.getMinutes()}p - Ngay ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
+};
+
+const getPaymentLabel = (status) => {
+  const map = { 'Paid': 'Da thanh toan', 'Unpaid': 'Chua thanh toan', 'Pending Refund': 'Cho hoan tien' };
+  return map[status] || status;
+};
+
+const getPaymentIcon = (status) => {
+  const map = { 'Paid': 'bi-check-circle-fill', 'Unpaid': 'bi-clock', 'Pending Refund': 'bi-arrow-left-right' };
+  return map[status] || 'bi-question';
+};
+
+const formatCurrency = (val) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+
+const getStatusColorClass = (status) => {
+  const map = { active: 'bg-success-subtle', pending: 'bg-warning-subtle', shipping: 'bg-blue-subtle', cancel: 'bg-gray-subtle' };
+  return map[status] || '';
+};
+
+const setFilter = (status) => { currentStatus.value = status; currentPage.value = 1; };
+const getCountByStatus = (status) => status === 'all' ? orders.value.length : orders.value.filter(o => o.status === status).length;
+
 const filteredOrders = computed(() => {
-  let result = orders.value;
-  if (currentStatus.value !== 'all') {
-    result = result.filter(o => o.status === currentStatus.value);
-  }
-  if (searchQuery.value) {
+  return orders.value.filter(o => {
+    const matchStatus = currentStatus.value === 'all' || o.status === currentStatus.value;
     const key = searchQuery.value.toLowerCase();
-    result = result.filter(o =>
-      o.customerName.toLowerCase().includes(key) ||
-      o.id.toLowerCase().includes(key) ||
-      o.phone.includes(key)
-    );
-  }
-  return result;
+    return matchStatus && (o.customerName.toLowerCase().includes(key) || o.id.toLowerCase().includes(key) || o.phone.includes(key));
+  });
 });
 
 const paginatedOrders = computed(() => {
@@ -310,49 +485,9 @@ const paginatedOrders = computed(() => {
 });
 
 const totalPages = computed(() => Math.ceil(filteredOrders.value.length / itemsPerPage) || 1);
-
-const stats = computed(() => {
-  return {
-    totalOrders: orders.value.length,
-    totalRevenue: orders.value.reduce((sum, item) => sum + (item.status === 'active' ? item.totalAmount : 0), 0),
-    pendingOrders: orders.value.filter(item => item.status === 'pending').length,
-    shippingOrders: orders.value.filter(item => item.status === 'shipping').length
-  };
-});
-
-const setFilter = (status) => {
-  currentStatus.value = status;
-  currentPage.value = 1;
-};
-
-const getCountByStatus = (status) => {
-  if (status === 'all') return orders.value.length;
-  return orders.value.filter(o => o.status === status).length;
-};
-
-const formatCurrency = (val) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
-
-const getStatusColorClass = (status) => {
-  switch (status) {
-    case 'active': return 'bg-success-subtle';
-    case 'pending': return 'bg-warning-subtle';
-    case 'shipping': return 'bg-blue-subtle';
-    case 'cancel': return 'bg-gray-subtle';
-    default: return '';
-  }
-};
-
-const handleStatusChange = (order) => {
-  console.log(`Updated Order ${order.id} to ${order.status}`);
-};
-
-const openModal = (order) => {
-  selectedOrder.value = order;
-  showModal.value = true;
-};
+const openModal = (order) => { selectedOrder.value = { ...order }; showModal.value = true; };
 const closeModal = () => showModal.value = false;
 </script>
-
 <style scoped>
 .admin-container {
   padding: 20px;
@@ -365,6 +500,142 @@ const closeModal = () => showModal.value = false;
 
 .dashboard-header {
   margin-bottom: 20px;
+}
+
+.badge-payment {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.badge-payment.paid {
+  color: #10b981;
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+}
+
+.badge-payment.unpaid {
+  color: #f97316;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+}
+
+/* Style Yêu cầu thêm: Chờ hoàn tiền */
+.badge-payment.pending-refund {
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.status-select {
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  width: 100%;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+}
+
+.print-header-only {
+  display: none;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Logic In ấn chuyên nghiệp */
+@media print {
+  .dashboard-header, .status-tabs, .toolbar-top, .pagination-footer, .modal-footer, .close-btn {
+    display: none !important;
+  }
+  .modal-overlay { position: static; background: none; }
+  .modal-content { box-shadow: none; border: none; width: 100%; max-width: 100%; }
+  .print-header-only { display: block; }
+  .admin-container { padding: 0; background: white; }
+}
+
+/* CSS Stats card (Giữ nguyên và tối ưu font) */
+.stat-card h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.fw-600 { font-weight: 600; }
+.text-green { color: #10b981; }
+.text-orange { color: #f97316; }
+.text-red { color: #ef4444; }
+
+.badge-payment {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  min-width: 130px;
+  justify-content: center;
+}
+
+.badge-payment.paid {
+  color: #10b981;
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+}
+
+.badge-payment.unpaid {
+  color: #f97316;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+}
+
+/* Style cho Chờ hoàn tiền (Yêu cầu thêm) */
+.badge-payment.pending-refund {
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.status-select {
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  width: 100%;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.fw-600 { font-weight: 600; }
+.text-green { color: #10b981; }
+.text-orange { color: #f97316; }
+
+/* Responsive Grid Stats */
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .stats-grid {
