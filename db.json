@@ -1104,25 +1104,44 @@
       ]
     },
     {
-      "id": "891d",
-      "position": "home_main",
+      "id": "f3ee",
+      "title": "Bộ Sưu Tập Mới",
+      "link": "https://myshop.com/collections/thu-dong-2025",
+      "position": "Home Slider",
+      "order": 1,
       "status": "active",
-      "create_at": "2025-12-03",
-      "image": "images/banner/meo.jpg"
+      "create_at": "2025-12-17",
+      "image": "https://images.unsplash.com/photo-1556906781-9a412961d28c?q=80&w=1000&auto=format&fit=crop"
     },
     {
-      "id": "8849",
-      "position": "home_main",
-      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
+      "id": "6e18",
+      "title": "Bộ Sưu Tập Tết 2026",
+      "link": "https://myshop.com/ao-dai",
+      "position": "Home Slider",
+      "order": 2,
       "status": "active",
-      "create_at": "2025-12-03"
+      "create_at": "2025-12-17",
+      "image": "https://images.unsplash.com/photo-1556906781-9a412961d28c?q=80&w=1000&auto=format&fit=crop"
     },
     {
-      "id": "ae8c",
-      "position": "home_main",
-      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
+      "id": "4038",
+      "title": "Bộ Sưu Tập Thu Đông ",
+      "link": "https://myshop/bo-suu-tap",
+      "position": "Home Slider",
+      "order": 3,
       "status": "active",
-      "create_at": "2025-12-03"
+      "create_at": "2025-12-17",
+      "image": "https://images.unsplash.com/photo-1556906781-9a412961d28c?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "id": "8435",
+      "title": "Bộ Sưu Tập Hè",
+      "link": "https://myshop/thu-dong",
+      "position": "Home Slider",
+      "order": 4,
+      "status": "active",
+      "create_at": "2025-12-17",
+      "image": "https://images.unsplash.com/photo-1556906781-9a412961d28c?q=80&w=1000&auto=format&fit=crop"
     }
   ],
   "collection": [

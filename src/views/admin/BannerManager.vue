@@ -45,9 +45,9 @@
       <div class="left-actions">
         <div class="search-box">
           <i class="bi bi-search"></i>
-          <input v-model="searchQuery" type="text" placeholder="Tìm tên banner, mô tả..." />
+          <input v-model="searchQuery" type="text" placeholder="Tìm tên banner, mô tả..." @input="currentPage = 1" />
         </div>
-        <select v-model="selectedPosition" class="filter-select">
+        <select v-model="selectedPosition" class="filter-select" @change="currentPage = 1">
           <option value="">Tất cả vị trí</option>
           <option value="Home Slider">Slider Trang chủ</option>
           <option value="Sidebar Right">Sidebar Phải</option>
@@ -64,7 +64,8 @@
     </div>
 
     <div class="table-container">
-      <table>
+      <div v-if="loading" class="loading-overlay">Đang tải dữ liệu...</div>
+      <table v-else>
         <thead>
           <tr>
             <th width="5%">ID</th>
@@ -79,45 +80,39 @@
         <tbody>
           <tr v-for="item in paginatedBanners" :key="item.id">
             <td class="text-muted text-xs">#{{ item.id }}</td>
-
             <td>
               <div class="banner-info-row">
                 <div class="banner-thumb-wrapper">
-                  <img :src="item.image" class="banner-thumb" alt="img"
-                    @error="e => e.target.src = 'https://placehold.co/120x60?text=No+Img'" />
+                  <img :src="displayImage(item.image)" class="banner-thumb" alt="banner-img"
+                    @error="e => e.target.src = 'https://placehold.co/120x60?text=Lỗi+Ảnh'" />
                 </div>
                 <div class="info-text">
-                  <span class="banner-title">{{ item.title }}</span>
-                  <span class="text-xs text-muted">{{ item.createAt }}</span>
+                  <span class="banner-title">{{ item.title || 'Chưa đặt tiêu đề' }}</span>
+                  <span class="text-xs text-muted">{{ item.createAt || '17/12/2025' }}</span>
                 </div>
               </div>
             </td>
-
             <td>
               <span class="position-badge" :class="getPositionClass(item.position)">
-                {{ item.position }}
+                {{ item.position || 'N/A' }}
               </span>
             </td>
-
             <td class="text-center">
-              <span class="order-badge">{{ item.order }}</span>
+              <span class="order-badge">{{ item.order || 0 }}</span>
             </td>
-
             <td>
               <a :href="item.link" target="_blank" class="link-text text-truncate">
-                {{ item.link }} <i class="bi bi-box-arrow-up-right text-xs"></i>
+                {{ item.link || '#' }} <i class="bi bi-box-arrow-up-right text-xs"></i>
               </a>
             </td>
-
             <td>
               <div class="status-toggle" @click="toggleStatus(item)">
                 <span class="dot" :class="item.status === 'active' ? 'bg-success' : 'bg-gray'"></span>
                 {{ item.status === 'active' ? 'Hiển thị' : 'Ẩn' }}
               </div>
             </td>
-
             <td class="text-center">
-              <button class="btn-icon" title="Xem chi tiết" @click="openModal(item)">
+              <button class="btn-icon" title="Chỉnh sửa" @click="openModal(item, true)">
                 <i class="bi bi-pencil-square text-blue"></i>
               </button>
               <button class="btn-icon delete" title="Xóa" @click="deleteBanner(item.id)">
@@ -128,9 +123,9 @@
         </tbody>
       </table>
 
-      <div v-if="filteredBanners.length === 0" class="empty-state">
+      <div v-if="!loading && filteredBanners.length === 0" class="empty-state">
         <i class="bi bi-card-image"></i>
-        <p>Không tìm thấy banner nào.</p>
+        <p>Không tìm thấy banner nào phù hợp.</p>
       </div>
     </div>
 
@@ -154,90 +149,191 @@
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title-group">
-            <h3>Banner #{{ selectedBanner.id }}</h3>
-            <span class="status-badge-modal" :class="selectedBanner.status">
-              {{ selectedBanner.status === 'active' ? 'Đang hiển thị' : 'Đang ẩn' }}
-            </span>
-          </div>
+          <h3>{{ isEditing ? 'Chỉnh sửa' : 'Chi tiết' }} Banner #{{ selectedBanner.id }}</h3>
           <button class="close-btn" @click="closeModal"><i class="bi bi-x-lg"></i></button>
         </div>
 
         <div class="modal-body">
           <div class="modal-cover-wrapper">
-            <img :src="selectedBanner.image" alt="Preview">
+            <img :src="displayImage(isEditing ? editForm.image : selectedBanner.image)" alt="Preview">
           </div>
 
           <div class="modal-info-grid">
             <div class="info-item">
-              <label>Tiêu đề (Alt Text)</label>
-              <p>{{ selectedBanner.title }}</p>
+              <label>Tên Banner (Tiêu đề)</label>
+              <input v-if="isEditing" type="text" v-model="editForm.title" class="modal-input" />
+              <p v-else class="fw-bold">{{ selectedBanner.title }}</p>
             </div>
+
+            <div class="info-item">
+              <label>Trạng thái</label>
+              <select v-if="isEditing" v-model="editForm.status" class="modal-input">
+                <option value="active">Hiển thị (Active)</option>
+                <option value="inactive">Ẩn (Inactive)</option>
+              </select>
+              <p v-else>
+                <span :class="selectedBanner.status === 'active' ? 'text-green' : 'text-gray'">
+                  ● {{ selectedBanner.status === 'active' ? 'Đang hiển thị' : 'Đang ẩn' }}
+                </span>
+              </p>
+            </div>
+
             <div class="info-item">
               <label>Vị trí hiển thị</label>
-              <p class="fw-bold">{{ selectedBanner.position }}</p>
+              <select v-if="isEditing" v-model="editForm.position" class="modal-input">
+                <option value="Home Slider">Slider Trang chủ</option>
+                <option value="Sidebar Right">Sidebar Phải</option>
+                <option value="Footer Banner">Footer</option>
+                <option value="Popup Sale">Popup Khuyến mãi</option>
+              </select>
+              <p v-else class="fw-bold">{{ selectedBanner.position }}</p>
             </div>
+
             <div class="info-item">
               <label>Thứ tự ưu tiên</label>
-              <p>Số {{ selectedBanner.order }}</p>
+              <input v-if="isEditing" type="number" v-model="editForm.order" class="modal-input" />
+              <p v-else>{{ selectedBanner.order }}</p>
             </div>
-            <div class="info-item">
-              <label>Thời gian tạo</label>
-              <p>{{ selectedBanner.createAt }}</p>
-            </div>
+
             <div class="info-item full">
-              <label>Đường dẫn mục tiêu (Target Link)</label>
-              <p class="text-blue break-word">{{ selectedBanner.link }}</p>
+              <label>Đường dẫn ảnh (Image URL)</label>
+              <input v-if="isEditing" type="text" v-model="editForm.image" class="modal-input"
+                placeholder="Dán URL ảnh từ Unsplash hoặc nguồn khác..." />
+              <p v-else class="text-muted text-xs break-word">{{ displayImage(selectedBanner.image) }}</p>
+            </div>
+
+            <div class="info-item full">
+              <label>Liên kết mục tiêu (Target Link)</label>
+              <input v-if="isEditing" type="text" v-model="editForm.link" class="modal-input" />
+              <p v-else class="text-blue break-word">{{ selectedBanner.link }}</p>
             </div>
           </div>
         </div>
 
         <div class="modal-footer">
-          <button class="btn-outline-custom" @click="closeModal">Đóng</button>
-          <button class="btn-primary-custom">Chỉnh sửa</button>
+          <button class="btn-outline-custom" @click="closeModal">Hủy bỏ</button>
+          <button v-if="!isEditing" class="btn-primary-custom" @click="isEditing = true">Sửa thông tin</button>
+          <button v-else class="btn-primary-custom" @click="saveEdit">Lưu thay đổi</button>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 
-const generateBanners = () => {
-  const data = [];
-  const positions = ['Home Slider', 'Sidebar Right', 'Footer Banner', 'Popup Sale'];
+// Cấu hình
+const API_URL = 'http://localhost:3000/carousel';
 
-  for (let i = 1; i <= 20; i++) {
-    const pos = positions[Math.floor(Math.random() * positions.length)];
-    const w = pos === 'Sidebar Right' ? 300 : 800;
-    const h = pos === 'Sidebar Right' ? 600 : 300;
-
-    data.push({
-      id: i,
-      title: `Banner Quảng Cáo Sự Kiện ${i}`,
-      image: `https://placehold.co/${w}x${h}?text=Banner+${i}`,
-      position: pos,
-      link: `https://myshop.com/promo/event-${i}`,
-      order: Math.floor(Math.random() * 10) + 1,
-      status: Math.random() > 0.3 ? 'active' : 'inactive',
-      createAt: '05/12/2025'
-    });
-  }
-  return data;
-};
-
-const banners = ref(generateBanners());
-
+// State
+const banners = ref([]);
+const loading = ref(false);
 const searchQuery = ref("");
 const selectedPosition = ref("");
 const currentTab = ref("all");
 const currentPage = ref(1);
-const itemsPerPage = 6; 
-const showModal = ref(false);
-const selectedBanner = ref({});
+const itemsPerPage = 6;
 
+const showModal = ref(false);
+const isEditing = ref(false);
+const selectedBanner = ref({});
+const editForm = ref({ id: null, title: '', status: 'active', position: '', order: 0, link: '', image: '' });
+
+const displayImage = (imageData) => {
+  const fallback = 'https://placehold.co/600x300?text=No+Image';
+
+  if (!imageData) return fallback;
+
+  if (Array.isArray(imageData)) {
+    const first = imageData[0];
+    if (
+      first &&
+      typeof first.image_url === 'string' &&
+      first.image_url.trim() !== ''
+    ) {
+      return first.image_url;
+    }
+    return fallback;
+  }
+  if (typeof imageData === 'string' && imageData.trim() !== '') {
+    return imageData;
+  }
+
+  return fallback;
+};
+
+// 2. Fetch dữ liệu từ API
+const fetchBanners = async () => {
+  loading.value = true;
+  try {
+    const response = await axios.get(API_URL);
+    banners.value = response.data.filter(item => item.id && item.id !== "");
+  } catch (error) {
+    console.error("Lỗi API:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchBanners);
+
+// 3. Nghiệp vụ: Thay đổi trạng thái nhanh
+const toggleStatus = async (item) => {
+  const newStatus = item.status === 'active' ? 'inactive' : 'active';
+  try {
+    await axios.patch(`${API_URL}/${item.id}`, { status: newStatus });
+    item.status = newStatus;
+  } catch (error) {
+    alert('Không thể cập nhật trạng thái!');
+  }
+};
+
+// 4. Nghiệp vụ: Xóa banner
+const deleteBanner = async (id) => {
+  if (confirm('Bạn có chắc chắn muốn xóa banner này vĩnh viễn?')) {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      banners.value = banners.value.filter(b => b.id !== id);
+    } catch (error) {
+      alert('Lỗi khi xóa dữ liệu!');
+    }
+  }
+};
+
+// 5. Nghiệp vụ: Modal & Lưu chỉnh sửa
+const openModal = (item, editMode = false) => {
+  selectedBanner.value = item;
+  isEditing.value = editMode;
+  editForm.value = { ...item };
+  // Chuẩn hóa ảnh mảng về chuỗi để hiển thị trong input edit
+  if (Array.isArray(editForm.value.image)) {
+    editForm.value.image = displayImage(editForm.value.image);
+  }
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  isEditing.value = false;
+};
+
+const saveEdit = async () => {
+  try {
+    const response = await axios.put(`${API_URL}/${editForm.value.id}`, editForm.value);
+    const index = banners.value.findIndex(b => b.id === editForm.value.id);
+    if (index !== -1) {
+      banners.value[index] = response.data;
+      alert('Cập nhật thành công!');
+      closeModal();
+    }
+  } catch (error) {
+    alert('Lỗi lưu dữ liệu!');
+  }
+};
+
+// 6. Logic Lọc & Thống kê
 const tabs = [
   { label: 'Tất cả', value: 'all' },
   { label: 'Đang hiển thị', value: 'active' },
@@ -246,18 +342,11 @@ const tabs = [
 
 const filteredBanners = computed(() => {
   let result = banners.value;
-
-  if (currentTab.value !== 'all') {
-    result = result.filter(b => b.status === currentTab.value);
-  }
-
-  if (selectedPosition.value) {
-    result = result.filter(b => b.position === selectedPosition.value);
-  }
-
+  if (currentTab.value !== 'all') result = result.filter(b => b.status === currentTab.value);
+  if (selectedPosition.value) result = result.filter(b => b.position === selectedPosition.value);
   if (searchQuery.value) {
     const key = searchQuery.value.toLowerCase();
-    result = result.filter(b => b.title.toLowerCase().includes(key));
+    result = result.filter(b => (b.title || '').toLowerCase().includes(key));
   }
   return result;
 });
@@ -274,11 +363,10 @@ const stats = computed(() => {
     total: banners.value.length,
     active: banners.value.filter(b => b.status === 'active').length,
     inactive: banners.value.filter(b => b.status === 'inactive').length,
-    homeSlider: banners.value.filter(b => b.position === 'Home Slider').length,
+    homeSlider: banners.value.filter(b => (b.position || '').toLowerCase().includes('slider')).length,
   };
 });
 
-// --- 4. HELPERS ---
 const setFilter = (tab) => {
   currentTab.value = tab;
   currentPage.value = 1;
@@ -290,32 +378,13 @@ const getCountByTab = (tab) => {
 };
 
 const getPositionClass = (pos) => {
-  switch (pos) {
-    case 'Home Slider': return 'badge-purple';
-    case 'Popup Sale': return 'badge-red';
-    case 'Sidebar Right': return 'badge-blue';
-    default: return 'badge-gray';
-  }
+  const p = (pos || '').toLowerCase();
+  if (p.includes('slider')) return 'badge-purple';
+  if (p.includes('popup')) return 'badge-red';
+  if (p.includes('sidebar')) return 'badge-blue';
+  return 'badge-gray';
 };
-
-const toggleStatus = (item) => {
-  item.status = item.status === 'active' ? 'inactive' : 'active';
-};
-
-const deleteBanner = (id) => {
-  if (confirm('Bạn có chắc chắn muốn xóa banner này?')) {
-    banners.value = banners.value.filter(b => b.id !== id);
-  }
-};
-
-const openModal = (item) => {
-  selectedBanner.value = item;
-  showModal.value = true;
-};
-const closeModal = () => showModal.value = false;
-
 </script>
-
 <style scoped>
 /* --- BASE STYLE --- */
 .admin-container {
@@ -735,6 +804,7 @@ tr:hover td {
   color: #9ca3af;
 }
 
+/* --- MODAL CHỈNH SỬA BỔ SUNG --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -842,6 +912,22 @@ tr:hover td {
   font-weight: 500;
 }
 
+/* CSS cho input trong modal */
+.modal-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.modal-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
 .info-item.full {
   grid-column: 1 / -1;
 }
@@ -861,6 +947,15 @@ tr:hover td {
   justify-content: flex-end;
   gap: 10px;
   border-top: 1px solid #f3f4f6;
+}
+
+.btn-outline-custom {
+  background: white;
+  border: 1px solid #d1d5db;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
 }
 
 @keyframes slideDown {
