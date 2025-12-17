@@ -452,7 +452,7 @@ const getCurrentFullTime = () => {
 };
 
 const getPaymentLabel = (status) => {
-  const map = { 'Paid': 'Da thanh toan', 'Unpaid': 'Chua thanh toan', 'Pending Refund': 'Cho hoan tien' };
+  const map = { 'Paid': 'Đã thanh toán', 'Unpaid': 'Chưa thanh toán', 'Pending Refund': 'Chờ hoàn tiền' };
   return map[status] || status;
 };
 
