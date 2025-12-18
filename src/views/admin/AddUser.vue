@@ -240,12 +240,14 @@ onMounted(async () => {
       const response = await axios.get(`${API_URL}/${route.query.id}`);
       const data = response.data;
       Object.assign(form, data);
-      // Xử lý lấy addressStr từ mảng address trong db.json
       if (Array.isArray(data.address) && data.address.length > 0) {
           form.addressStr = data.address[0].place_id;
       }
       previewAvatar.value = data.avatar;
-    } catch (error) { console.error(error); }
+    } catch (error) { 
+        console.error("Lỗi tải dữ liệu user:", error);
+        alert("Không tìm thấy dữ liệu người dùng hoặc Server chưa chạy (Port 3000).");
+    }
   }
 });
 
@@ -270,31 +272,49 @@ const save = async () => {
       });
       alert("Thêm mới thành công!");
     }
-    // QUAY VỀ: Dùng tên route 'user' như trong file Router của bạn
     router.push({ name: 'user' }); 
-  } catch (error) { alert("Lỗi khi lưu!"); }
+  } catch (error) { 
+    console.error("Chi tiết lỗi:", error);
+    if (error.code === "ERR_NETWORK" || error.code === "ERR_CONNECTION_REFUSED") {
+        alert("Không thể kết nối đến Server! Hãy kiểm tra xem JSON Server (Port 3000) đã bật chưa.");
+    } else {
+        alert("Lỗi khi lưu: " + error.message);
+    }
+  }
 };
 
 const cancel = () => {
-  // QUAY VỀ: Dùng tên route 'user'
   router.push({ name: 'user' });
 };
 
-// --- Logic xử lý ảnh ---
 const triggerUpload = () => fileInput.value.click();
-const handleFileUpload = (e) => {
+const handleFileUpload = async (e) => {
   const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      previewAvatar.value = event.target.result;
-      form.avatar = event.target.result;
-    };
-    reader.readAsDataURL(file);
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "DAX_BE"); 
+
+  try {
+    const res = await axios.post(
+      "https://api.cloudinary.com/v1_1/dm623a8ue/image/upload",
+      formData
+    );
+
+    form.avatar = res.data.secure_url; 
+    previewAvatar.value = res.data.secure_url;
+    
+    console.log("Đã upload xong:", res.data.secure_url);
+
+  } catch (error) {
+    console.error("Lỗi upload ảnh:", error);
+    alert("Upload ảnh lên Cloud thất bại!");
   }
 };
 const removeAvatar = () => { previewAvatar.value = null; form.avatar = ''; };
 </script>
+
 <style scoped>
 .admin-container {
   padding: 20px;
