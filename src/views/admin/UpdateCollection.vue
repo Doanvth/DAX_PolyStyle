@@ -3,180 +3,230 @@
     <!-- HEADER ACTION -->
     <div class="page-header">
       <div class="header-left">
-        <button class="btn-back" @click="goBack">
+        <router-link :to="{ name: 'collection' }" class="btn-back">
           <i class="bi bi-arrow-left"></i>
-        </button>
+        </router-link>
         <div>
-          <h2 class="page-title">Thêm Mới Collection</h2>
-          <p class="text-muted">Tạo bộ sưu tập mới cho website</p>
+          <h2 class="page-title">Chỉnh Sửa Bộ Sưu Tập</h2>
+          <p class="text-muted">Cập nhật thông tin bộ sưu tập</p>
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-outline-custom" @click="goBack">Hủy bỏ</button>
-        <button class="btn-primary-custom" @click="handleSubmit">
-          <i class="bi bi-check2-circle"></i> Lưu Collection
+        <router-link :to="{ name: 'collection' }" class="btn-outline-custom">Hủy bỏ</router-link>
+        <button class="btn-primary-custom" @click="handleSubmit" :disabled="isLoading">
+          <span v-if="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          <i class="bi bi-check2-circle" v-else></i> 
+          {{ isLoading ? 'Đang lưu...' : 'Cập nhật' }}
         </button>
       </div>
     </div>
 
     <!-- FORM LAYOUT -->
     <div class="form-layout">
+      
+      <!-- LEFT COLUMN: MAIN CONTENT -->
       <div class="col-left">
-        <!-- 1. Basic Info -->
+        
+        <!-- 1. General Info -->
         <div class="card-box">
-          <h4 class="card-title">Thông tin cơ bản</h4>
+          <h4 class="card-title">Thông tin chung</h4>
           
           <div class="form-group">
-            <label class="form-label">Tiêu đề <span class="text-red">*</span></label>
-            <input type="text" v-model="form.title" class="form-input" placeholder="Nhập tiêu đề collection...">
+            <label class="form-label">Tiêu đề chính <span class="text-red">*</span></label>
+            <div class="input-wrapper">
+                <span class="input-prefix"><i class="bi bi-type-h1"></i></span>
+                <input type="text" v-model="form.title" class="form-control form-input pl-40" placeholder="Nhập tiêu đề bộ sưu tập..." />
+            </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Hình ảnh cover</label>
-            <input type="text" v-model="form.image" class="form-input" placeholder="URL hình ảnh...">
+            <label class="form-label">Tiêu đề phụ / Mô tả ngắn</label>
+            <div class="input-wrapper">
+                <span class="input-prefix"><i class="bi bi-type-h3"></i></span>
+                <input type="text" v-model="form.subtitle" class="form-control form-input pl-40" placeholder="Nhập tiêu đề nhỏ..." />
+            </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Nội dung mô tả <span class="text-red">*</span></label>
-            <textarea v-model="form.content" class="form-textarea" rows="4" placeholder="Nhập nội dung mô tả..."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Nội dung phụ 1</label>
-            <textarea v-model="form.content2" class="form-textarea" rows="3" placeholder="Nội dung phụ..."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Nội dung phụ 2</label>
-            <textarea v-model="form.content3" class="form-textarea" rows="3" placeholder="Nội dung phụ..."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Trích dẫn cuối trang</label>
-            <textarea v-model="form.content5" class="form-textarea" rows="3" placeholder="Trích dẫn footer..."></textarea>
+            <label class="form-label">Mô tả chi tiết</label>
+            <textarea v-model="form.description" class="form-textarea" rows="4" placeholder="Viết mô tả chi tiết về bộ sưu tập..."></textarea>
           </div>
         </div>
+
       </div>
 
+      <!-- RIGHT COLUMN: SIDEBAR -->
       <div class="col-right">
-        <!-- 2. Social Links -->
+        
+        <!-- Status -->
         <div class="card-box">
-          <h4 class="card-title">Liên kết xã hội</h4>
-          
-          <div class="form-group">
-            <label class="form-label">URL Lazada</label>
-            <input type="text" v-model="form.lazada_url" class="form-input" placeholder="https://lazada.vn/...">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">URL Shopee</label>
-            <input type="text" v-model="form.shopee_url" class="form-input" placeholder="https://shopee.vn/...">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">URL Youtube</label>
-            <input type="text" v-model="form.youtube_url" class="form-input" placeholder="https://youtube.com/...">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">URL Tiktok</label>
-            <input type="text" v-model="form.tiktok_url" class="form-input" placeholder="https://tiktok.com/...">
-          </div>
+            <h4 class="card-title">Trạng thái</h4>
+            <div class="status-selection">
+                <label class="status-option" :class="{ active: form.status === 'active' }">
+                    <input type="radio" v-model="form.status" value="active" hidden>
+                    <span class="dot success"></span>
+                    <span>Công khai</span>
+                    <i class="bi bi-check-lg ms-auto" v-if="form.status === 'active'"></i>
+                </label>
+                <label class="status-option" :class="{ active: form.status === 'inactive' }">
+                    <input type="radio" v-model="form.status" value="inactive" hidden>
+                    <span class="dot danger"></span>
+                    <span>Ẩn</span>
+                    <i class="bi bi-check-lg ms-auto" v-if="form.status === 'inactive'"></i>
+                </label>
+            </div>
         </div>
 
-        <!-- 3. Status -->
+        <!-- Cover Image -->
         <div class="card-box mt-4">
-          <h4 class="card-title">Trạng thái</h4>
-          
-          <div class="form-group">
-            <label class="form-label">Trạng thái hiển thị</label>
-            <select v-model="form.status" class="form-input">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
+            <h4 class="card-title">Ảnh bìa chính</h4>
+            <div class="upload-zone-large" :class="{'has-image': form.image}" @click="triggerImageUpload">
+                <img v-if="form.image" :src="form.image" class="banner-preview" />
+                <div v-else class="upload-placeholder">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                    <p>Tải ảnh bìa</p>
+                </div>
+                <input type="file" ref="imageInput" class="d-none" accept="image/*" @change="onImageSelected">
+            </div>
+            <div class="mt-3">
+              <input type="text" v-model="form.image" class="form-input" placeholder="Hoặc nhập URL hình ảnh..." @input="updateImagePreview" />
+            </div>
         </div>
+
+        <!-- Additional Info -->
+        <div class="card-box mt-4">
+            <h4 class="card-title">Thông tin bổ sung</h4>
+            
+            <div class="form-group">
+              <label class="form-label">Số lượng sản phẩm</label>
+              <input type="number" v-model.number="form.productCount" min="0" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Hotline</label>
+              <input type="text" v-model="form.hotline" class="form-input" placeholder="Nhập số hotline..." />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Ngày tạo</label>
+              <input type="text" v-model="form.createAt" class="form-input" placeholder="dd/mm/yyyy" />
+            </div>
+        </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
 const router = useRouter();
+const isLoading = ref(false);
+const imageInput = ref(null);
 
-const form = reactive({
-  id: '',
+const form = ref({
+  id: null,
   title: '',
+  subtitle: '',
+  description: '',
   image: '',
-  content: '',
-  content2: '',
-  content3: '',
-  content4: '',
-  content5: '',
   status: 'active',
-  lazada_url: '',
-  shopee_url: '',
-  youtube_url: '',
-  tiktok_url: '',
-  created_at: ''
+  productCount: 0,
+  hotline: '',
+  createAt: ''
 });
 
-const handleSubmit = () => {
-  // Basic validation
-  if(!form.title || !form.content) {
-    return alert("Vui lòng điền đầy đủ tiêu đề và nội dung!");
+// Load collection data by ID
+const loadCollectionData = () => {
+  const collectionId = parseInt(route.params.id);
+  if (!collectionId) {
+    alert('Không tìm thấy bộ sưu tập');
+    router.push({ name: 'collection' });
+    return;
   }
 
-  // Tạo ID mới
-  const newId = Date.now().toString();
-  
-  // Chuẩn bị dữ liệu để lưu
-  const newCollection = {
-    id: newId,
-    image: form.image || '/default-collection.jpg',
-    title: form.title,
-    collection_detail: [{
-      title: form.title,
-      content: form.content,
-      content2: form.content2,
-      content3: form.content3,
-      content4: form.content4,
-      content5: form.content5,
-      social_chanel: [{
-        lazada_url: form.lazada_url || 'https://s.lazada.vn/s.2ArTZ?cc',
-        shopee_url: form.shopee_url || 'https://s.shopee.vn/9UK45PLirC'
-      }],
-      entertainment_chanel: [{
-        youtube_url: form.youtube_url || 'https://www.youtube.com/channel/UC3rqZ2JMisKK6xnF55iPjkg',
-        tiktok_url: form.tiktok_url || 'https://www.tiktok.com/@orchid_fashion'
-      }]
-    }],
-    status: form.status,
-    created_at: new Date().toISOString()
-  };
-
-  // Lấy danh sách collection hiện có
-  const collections = JSON.parse(localStorage.getItem('orchid_collections') || '[]');
-  
-  // Thêm collection mới
-  collections.push(newCollection);
-  
-  // Lưu vào localStorage
-  localStorage.setItem('orchid_collections', JSON.stringify(collections));
-  
-  console.log("=== SUBMITTING ===", JSON.stringify(newCollection, null, 2));
-  alert("Đã thêm collection thành công!");
-  
-  // Quay lại trang quản lý collection
-  router.push({ name: 'collection' });
+  const savedData = localStorage.getItem('collections');
+  if (savedData) {
+    const collections = JSON.parse(savedData);
+    const collection = collections.find(item => item.id === collectionId);
+    
+    if (collection) {
+      form.value = { ...collection };
+    } else {
+      alert('Bộ sưu tập không tồn tại');
+      router.push({ name: 'collection' });
+    }
+  } else {
+    alert('Không có dữ liệu bộ sưu tập');
+    router.push({ name: 'collection' });
+  }
 };
 
-const goBack = () => {
-  router.push({ name: 'collection' });
+onMounted(() => {
+  loadCollectionData();
+});
+
+// Image handling
+const triggerImageUpload = () => imageInput.value.click();
+
+const onImageSelected = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      form.value.image = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
 };
+
+const updateImagePreview = () => {
+  // URL validation can be added here
+};
+
+// Submit form
+const handleSubmit = async () => {
+  if (!form.value.title.trim()) {
+    alert("Vui lòng nhập tiêu đề chính!");
+    return;
+  }
+
+  isLoading.value = true;
+
+  try {
+    // Load existing collections
+    const savedData = localStorage.getItem('collections');
+    let collections = [];
+    if (savedData) {
+      collections = JSON.parse(savedData);
+    }
+
+    // Find and update the collection
+    const index = collections.findIndex(item => item.id === form.value.id);
+    if (index !== -1) {
+      collections[index] = { ...form.value };
+      localStorage.setItem('collections', JSON.stringify(collections));
+      
+      // Simulate API call delay
+      setTimeout(() => {
+        isLoading.value = false;
+        alert("Đã cập nhật bộ sưu tập thành công!");
+        router.push({ name: 'collection' });
+      }, 1000);
+    } else {
+      alert('Bộ sưu tập không tồn tại');
+      router.push({ name: 'collection' });
+    }
+  } catch (error) {
+    console.error('Error updating collection:', error);
+    alert('Có lỗi xảy ra khi cập nhật');
+    isLoading.value = false;
+  }
+};
+
 </script>
 
 <style scoped>

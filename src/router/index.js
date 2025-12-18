@@ -34,7 +34,11 @@ import RevenueManager from "@/views/admin/RevenueManager.vue";
 import CollectionManager from "@/views/admin/CollectionManager.vue";
 
 import AddCollection from "@/views/admin/AddCollection.vue";
+import UpdateCollection from "@/views/admin/UpdateCollection.vue";
+import DeleteCollection from "@/views/admin/DeleteCollection.vue";
 import AddStore from "@/views/admin/AddStore.vue";
+import UpdateStore from "@/views/admin/UpdateStore.vue"; // ĐÃ SỬA TÊN
+import DeleteStore from "@/views/admin/DeleteStore.vue";
 import AddCategory from "@/views/admin/AddCategory.vue";
 
 import AddArticle from "@/views/admin/AddArticle.vue";
@@ -43,6 +47,7 @@ import AddProduct from "@/views/admin/AddProduct.vue";
 
 import AddDiscount from "@/views/admin/AddDiscount.vue";
 import DiscountManage from "@/views/admin/DiscountManager.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -85,11 +90,27 @@ const router = createRouter({
 
         { path: "order", name: "order", component: OrderManager },
 
-        { path: "store", name: "store", component: StoreManager },
+        {
+          path: "store",
+          name: "store",
+          component: StoreManager,
+        },
         {
           path: "store/add",
           name: "store-add",
           component: AddStore,
+        },
+        {
+          path: "store/edit/:id",
+          name: "store-edit",
+          component: UpdateStore, // ĐÃ SỬA TÊN
+          props: true,
+        },
+        {
+          path: "store/delete/:id",
+          name: "store-delete",
+          component: DeleteStore,
+          props: true,
         },
         {
           path: "collection",
@@ -100,6 +121,18 @@ const router = createRouter({
           path: "collection/add",
           name: "collection-add",
           component: AddCollection,
+        },
+        {
+          path: "collection/edit/:id",
+          name: "collection-edit",
+          component: UpdateCollection,
+          meta: { requiresAuth: true, admin: true },
+        },
+        {
+          path: "collection/delete/:id",
+          name: "collection-delete",
+          component: DeleteCollection,
+          meta: { requiresAuth: true, admin: true },
         },
         { path: "post", name: "post", component: ArticleManager },
         { path: "addposts", name: "PostCreate", component: AddArticle },
@@ -219,6 +252,18 @@ const router = createRouter({
           path: "OrderSuccessPage",
           name: "OrderSuccessPages",
           component: OrderSuccessPage,
+        },
+        {
+          path: "collection/edit/:id",
+          name: "collection-edit",
+          component: UpdateCollection,
+          meta: { requiresAuth: true, admin: true },
+        },
+        {
+          path: "collection/delete/:id",
+          name: "collection-delete",
+          component: DeleteCollection,
+          meta: { requiresAuth: true, admin: true },
         },
       ],
     },

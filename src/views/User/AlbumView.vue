@@ -2,54 +2,89 @@
   <div class="album-container">
     <h1 class="album-title">Album</h1>
 
-    <div class="album-grid">
-      <router-link 
-        v-for="item in paginatedData" 
-        :key="item.id"
-        :to="`/albumDetail`" 
-        class="album-item"
-      >
-        <div class="album-image">
-          <img :src="item.imgSrc" :alt="item.title">
-        </div>
-        <div class="album-caption">
-          <span class="album-caption-title">{{ item.title }}</span>
-        </div>
-      </router-link> </div>
+    <div v-if="isLoading" class="loading">Đang tải dữ liệu...</div>
+    
+    <div v-else>
+      <div v-if="albumData.length === 0" class="empty-state">
+        <p>Chưa có album nào. Hãy thêm album mới từ trang quản trị.</p>
+      </div>
 
-    <div class="pagination">
-      <button
-        v-for="page in totalPages"
-        :key="page"
-        class="page-btn"
-        :class="{ active: page === currentPage }"
-        @click="changePage(page)"
-      >
-        {{ page }}
-      </button>
+      <div v-else>
+        <div class="album-grid">
+          <router-link 
+            v-for="item in paginatedData" 
+            :key="item.id"
+            :to="`/albumDetail?id=${item.id}`" 
+            class="album-item"
+          >
+            <div class="album-image">
+              <img :src="item.image || '/default-album.jpg'" :alt="item.title">
+            </div>
+            <div class="album-caption">
+              <span class="album-caption-title">{{ item.title }}</span>
+            </div>
+          </router-link>
+        </div>
+
+        <div v-if="totalPages > 1" class="pagination">
+          <button
+            v-for="page in totalPages"
+            :key="page"
+            class="page-btn"
+            :class="{ active: page === currentPage }"
+            @click="changePage(page)"
+          >
+            {{ page }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const itemsPerPage = 9;
-
 const currentPage = ref(1);
+const albumData = ref([]);
+const isLoading = ref(true);
 
-const albumData = ref([
-  { id: 1, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20251027_f1lAVaZF.jpeg?v=1761555358", title: "FLOW MOTION" },
-  { id: 2, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250923_8BaaYKMP.jpeg?v=1758611674", title: "GẤM HOA ĐẤT VIỆT" },
-  { id: 3, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250731_jiKZTMZF.jpeg?v=1753926555", title: "FOREST REVERSE" },
-  { id: 4, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250723_kF6cl03O.jpeg?v=1753242769", title: "URBAN SONATA" },
-  { id: 5, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250523_hQmsmrRd.jpeg?v=1747966757", title: "APHRODITE" },
-  { id: 6, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250410_1KWQux0g.jpeg?v=1744267332", title: "SUN-KISSED MEMORIES" },
-  { id: 7, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250327_gItFU8Rg.jpeg?v=1743050963", title: "DYNAMIC-TEE" },
-  { id: 8, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250218_Bz3XUh8H.jpeg?v=1739854604", title: "WORK-LIFE BALANCE" },
-  { id: 9, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20250107_2icCv1VU.jpeg?v=1736225414", title: "SUMMER FEELING" },
-  { id: 10, imgSrc: "https://pos.nvncdn.com/af3c03-152482/album/20241226_d9dPM5tB.jpeg?v=1735182164", title: "NEW COLLECTION" }
-]);
+// Lấy dữ liệu album từ localStorage
+const loadAlbumData = () => {
+  isLoading.value = true;
+  
+  // Lấy từ collection trong db.json mô phỏng
+  const collections = JSON.parse(localStorage.getItem('orchid_collections') || '[]');
+  
+  if (collections.length === 0) {
+    // Nếu chưa có dữ liệu, lấy từ db.json mẫu
+    fetch('/db.json')
+      .then(response => response.json())
+      .then(data => {
+        if (data.collection && data.collection.length > 0) {
+          albumData.value = data.collection.map(item => ({
+            id: item.id || 'default-id',
+            imgSrc: item.image || '/default-album.jpg',
+            title: item.collection_detail?.[0]?.title || 'Không có tiêu đề'
+          }));
+        }
+        isLoading.value = false;
+      })
+      .catch(error => {
+        console.error('Lỗi khi tải dữ liệu:', error);
+        isLoading.value = false;
+      });
+  } else {
+    // Lấy từ localStorage
+    albumData.value = collections.map(item => ({
+      id: item.id || Date.now().toString(),
+      imgSrc: item.image || '/default-album.jpg',
+      title: item.collection_detail?.[0]?.title || item.title || 'Không có tiêu đề'
+    }));
+    isLoading.value = false;
+  }
+};
 
 const totalPages = computed(() => {
   return Math.ceil(albumData.value.length / itemsPerPage);
@@ -64,6 +99,10 @@ const paginatedData = computed(() => {
 function changePage(page) {
   currentPage.value = page;
 }
+
+onMounted(() => {
+  loadAlbumData();
+});
 </script>
 
 <style scoped>
@@ -83,6 +122,27 @@ function changePage(page) {
   color: #333;
   margin-bottom: 30px;
   text-transform: uppercase;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 2px dashed #ddd;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 20px;
 }
 
 .album-grid {

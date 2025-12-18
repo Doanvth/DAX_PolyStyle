@@ -66,7 +66,7 @@
             <th width="25%">Địa Chỉ</th>
             <th width="20%">Liên Hệ</th>
             <th width="15%">Trạng Thái</th>
-            <th width="5%" class="text-center">#</th>
+            <th width="10%" class="text-center">#</th>
           </tr>
         </thead>
         <tbody>
@@ -108,9 +108,17 @@
             </td>
 
             <td class="text-center">
-              <button class="btn-icon" title="Xem chi tiết" @click="openModal(store)">
-                <i class="bi bi-eye text-blue"></i>
-              </button>
+              <div class="action-buttons">
+                <button class="btn-icon" title="Xem chi tiết" @click="openModal(store)">
+                  <i class="bi bi-eye text-blue"></i>
+                </button>
+                <button class="btn-icon" title="Chỉnh sửa" @click="editStore(store.id)">
+                  <i class="bi bi-pencil text-warning"></i>
+                </button>
+                <button class="btn-icon" title="Xóa cửa hàng" @click="confirmDelete(store)">
+                  <i class="bi bi-trash text-danger"></i>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -139,6 +147,7 @@
       </div>
     </div>
 
+    <!-- Modal chi tiết -->
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -182,7 +191,44 @@
 
         <div class="modal-footer">
           <button class="btn-outline-custom" @click="closeModal">Đóng</button>
-          <button class="btn-primary-custom">Chỉnh sửa thông tin</button>
+          <button class="btn-primary-custom" @click="editStore(selectedStore.id)">Chỉnh sửa thông tin</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal xác nhận xóa -->
+    <div v-if="showDeleteModal" class="modal-overlay" @click.self="closeDeleteModal">
+      <div class="modal-content delete-modal">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3><i class="bi bi-exclamation-triangle text-danger me-2"></i> Xác nhận xóa</h3>
+          </div>
+          <button class="close-btn" @click="closeDeleteModal"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="text-center">
+            <i class="bi bi-trash text-danger" style="font-size: 48px; margin-bottom: 20px;"></i>
+            <h4>Bạn có chắc chắn muốn xóa cửa hàng này?</h4>
+            
+            <div v-if="storeToDelete" class="store-info mt-4">
+              <p><strong>Tên:</strong> {{ storeToDelete.name }}</p>
+              <p><strong>Địa chỉ:</strong> {{ storeToDelete.address }}</p>
+              <p><strong>Email:</strong> {{ storeToDelete.email }}</p>
+              <p><strong>Trạng thái:</strong> {{ storeToDelete.status === 'active' ? 'Đang hoạt động' : 'Đóng cửa' }}</p>
+              
+              <div v-if="storeToDelete.isMain" class="alert alert-warning mt-3">
+                <i class="bi bi-exclamation-circle"></i> Đây là trụ sở chính, không thể xóa!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-outline-custom" @click="closeDeleteModal">Hủy bỏ</button>
+          <button class="btn-danger-custom" @click="deleteStore" :disabled="storeToDelete && storeToDelete.isMain">
+            <i class="bi bi-trash"></i> Xóa Cửa Hàng
+          </button>
         </div>
       </div>
     </div>
@@ -191,39 +237,69 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-const generateData = () => {
-  const data = [];
-  const cities = ['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'];
-  const streets = ['Nguyễn Huệ', 'Lê Lợi', 'Trần Hưng Đạo', '3 Tháng 2', 'Xuân Thủy'];
+const router = useRouter();
 
-  for (let i = 1; i <= 35; i++) {
-    const city = cities[Math.floor(Math.random() * cities.length)];
-    const street = streets[Math.floor(Math.random() * streets.length)];
-    const status = Math.random() > 0.15 ? 'active' : 'inactive';
-
-    data.push({
-      id: i,
-      name: `Orchid Store ${city} ${i}`,
-      address: `Số ${i * 12} đường ${street}, ${city}`,
-      email: `store.${i}@orchid.com.vn`,
-      phone: `024.777.${1000 + i}`,
-      status: status,
-      isMain: i === 1
-    });
+// Lấy dữ liệu từ localStorage hoặc API
+const loadStoresFromDB = () => {
+  const savedStores = localStorage.getItem('orchid_stores');
+  if (savedStores) {
+    return JSON.parse(savedStores);
   }
-  return data.reverse();
+  
+  // Nếu không có, tạo dữ liệu mẫu ban đầu
+  const initialStores = [
+    {
+      id: 1,
+      name: "Orchid Store Hà Nội",
+      address: "Số 12 đường Nguyễn Huệ, Hà Nội",
+      email: "store.hanoi@orchid.com.vn",
+      phone: "024.777.1001",
+      status: 'active',
+      isMain: true,
+      description: "Trụ sở chính tại Hà Nội",
+      createdAt: "2025-11-26"
+    },
+    {
+      id: 2,
+      name: "Orchid Store TP.HCM",
+      address: "Số 24 đường Lê Lợi, Quận 1, TP.HCM",
+      email: "store.hcm@orchid.com.vn",
+      phone: "028.777.1002",
+      status: 'active',
+      isMain: false,
+      description: "Chi nhánh tại TP.HCM",
+      createdAt: "2025-11-25"
+    },
+    {
+      id: 3,
+      name: "Orchid Store Đà Nẵng",
+      address: "Số 36 đường Trần Hưng Đạo, Đà Nẵng",
+      email: "store.danang@orchid.com.vn",
+      phone: "023.777.1003",
+      status: 'active',
+      isMain: false,
+      description: "Chi nhánh tại Đà Nẵng",
+      createdAt: "2025-11-24"
+    }
+  ];
+  
+  localStorage.setItem('orchid_stores', JSON.stringify(initialStores));
+  return initialStores;
 };
 
-const stores = ref(generateData());
+const stores = ref(loadStoresFromDB());
 
 const searchKeyword = ref("");
 const currentStatus = ref("all");
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const showModal = ref(false);
+const showDeleteModal = ref(false);
 const selectedStore = ref({});
+const storeToDelete = ref(null);
 
 const tabs = [
   { label: 'Tất cả', value: 'all' },
@@ -257,11 +333,12 @@ const paginatedStores = computed(() => {
 const totalPages = computed(() => Math.ceil(filteredStores.value.length / itemsPerPage) || 1);
 
 const stats = computed(() => {
+  const uniqueCities = new Set(stores.value.map(s => s.address.split(',').pop().trim()));
   return {
     total: stores.value.length,
     active: stores.value.filter(s => s.status === 'active').length,
     inactive: stores.value.filter(s => s.status === 'inactive').length,
-    cities: 5
+    cities: uniqueCities.size
   };
 });
 
@@ -277,6 +354,7 @@ const getCountByStatus = (status) => {
 
 const toggleStatus = (store) => {
   store.status = store.status === 'active' ? 'inactive' : 'active';
+  saveStoresToDB();
 };
 
 const formatStatus = (status) => status === 'active' ? 'Đang mở' : 'Đóng cửa';
@@ -285,7 +363,57 @@ const openModal = (store) => {
   selectedStore.value = store;
   showModal.value = true;
 };
+
 const closeModal = () => showModal.value = false;
+
+// Mở modal xác nhận xóa
+const confirmDelete = (store) => {
+  storeToDelete.value = store;
+  showDeleteModal.value = true;
+};
+
+const closeDeleteModal = () => {
+  showDeleteModal.value = false;
+  storeToDelete.value = null;
+};
+
+// Chức năng xóa cửa hàng
+const deleteStore = () => {
+  if (storeToDelete.value) {
+    if (storeToDelete.value.isMain) {
+      alert('Không thể xóa trụ sở chính!');
+      closeDeleteModal();
+      return;
+    }
+    
+    // Xóa cửa hàng
+    stores.value = stores.value.filter(s => s.id !== storeToDelete.value.id);
+    saveStoresToDB();
+    
+    // Reset phân trang nếu cần
+    if (currentPage.value > totalPages.value) {
+      currentPage.value = totalPages.value;
+    }
+    
+    closeDeleteModal();
+    alert('Xóa cửa hàng thành công!');
+  }
+};
+
+// Chức năng chỉnh sửa
+const editStore = (storeId) => {
+  router.push({ name: 'store-edit', params: { id: storeId } });
+};
+
+// Lưu dữ liệu vào localStorage (giả lập DB)
+const saveStoresToDB = () => {
+  localStorage.setItem('orchid_stores', JSON.stringify(stores.value));
+};
+
+// Load dữ liệu khi component được mount
+onMounted(() => {
+  console.log('Đang tải dữ liệu cửa hàng...');
+});
 </script>
 
 <style scoped>
@@ -573,16 +701,45 @@ tr:hover td {
   background: #9ca3af;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
 .btn-icon {
   background: none;
   border: none;
   cursor: pointer;
   color: #6b7280;
   font-size: 15px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
 .btn-icon:hover {
+  background: #f3f4f6;
+}
+
+.btn-icon .text-blue:hover {
   color: #2563eb;
+}
+
+.btn-icon .text-warning:hover {
+  color: #f59e0b;
+}
+
+.btn-icon .text-danger:hover {
+  color: #ef4444;
+}
+
+.text-warning {
+  color: #f59e0b;
+}
+
+.text-danger {
+  color: #ef4444;
 }
 
 .text-center {
@@ -675,6 +832,10 @@ tr:hover td {
   animation: slideDown 0.2s ease-out;
 }
 
+.delete-modal {
+  width: 500px;
+}
+
 .modal-header {
   padding: 15px 20px;
   border-bottom: 1px solid #f3f4f6;
@@ -689,6 +850,8 @@ tr:hover td {
   font-weight: 700;
   color: #111;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
 }
 
 .close-btn {
@@ -765,6 +928,74 @@ tr:hover td {
   gap: 10px;
 }
 
+.btn-danger-custom {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-danger-custom:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.btn-danger-custom:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.store-info {
+  text-align: left;
+  padding: 15px;
+  background: #f9fafb;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.store-info p {
+  margin: 5px 0;
+}
+
+.alert {
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
+.alert-warning {
+  background-color: #fef3c7;
+  border: 1px solid #fbbf24;
+  color: #92400e;
+}
+
+.alert-warning i {
+  margin-right: 5px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-3 {
+  margin-top: 15px;
+}
+
+.mt-4 {
+  margin-top: 20px;
+}
+
+.me-2 {
+  margin-right: 8px;
+}
+
 @keyframes slideDown {
   from {
     transform: translateY(-15px);
@@ -780,6 +1011,12 @@ tr:hover td {
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .modal-content,
+  .delete-modal {
+    width: 90%;
+    max-width: 480px;
   }
 }
 </style>

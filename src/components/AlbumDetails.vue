@@ -1,159 +1,179 @@
 <template>
-  <div> <div class="hero-image">
-      <img :src="heroImage" alt="Hero Image">
+  <div>
+    <div v-if="isLoading" class="loading">Đang tải dữ liệu...</div>
+    
+    <div v-else-if="!album" class="empty-state">
+      <p>Không tìm thấy album hoặc album đã bị xóa.</p>
+      <router-link to="/album" class="back-link">← Quay lại trang Album</router-link>
     </div>
-
-    <div class="article-page">
-      
-      <div class="content-block">
-        <h1>{{ title }}</h1>
-        <p>{{ description }}</p>
+    
+    <div v-else>
+      <div class="hero-image">
+        <img :src="heroImage" :alt="title">
       </div>
 
-      <div class="image-grid">
-        <template v-for="(item, index) in articleContent" :key="index">
-          
-          <p v-if="item.type === 'text'" class="article-text">
-            {{ item.content }}
-          </p>
+      <div class="article-page">
+        <div class="content-block">
+          <h1>{{ title }}</h1>
+          <p>{{ description }}</p>
+        </div>
 
-          <div v-else-if="item.type === 'full-image'" class="grid-item-full">
-            <img :src="item.src" alt="Article content image">
-          </div>
-
-          <div v-else-if="item.type === 'image-pair'" class="grid-item-pair">
-            <div class="pair-item">
-              <img :src="item.srcLeft" alt="Article content image left">
-            </div>
-            <div class="pair-item">
-              <img :src="item.srcRight" alt="Article content image right">
-            </div>
-          </div>
-
-        </template>
-      </div>
-
-      <footer class="article-footer">
-        <p class="footer-quote">{{ footerQuote }}</p>
-        <div class="footer-divider"></div>
-        <h2>ORCHID - DẪN LỐI THỜI TRANG PHÁI ĐẸP</h2>
-        <ul class="footer-links">
-          <li>
-            <span class="link-icon">■</span>
-            <a href="tel:0972359666">
-              <strong>Hotline:</strong>
-              <span>0972.359.666</span>
-            </a>
-          </li>
-          
-          <li v-for="link in socialLinks" :key="link.name">
-            <span class="link-icon">■</span>
+        <div class="image-grid">
+          <template v-for="(item, index) in articleContent" :key="index">
             
-            <span v-if="!link.url" class="group-title">
-              <strong>{{ link.name }}:</strong>
-            </span>
+            <p v-if="item.type === 'text'" class="article-text">
+              {{ item.content }}
+            </p>
 
-            <a v-else :href="link.url" target="_blank" rel="noopener noreferrer">
-              <strong>{{ link.name }}:</strong>
-              <span>{{ link.url }}</span> </a>
-          </li>
+            <div v-else-if="item.type === 'full-image'" class="grid-item-full">
+              <img :src="item.src" :alt="`Article image ${index + 1}`">
+            </div>
+
+            <div v-else-if="item.type === 'image-pair'" class="grid-item-pair">
+              <div class="pair-item">
+                <img :src="item.srcLeft" :alt="`Article image ${index + 1} left`">
+              </div>
+              <div class="pair-item">
+                <img :src="item.srcRight" :alt="`Article image ${index + 1} right`">
+              </div>
+            </div>
+
+          </template>
+        </div>
+
+        <footer class="article-footer">
+          <p class="footer-quote">{{ footerQuote }}</p>
+          <div class="footer-divider"></div>
+          <h2>ORCHID - DẪN LỐI THỜI TRANG PHÁI ĐẸP</h2>
+          <ul class="footer-links">
+            <li>
+              <span class="link-icon">■</span>
+              <a href="tel:0972359666">
+                <strong>Hotline:</strong>
+                <span>0972.359.666</span>
+              </a>
+            </li>
+            
+            <li v-for="link in socialLinks" :key="link.name">
+              <span class="link-icon">■</span>
+              
+              <span v-if="!link.url" class="group-title">
+                <strong>{{ link.name }}:</strong>
+              </span>
+
+              <a v-else :href="link.url" target="_blank" rel="noopener noreferrer">
+                <strong>{{ link.name }}:</strong>
+                <span>{{ link.url }}</span>
+              </a>
+            </li>
           </ul>
-      </footer>
-
+        </footer>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
+const router = useRouter();
 
-const heroImage = ref('https://pos.nvncdn.com/af3c03-152482/album/20251027_f1lAVaZF.jpeg?v=1761555358');
-const title = ref('FLOW MOTION');
+const heroImage = ref('');
+const title = ref('');
+const description = ref('');
+const footerQuote = ref('');
+const articleContent = ref([]);
+const socialLinks = ref([]);
+const album = ref(null);
+const isLoading = ref(true);
 
-const description = ref('Giữa nhịp sống vội vã, nơi công việc, cảm xúc và những “deadline” đôi khi khiến ta quên mất đi được là chính mình. Bộ sưu tập “Flow Motion” ra đời như một khoảng dừng nhẹ, gửi gắm lời nhắn nhủ: chuyển động không chỉ để vận động, mà để lắng nghe cơ thể, làm mới năng lượng và tìm lại sự cân bằng bên trong.');
-const footerQuote = ref('“Flow Motion” không dừng lại là thời trang thể thao, không đơn thuần là vận động, mà là cách nâng sống trọn trong từng chuyển động của mình.');
-
-const articleContent = ref([
-  {
-    type: 'text',
-    content: 'Lấy cảm hứng từ tinh thần thể thao hiện đại, BST “Flow Motion” mang đến hình ảnh người phụ nữ Orchid năng động mà tinh tế, khỏe khoắn mà đầy cảm xúc. Mỗi thiết kế là sự hòa quyện giữa tính ứng dụng cao và phong thái thời trang để nàng có thể tự do di chuyển giữa công việc - cuộc sống - bản thân mà không đánh mất phong cách riêng.'
-  },
-  {
-    type: 'full-image',
-    src: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_2Mkw2fgQ.jpg'
-  },
-  {
-    type: 'image-pair',
-    srcLeft: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_1xrjng4y.jpg',
-    srcRight: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_Dcsj6i5q.jpg'
-  },
-  {
-    type: 'image-pair',
-    srcLeft: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_yzox7HIY.jpg',
-    srcRight: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_ql8xSAZG.jpg' 
-  },
-  {
-    type: 'image-pair',
-    srcLeft: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_eNvrfcXn.jpg',
-    srcRight: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_xnTd9FRo.jpg'
-  },
-  {
-    type: 'full-image',
-    src: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_jBLonuAP.jpg'
-  },
-  {
-    type: 'text',
-    content: 'Khai thác các chất liệu co giãn linh hoạt, giữ nhiệt nhẹ và thoáng như Umi Hàn, xốp gió, len gân, nhung the, từng thiết kế ôm trọn cơ thể nhưng vẫn cho nàng sự tự do trong từng chuyển động. Bảng màu trung tính pha điểm nhấn metallic khơi gợi năng lượng tích cực như ánh sáng len lỏi trong mùa đông, phản chiếu tinh thần sống chủ động và rực rỡ.'
-  },
-  {
-    type: 'image-pair',
-    srcLeft: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_2enOqjkY.jpg',
-    srcRight: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_kH1exChW.jpg'
-  },
-  {
-    type: 'image-pair',
-    srcLeft: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_adWHNr1d.jpg',
-    srcRight: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_PgQbugQL.jpg'
-  },
-  {
-    type: 'full-image',
-    src: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_iHrrlyKY.jpg'
-  },
-  {
-    type: 'image-pair',
-    srcLeft: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_SnxkCUhj.jpg',
-    srcRight: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_EAePLw7h.jpg'
-  },
-  {
-    type: 'text',
-    content: 'Không dừng lại ở đó, kết cấu xử lý phom dáng tài tình, thể hiện rõ cá tính, đường cắt dứt khoát tạo nên nét khỏe khoắn tự nhiên, tôn vinh tinh thần #move_with_balance năng động, tự tin, và đầy sức sống.'
-  },
-  {
-    type: 'full-image',
-    src: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_Qcu7rQ56.jpg'
-  },
-  {
-    type: 'full-image',
-    src: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_gCI1tamg.jpg'
-  },
-  {
-    type: 'full-image',
-    src: 'https://pos.nvncdn.com/af3c03-152482/art/artCT/20251027_3hnChe4U.jpg'
+// Lấy dữ liệu từ localStorage hoặc db.json
+const loadAlbumData = () => {
+  const albumId = route.query.id;
+  
+  if (!albumId) {
+    isLoading.value = false;
+    return;
   }
-]);
 
-const socialLinks = ref([
-  { name: 'Fanpage', url: 'https://www.facebook.com/ThoiTrangOrchid/' },
-  { name: 'Kênh thương mại điện tử', url: '' },
-  { name: 'Lazada Mall', url: 'https://s.lazada.vn/s.2ArTZ?cc' },
-  { name: 'Shopee Mall', url: 'https://s.shopee.vn/9UK45PLirC' },
-  { name: 'Kênh giải trí', url: '' }, 
-  { name: 'Youtube', url: 'https://www.youtube.com/channel/UC3rqZ2JMisKK6xnF55iPjkg' },
-  { name: 'Tiktok', url: 'https://www.tiktok.com/@orchid_fashion' },
-  { name: 'Instagram', url: 'https://www.instagram.com/orchidfashion.official/' }
-]);
+  // Thử lấy từ localStorage trước
+  const collections = JSON.parse(localStorage.getItem('orchid_collections') || '[]');
+  const foundAlbum = collections.find(item => item.id == albumId);
+  
+  if (foundAlbum) {
+    album.value = foundAlbum;
+    parseAlbumData(foundAlbum);
+    isLoading.value = false;
+  } else {
+    // Nếu không có trong localStorage, thử lấy từ db.json mẫu
+    fetch('/db.json')
+      .then(response => response.json())
+      .then(data => {
+        const sampleAlbum = data.collection?.find(item => item.id == albumId);
+        if (sampleAlbum) {
+          album.value = sampleAlbum;
+          parseAlbumData(sampleAlbum);
+        }
+        isLoading.value = false;
+      })
+      .catch(error => {
+        console.error('Lỗi khi tải dữ liệu:', error);
+        isLoading.value = false;
+      });
+  }
+};
 
+// Phân tích dữ liệu album
+const parseAlbumData = (albumData) => {
+  const detail = albumData.collection_detail?.[0] || {};
+  
+  // Hero image
+  heroImage.value = albumData.image || '/default-hero.jpg';
+  
+  // Tiêu đề và mô tả
+  title.value = detail.title || albumData.title || 'Không có tiêu đề';
+  description.value = detail.content || albumData.description || 'Không có mô tả';
+  footerQuote.value = detail.content5 || 'Không có trích dẫn';
+  
+  // Xây dựng nội dung bài viết từ dữ liệu
+  articleContent.value = [];
+  
+  // Thêm nội dung text
+  if (detail.content2) articleContent.value.push({ type: 'text', content: detail.content2 });
+  if (detail.content3) articleContent.value.push({ type: 'text', content: detail.content3 });
+  if (detail.content4) articleContent.value.push({ type: 'text', content: detail.content4 });
+  
+  // Thêm hình ảnh từ dữ liệu (nếu có)
+  if (detail.image && detail.image.length > 0) {
+    // Giả sử mỗi image là một full image
+    detail.image.forEach((img, index) => {
+      if (img.image_url) {
+        articleContent.value.push({ 
+          type: 'full-image', 
+          src: img.image_url 
+        });
+      }
+    });
+  }
+  
+  // Liên kết xã hội
+  socialLinks.value = [
+    { name: 'Fanpage', url: 'https://www.facebook.com/ThoiTrangOrchid/' },
+    { name: 'Kênh thương mại điện tử', url: '' },
+    { name: 'Lazada Mall', url: detail.social_chanel?.[0]?.lazada_url || 'https://s.lazada.vn/s.2ArTZ?cc' },
+    { name: 'Shopee Mall', url: detail.social_chanel?.[0]?.shopee_url || 'https://s.shopee.vn/9UK45PLirC' },
+    { name: 'Kênh giải trí', url: '' }, 
+    { name: 'Youtube', url: detail.entertainment_chanel?.[0]?.youtube_url || 'https://www.youtube.com/channel/UC3rqZ2JMisKK6xnF55iPjkg' },
+    { name: 'Tiktok', url: detail.entertainment_chanel?.[0]?.tiktok_url || 'https://www.tiktok.com/@orchid_fashion' },
+    { name: 'Instagram', url: 'https://www.instagram.com/orchidfashion.official/' }
+  ];
+};
+
+onMounted(() => {
+  loadAlbumData();
+});
 </script>
 
 <style scoped>
@@ -163,6 +183,38 @@ const socialLinks = ref([
   --footer-bg: #1a1a1a;
   --footer-text: #f0f0f0;
   --footer-link: #4a90e2; 
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.back-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.back-link:hover {
+  background-color: #555;
 }
 
 .article-page {
