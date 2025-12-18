@@ -15,8 +15,10 @@
     "bootstrap-icons": "^1.13.1",
     "chart.js": "^4.5.0",
     "json-server": "^1.0.0-beta.3",
+    "sweetalert2": "^11.26.10",
     "vue": "^3.5.22",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",

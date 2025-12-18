@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": "",
+      "id": "1",
       "name": "OD4B494 - ÁO COTTON",
       "sku": "OD4B494",
       "price": 595000,
@@ -167,6 +167,88 @@
           "create_At": ""
         }
       ]
+    },
+    {
+      "id": "PROD-1766049810493-174",
+      "name": "OD4S511 - Áo len ren",
+      "sku": "OD4S511",
+      "price": 599000,
+      "stock": 120,
+      "quantity": 150,
+      "categoryId": "2",
+      "discount_id": null,
+      "description": "Thiết kế áo nằm trong BST Đông 2025 mới nhất từ Orchid. Sản phẩm mang đến cho người mặc vẻ đẹp thanh lịch, sang trọng nhưng không kém phần trẻ trung, nữ tính. Phù hợp mặc đi làm, dự tiệc, đi chơi, dạo phố,...",
+      "image": [
+        {
+          "id": "ID-1766052605636-4052",
+          "url": "https://res.cloudinary.com/dm623a8ue/image/upload/v1766052604/products/pkelae0avzvc7gstkcms.jpg",
+          "public_id": "products/pkelae0avzvc7gstkcms"
+        },
+        {
+          "id": "ID-1766052615673-7621",
+          "url": "https://res.cloudinary.com/dm623a8ue/image/upload/v1766052616/products/fnmm34xam0tnitfry0vl.jpg",
+          "public_id": "products/fnmm34xam0tnitfry0vl"
+        },
+        {
+          "id": "ID-1766052623088-3005",
+          "url": "https://res.cloudinary.com/dm623a8ue/image/upload/v1766052623/products/gt3qq4sbifdrmupin4t6.jpg",
+          "public_id": "products/gt3qq4sbifdrmupin4t6"
+        },
+        {
+          "id": "ID-1766052632751-1503",
+          "url": "https://res.cloudinary.com/dm623a8ue/image/upload/v1766052632/products/m4r74tga94htuhzlj7kc.jpg",
+          "public_id": "products/m4r74tga94htuhzlj7kc"
+        },
+        {
+          "id": "ID-1766052655470-9308",
+          "url": "https://res.cloudinary.com/dm623a8ue/image/upload/v1766052655/products/c2akklqd2v2xwd5hz1cq.jpg",
+          "public_id": "products/c2akklqd2v2xwd5hz1cq"
+        }
+      ],
+      "video": [],
+      "variant": [
+        {
+          "size_id": 1,
+          "color_id": 3,
+          "quantity": 5
+        },
+        {
+          "size_id": 2,
+          "color_id": 5,
+          "quantity": 5
+        },
+        {
+          "size_id": 3,
+          "color_id": 1,
+          "quantity": 5
+        }
+      ],
+      "product_detail": [
+        {
+          "id": "ID-1766049810493-1585",
+          "silhouette": "Phom dáng suông được thiết kế 1 lớp",
+          "sleeve_style": "Tay dài bo gấu",
+          "neckline": "Cổ sen cách điệu",
+          "pant_leg_style": "",
+          "highlight": "LƯU Ý: Do điều kiện ánh sáng khác nhau, màu sắc hiển thị của sản phẩm trên Website có thể chênh lệch từ 3-5% so với màu sắc thực tế. Thời trang Orchid mong quý khách thông cảm. Sản phẩm không đi kèm phụ kiện.\n",
+          "material": "Len ren",
+          "color": "",
+          "notice": "",
+          "video": [],
+          "image": []
+        }
+      ],
+      "desc": [
+        {
+          "warning_info": "",
+          "create_year": "2025 - Xu hướng 2026",
+          "manufacturing_unit": "Công ty TNHH SX & TM Tuấn Trang",
+          "country": "Việt Nam"
+        }
+      ],
+      "create_At": "18/12/2025",
+      "rate": "0",
+      "comments": []
     }
   ],
   "users": [

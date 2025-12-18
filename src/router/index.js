@@ -41,7 +41,6 @@ import AddArticle from "@/views/admin/AddArticle.vue";
 import AddBanner from "@/views/admin/AddBanner.vue";
 import AddProduct from "@/views/admin/AddProduct.vue";
 
-
 import AddDiscount from "@/views/admin/AddDiscount.vue";
 import DiscountManage from "@/views/admin/DiscountManager.vue";
 const router = createRouter({
@@ -59,13 +58,27 @@ const router = createRouter({
         { path: "", name: "dasboard", component: Dasboard },
 
         { path: "products", name: "products", component: ProductManager },
-        { path: 'addproducts', name: "productsAdd", component: AddProduct },
+        {
+          path: "addproducts",
+          name: "productsAdd",
+          component: AddProduct,
+          props: { isEdit: false },
+        },
+        {
+          path: "/edit-product/:id",
+          name: "edit-product",
+          component: AddProduct,
+          props: (route) => ({
+            isEdit: true,
+            id: route.params.id,
+          }),
+        },
 
         { path: "category", name: "category", component: CategoryManager },
         {
           path: "category/add",
           name: "category-add",
-          component: AddCategory
+          component: AddCategory,
         },
 
         { path: "user", name: "user", component: UserManager },
@@ -74,9 +87,9 @@ const router = createRouter({
 
         { path: "store", name: "store", component: StoreManager },
         {
-          path: 'store/add',
-          name: 'store-add',
-          component: AddStore
+          path: "store/add",
+          name: "store-add",
+          component: AddStore,
         },
         {
           path: "collection",
@@ -89,22 +102,26 @@ const router = createRouter({
           component: AddCollection,
         },
         { path: "post", name: "post", component: ArticleManager },
-        { path: 'addposts', name: 'PostCreate', component: AddArticle },
+        { path: "addposts", name: "PostCreate", component: AddArticle },
         {
-          path: 'posts/edit/:id',
-          name: 'PostEdit',
-          component: AddArticle
+          path: "posts/edit/:id",
+          name: "PostEdit",
+          component: AddArticle,
         },
         { path: "banner", name: "banner", component: BannerManager },
-        { path: 'addbanners', component: AddBanner },
+        { path: "addbanners", component: AddBanner },
         {
-          path: 'banner/edit/:id',
-          name: 'BannerEdit',
-          component: AddBanner
+          path: "banner/edit/:id",
+          name: "BannerEdit",
+          component: AddBanner,
         },
         { path: "revenue", name: "revenue", component: RevenueManager },
-        { path: "discountManagers", name: "discountManagers", component: DiscountManage },
-        { path: "adddiscounts", name: "addDiscounts", component: AddDiscount }
+        {
+          path: "discountManagers",
+          name: "discountManagers",
+          component: DiscountManage,
+        },
+        { path: "adddiscounts", name: "addDiscounts", component: AddDiscount },
       ],
     },
 
@@ -138,27 +155,27 @@ const router = createRouter({
           component: FranchiseView,
         },
         {
-          path: 'profile',
+          path: "profile",
           component: ProfileView,
           children: [
             {
-              path: '',
-              name: 'ProfileDetails',
+              path: "",
+              name: "ProfileDetails",
               component: UserDetails,
             },
             {
-              path: 'addresses',
-              name: 'ProfileAddresses',
+              path: "addresses",
+              name: "ProfileAddresses",
               component: UserAddresses,
             },
             {
-              path: 'orders',
-              name: 'ProfileOrders',
+              path: "orders",
+              name: "ProfileOrders",
               component: UserOrders,
             },
             {
-              path: 'vouchers',
-              name: 'ProfileVouchers',
+              path: "vouchers",
+              name: "ProfileVouchers",
               component: UserVouchers,
             },
           ],
