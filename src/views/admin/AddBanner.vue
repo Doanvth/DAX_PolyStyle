@@ -1,340 +1,408 @@
 <template>
   <div class="admin-container">
-    <!-- HEADER ACTION -->
     <div class="page-header">
       <div class="header-left">
-        <button class="btn-back" @click="goBack">
-          <i class="bi bi-arrow-left"></i>
+        <button class="btn-back" @click="$router.push('/admin/banner')">
+          <i class="bi bi-arrow-left-short"></i>
         </button>
         <div>
-          <h2 class="page-title">{{ isEditMode ? 'Cập Nhật Biểu Ngữ' : 'Thêm Biểu Ngữ Mới' }}</h2>
-          <p class="text-muted">Quản lý banner quảng cáo và slide trang chủ</p>
+          <h2 class="page-title">{{ isEditMode ? 'Cập Nhật Banner' : 'Tạo Banner Mới' }}</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active">{{ isEditMode ? 'Chỉnh sửa' : 'Thêm mới' }}</li>
+            </ol>
+          </nav>
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-outline-custom" @click="goBack">Hủy bỏ</button>
-        <button class="btn-primary-custom" @click="saveBanner">
-          <i class="bi bi-check2-circle"></i> 
-          {{ isEditMode ? 'Lưu Thay Đổi' : 'Lưu Banner' }}
+        <button class="btn-cancel" @click="$router.push('/admin/banner')">Hủy bỏ</button>
+        <button class="btn-save" @click="saveBanner" :disabled="isUploading">
+          <i v-if="!isUploading" class="bi bi-cloud-check"></i>
+          <span v-else class="spinner-border spinner-border-sm me-2"></span>
+          {{ isUploading ? 'Đang xử lý...' : (isEditMode ? 'Cập nhật ngay' : 'Lưu Banner') }}
         </button>
       </div>
     </div>
 
-    <!-- FORM LAYOUT -->
-    <div class="form-layout">
-      
-      <!-- LEFT COLUMN: MAIN IMAGE & INFO -->
-      <div class="col-left">
-        
-        <!-- 1. Banner Image -->
-        <div class="card-box">
-          <h4 class="card-title">Hình ảnh Banner</h4>
-          
-          <!-- Upload Zone -->
-          <div class="upload-zone-large" :class="{'has-image': previewImg || banner.image}" @click="triggerFileUpload">
-              <img v-if="previewImg" :src="previewImg" class="banner-preview" />
-              <img v-else-if="banner.image" :src="banner.image" class="banner-preview" />
-              
-              <div v-else class="upload-placeholder">
-                  <i class="bi bi-card-image"></i>
-                  <p>Nhấn để tải ảnh banner lên</p>
-                  <span class="text-sm-muted">Kích thước khuyên dùng: 1920x600px (Slider)</span>
+    <div class="form-content-wrapper">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="card-custom">
+            <div class="card-header-custom">
+              <i class="bi bi-info-circle"></i> Thông tin cơ bản
+            </div>
+            <div class="card-body-custom">
+              <div class="form-group mb-4">
+                <label class="form-label-custom">Tiêu đề Banner <span class="required">*</span></label>
+                <input type="text" v-model="banner.title" class="form-control-custom" placeholder="Ví dụ: Khuyến mãi mùa hè 2024" />
               </div>
-              
-              <input type="file" ref="fileInput" class="d-none" accept="image/*" @change="handleFileUpload">
-              
-              <button v-if="previewImg || banner.image" class="btn-reset-abs" @click.stop="resetImage">
-                  <i class="bi bi-x"></i>
-              </button>
-          </div>
 
-          <div class="form-group mt-3">
-             <label class="form-label">Đường dẫn ảnh (Image Source URL)</label>
-             <div class="input-wrapper">
-                 <span class="input-prefix"><i class="bi bi-image"></i></span>
-                 <input type="text" v-model="banner.image" class="form-input pl-40" placeholder="https://..." />
-             </div>
-             <small class="text-muted mt-1 d-block">Link trực tiếp đến file ảnh (nếu không upload).</small>
-          </div>
-        </div>
+              <div class="form-group mb-4">
+                <label class="form-label-custom">Đường dẫn liên kết (Link)</label>
+                <div class="input-group-custom">
+                  <span class="input-icon"><i class="bi bi-link-45deg"></i></span>
+                  <input type="text" v-model="banner.link" class="form-control-custom has-icon" placeholder="https://domain.com/san-pham" />
+                </div>
+              </div>
 
-        <!-- 2. Basic Info -->
-        <div class="card-box mt-4">
-          <h4 class="card-title">Thông tin chi tiết</h4>
-          
-          <div class="form-group">
-            <label class="form-label">Tiêu đề Banner <span class="text-red">*</span></label>
-            <div class="input-wrapper">
-                <span class="input-prefix"><i class="bi bi-type"></i></span>
-                <input type="text" v-model="banner.title" class="form-input pl-40" placeholder="VD: Khuyến mãi Mùa Hè 2025..." required />
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <label class="form-label-custom">Vị trí hiển thị</label>
+                  <select v-model="banner.position" class="form-select-custom">
+                    <option value="Home Slider">Trang chủ (Slider chính)</option>
+                    <option value="Sidebar Right">Cột bên phải (Sidebar)</option>
+                    <option value="Popup">Popup quảng cáo</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <label class="form-label-custom">Thứ tự ưu tiên</label>
+                  <input type="number" v-model.number="banner.order" class="form-control-custom" />
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Liên kết mục tiêu (Target Link)</label>
-            <div class="input-wrapper">
-                <span class="input-prefix"><i class="bi bi-link-45deg"></i></span>
-                <input type="text" v-model="banner.link" class="form-input pl-40" placeholder="VD: https://myshop.com/khuyen-mai" />
+          <div class="card-custom mt-4">
+            <div class="card-header-custom">
+              <i class="bi bi-image"></i> Hình ảnh hiển thị
             </div>
-            <small class="text-muted mt-1 d-block">Khách hàng sẽ được chuyển đến link này khi bấm vào banner.</small>
-          </div>
-        </div>
-      </div>
+            <div class="card-body-custom">
+              <div class="upload-zone" @click="$refs.fileInput.click()" :class="{ 'has-img': banner.image }">
+                <input type="file" ref="fileInput" hidden @change="handleFileUpload" accept="image/*" />
+                
+                <div v-if="!banner.image" class="upload-empty">
+                  <div class="upload-icon">
+                    <i class="bi bi-cloud-arrow-up-fill"></i>
+                  </div>
+                  <h5>Kéo thả hoặc nhấp để tải ảnh</h5>
+                  <p>Hỗ trợ: JPG, PNG, WEBP (Tối đa 2MB)</p>
+                </div>
 
-      <!-- RIGHT COLUMN: SETTINGS -->
-      <div class="col-right">
-        
-        <!-- Configuration -->
-        <div class="card-box">
-          <h4 class="card-title">Cấu hình hiển thị</h4>
-          
-          <div class="form-group">
-             <label class="form-label">Vị trí hiển thị <span class="text-red">*</span></label>
-             <div class="select-wrapper">
-                 <select v-model="banner.position" class="form-input">
-                    <option value="" disabled>-- Chọn vị trí --</option>
-                    <option value="Home Slider">Trang Chủ (Main Slider)</option>
-                    <option value="Sidebar Right">Sidebar (Cột bên)</option>
-                    <option value="Footer Banner">Footer (Chân trang)</option>
-                    <option value="Popup Sale">Popup Khuyến mãi</option>
-                 </select>
-             </div>
-          </div>
-
-          <div class="form-group">
-             <label class="form-label">Thứ tự ưu tiên</label>
-             <div class="input-wrapper">
-                 <span class="input-prefix"><i class="bi bi-sort-numeric-down"></i></span>
-                 <input type="number" v-model.number="banner.order" class="form-input pl-40" placeholder="0" min="0"/>
-             </div>
-             <small class="text-muted mt-1 d-block">Số nhỏ hiển thị trước.</small>
-          </div>
-
-          <div class="form-group">
-             <label class="form-label">Ngày đăng</label>
-             <div class="input-wrapper">
-                 <span class="input-prefix"><i class="bi bi-calendar-event"></i></span>
-                 <input type="date" v-model="banner.create_at" class="form-input pl-40" />
-             </div>
-          </div>
-        </div>
-
-        <!-- Status -->
-        <div class="card-box mt-4">
-            <h4 class="card-title">Trạng thái</h4>
-            <div class="status-selection">
-                <label class="status-option" :class="{ active: banner.status === 'active' }">
-                    <input type="radio" v-model="banner.status" value="active" hidden>
-                    <span class="dot success"></span>
-                    <span>Hiển thị</span>
-                    <i class="bi bi-check-lg ms-auto" v-if="banner.status === 'active'"></i>
-                </label>
-                <label class="status-option" :class="{ active: banner.status === 'inactive' }">
-                    <input type="radio" v-model="banner.status" value="inactive" hidden>
-                    <span class="dot danger"></span>
-                    <span>Ẩn</span>
-                    <i class="bi bi-check-lg ms-auto" v-if="banner.status === 'inactive'"></i>
-                </label>
+                <div v-else class="upload-preview">
+                  <img :src="banner.image" alt="Preview" />
+                  <div class="upload-overlay">
+                    <button class="btn-change-img"><i class="bi bi-arrow-repeat"></i> Thay đổi ảnh</button>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
 
+        <div class="col-lg-4">
+          <div class="card-custom">
+            <div class="card-header-custom">
+              <i class="bi bi-gear"></i> Cài đặt xuất bản
+            </div>
+            <div class="card-body-custom">
+              <label class="form-label-custom">Trạng thái hiển thị</label>
+              <div class="status-selector">
+                <div 
+                  class="status-opt active-opt" 
+                  :class="{ selected: banner.status === 'active' }"
+                  @click="banner.status = 'active'"
+                >
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>Kích hoạt</span>
+                </div>
+                <div 
+                  class="status-opt inactive-opt" 
+                  :class="{ selected: banner.status === 'inactive' }"
+                  @click="banner.status = 'inactive'"
+                >
+                  <i class="bi bi-eye-slash-fill"></i>
+                  <span>Tạm ẩn</span>
+                </div>
+              </div>
+
+              <hr class="my-4" />
+
+              <div class="helper-box">
+                <h6>Gợi ý:</h6>
+                <ul>
+                  <li>Kích thước khuyến nghị: 1920x600px cho Slider.</li>
+                  <li>Đảm bảo link bắt đầu bằng http:// hoặc https://</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
-export default {
-    data() {
-        return {
-            banner: {
-                title: "",
-                link: "",
-                position: "",
-                order: 0,
-                status: "active",
-                create_at: new Date().toISOString().split('T')[0],
-                image: ""
-            },
-            previewImg: null
-        };
-    },
-    computed: {
-        isEditMode() {
-            return !!this.$route.params.id;
-        }
-    },
-    async created() {
-        if (this.isEditMode) {
-            const id = this.$route.params.id;
-            try {
-                const response = await axios.get(`http://localhost:3000/carousel/${id}`);
-                let data = response.data;
+const route = useRoute();
+const router = useRouter();
+const isUploading = ref(false);
+const fileInput = ref(null);
 
-                // Chuẩn hóa dữ liệu nếu cần
-                if (Array.isArray(data.image) && data.image.length > 0) {
-                    data.image = data.image[0].image_url;
-                }
-                
-                this.banner = data;
-            } catch (error) {
-                console.error("Lỗi:", error);
-                alert("Không tìm thấy banner!");
-            }
-        }
-    },
-    methods: {
-        triggerFileUpload() {
-            this.$refs.fileInput.click();
-        },
-        handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                // Tạo preview local
-                if (this.previewImg) URL.revokeObjectURL(this.previewImg);
-                this.previewImg = URL.createObjectURL(file);
-                
-                // Giả lập lưu tên file vào model
-                // Trong thực tế: Upload file lên server -> Nhận về URL -> Gán vào banner.image
-                this.banner.image = "https://images.unsplash.com/photo-1556906781-9a412961d28c?q=80&w=1000&auto=format&fit=crop"; 
-            }
-        },
-        resetImage() {
-            if (this.previewImg) URL.revokeObjectURL(this.previewImg);
-            this.previewImg = null;
-            this.banner.image = "";
-            if(this.$refs.fileInput) this.$refs.fileInput.value = '';
-        },
-        goBack() {
-            this.$router.push('/admin/banner');
-        },
-        async saveBanner() {
-            // Validate
-            if (!this.banner.title || !this.banner.position) {
-                return alert("Vui lòng nhập Tiêu đề và chọn Vị trí hiển thị!");
-            }
-            if (!this.banner.image) {
-                return alert("Vui lòng tải ảnh banner lên!");
-            }
+const banner = ref({
+  title: '',
+  image: '',
+  link: '',
+  position: 'Home Slider',
+  status: 'active',
+  order: 0
+});
 
-            try {
-                const dataToSend = { ...this.banner };
+const isEditMode = computed(() => !!route.params.id);
 
-                if (this.isEditMode) {
-                    const id = this.$route.params.id;
-                    await axios.put(`http://localhost:3000/carousel/${id}`, dataToSend);
-                    alert("Cập nhật thành công!");
-                } else {
-                    await axios.post('http://localhost:3000/carousel', dataToSend);
-                    alert("Thêm mới thành công!");
-                }
-                this.goBack();
-            } catch (error) {
-                console.error("Lỗi lưu:", error);
-                alert("Có lỗi xảy ra, vui lòng thử lại!");
-            }
-        }
+onMounted(async () => {
+  if (isEditMode.value) {
+    try {
+      const res = await axios.get(`http://localhost:3000/carousel/${route.params.id}`);
+      let data = res.data;
+      if (Array.isArray(data.image)) data.image = data.image[0]?.image_url || data.image[0];
+      banner.value = data;
+    } catch (err) {
+      console.error("Lỗi lấy data:", err);
     }
+  }
+});
+
+const handleFileUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  isUploading.value = true;
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'DAX_BE');
+
+  try {
+    const res = await axios.post('https://api.cloudinary.com/v1_1/dm623a8ue/image/upload', formData);
+    banner.value.image = res.data.secure_url;
+  } catch (err) {
+    alert("Lỗi upload ảnh lên Cloudinary!");
+  } finally {
+    isUploading.value = false;
+  }
+};
+
+const saveBanner = async () => {
+  if (!banner.value.title || !banner.value.image) {
+    return alert("Vui lòng nhập tiêu đề và tải ảnh lên!");
+  }
+
+  try {
+    if (isEditMode.value) {
+      await axios.put(`http://localhost:3000/carousel/${route.params.id}`, banner.value);
+    } else {
+      await axios.post('http://localhost:3000/carousel', banner.value);
+    }
+    alert("Thành công: Dữ liệu đã được lưu!");
+    router.push('/admin/banner');
+  } catch (err) {
+    alert("Lỗi khi lưu dữ liệu!");
+  }
 };
 </script>
 
 <style scoped>
-/* --- BASE STYLE --- */
+/* Tổng thể */
 .admin-container {
-  padding: 20px;
+  padding: 30px;
+  background-color: #f4f7fe;
   min-height: 100vh;
-  background-color: #f3f4f6;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #374151;
+  font-family: 'Inter', sans-serif;
 }
 
-/* HEADER */
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+/* Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
 .header-left { display: flex; align-items: center; gap: 15px; }
+
 .btn-back {
-  width: 40px; height: 40px; border-radius: 50%; border: 1px solid #e5e7eb; background: white;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #6b7280; transition: all 0.2s;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: 0.3s;
 }
-.btn-back:hover { background: #f9fafb; color: #111; transform: translateX(-2px); }
-.page-title { margin: 0; font-size: 24px; font-weight: 700; color: #111; }
-.text-muted { color: #9ca3af; font-size: 13px; margin: 2px 0 0 0; }
-.header-right { display: flex; gap: 10px; }
+.btn-back:hover { background: #eef2ff; color: #2563eb; }
 
-/* BUTTONS */
-.btn-primary-custom {
-  background: #2563eb; color: white; border: none; padding: 10px 24px;
-  border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;
-  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.2);
-}
-.btn-primary-custom:hover { background: #1d4ed8; transform: translateY(-1px); }
-.btn-outline-custom {
-  background: white; border: 1px solid #d1d5db; color: #374151; padding: 10px 20px;
-  border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-}
-.btn-outline-custom:hover { background: #f9fafb; border-color: #9ca3af; }
+.page-title { font-size: 22px; font-weight: 700; color: #1e293b; margin: 0; }
+.breadcrumb { margin: 0; font-size: 13px; }
 
-/* LAYOUT GRID */
-.form-layout { display: grid; grid-template-columns: 2fr 1.2fr; gap: 25px; }
-@media (max-width: 1024px) { .form-layout { grid-template-columns: 1fr; } }
-
-/* CARDS */
-.card-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02); }
-.card-title { margin: 0 0 20px 0; font-size: 16px; font-weight: 700; color: #1f2937; border-bottom: 1px solid #f3f4f6; padding-bottom: 15px; }
-.mt-4 { margin-top: 25px; }
-.mt-3 { margin-top: 15px; }
-
-/* INPUTS */
-.form-group { margin-bottom: 20px; }
-.form-label { display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 6px; }
-.text-red { color: #ef4444; }
-.text-sm-muted { font-size: 12px; color: #9ca3af; margin-top: 4px; display: block; }
-.form-input {
-  width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px;
-  font-size: 14px; color: #111; outline: none; transition: all 0.2s; background: #fff;
+.btn-cancel {
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: #64748b;
+  margin-right: 15px;
 }
-.form-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-/* INPUT WRAPPER */
-.input-wrapper { position: relative; }
-.input-prefix {
-  position: absolute; left: 1px; top: 1px; bottom: 1px; width: 40px;
-  display: flex; align-items: center; justify-content: center;
-  color: #9ca3af; font-size: 16px; border-right: 1px solid transparent;
+.btn-save {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
-.form-input.pl-40 { padding-left: 40px; }
+.btn-save:hover { background: #1d4ed8; transform: translateY(-1px); }
 
-/* STATUS SELECTION */
-.status-selection { display: flex; flex-direction: column; gap: 8px; }
-.status-option {
-    display: flex; align-items: center; gap: 10px; padding: 12px 15px;
-    border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: 0.2s;
-    font-size: 14px; color: #374151; font-weight: 500;
+/* Card & Form */
+.card-custom {
+  background: white;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  overflow: hidden;
 }
-.status-option:hover { background: #f9fafb; border-color: #d1d5db; }
-.status-option.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
-.dot { width: 10px; height: 10px; border-radius: 50%; display: block; }
-.dot.success { background-color: #10b981; }
-.dot.danger { background-color: #ef4444; }
-.ms-auto { margin-left: auto; }
 
-/* UPLOAD ZONE LARGE */
-.upload-zone-large {
-    height: 300px; border: 2px dashed #e5e7eb; border-radius: 8px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    cursor: pointer; background: #f9fafb; position: relative; overflow: hidden; transition: 0.2s;
+.card-header-custom {
+  padding: 18px 25px;
+  border-bottom: 1px solid #f1f5f9;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.upload-zone-large:hover { border-color: #2563eb; background: #eff6ff; }
-.upload-zone-large.has-image { border: none; background: #000; }
-.upload-placeholder { text-align: center; color: #6b7280; }
-.upload-placeholder i { font-size: 48px; color: #9ca3af; margin-bottom: 10px; display: block; }
-.upload-placeholder p { font-size: 14px; margin: 0; font-weight: 500; }
-.banner-preview { width: 100%; height: 100%; object-fit: contain; }
-.btn-reset-abs {
-    position: absolute; top: 10px; right: 10px; width: 32px; height: 32px;
-    background: rgba(255,255,255,0.9); border-radius: 50%; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ef4444; font-size: 18px;
+
+.card-body-custom { padding: 25px; }
+
+.form-label-custom {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+  display: block;
 }
-.d-none { display: none; }
+
+.required { color: #ef4444; }
+
+.form-control-custom, .form-select-custom {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.form-control-custom:focus, .form-select-custom:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Input Icon */
+.input-group-custom { position: relative; }
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 18px;
+}
+.has-icon { padding-left: 45px; }
+
+/* Upload Zone */
+.upload-zone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 15px;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  background: #f8fafc;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-zone:hover { border-color: #2563eb; background: #eff6ff; }
+
+.upload-empty { text-align: center; }
+.upload-icon {
+  font-size: 40px;
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.upload-preview { width: 100%; height: 100%; }
+.upload-preview img { width: 100%; height: 250px; object-fit: cover; }
+
+.upload-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.upload-zone:hover .upload-overlay { opacity: 1; }
+
+.btn-change-img {
+  background: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* Status Selector */
+.status-selector { display: flex; flex-direction: column; gap: 12px; }
+.status-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #64748b;
+}
+
+.status-opt i { font-size: 18px; }
+.status-opt.selected.active-opt {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+.status-opt.selected.inactive-opt {
+  background: #fff1f2;
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
+.helper-box {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 10px;
+  border-left: 4px solid #94a3b8;
+}
+.helper-box h6 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.helper-box ul { padding-left: 20px; font-size: 12px; color: #64748b; margin: 0; }
 </style>
