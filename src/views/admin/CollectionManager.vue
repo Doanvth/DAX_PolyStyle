@@ -59,7 +59,7 @@
             <th width="15%" class="text-center">Số lượng SP</th>
             <th width="15%">Trạng Thái</th>
             <th width="10%">Ngày tạo</th>
-            <th width="5%" class="text-center">#</th>
+            <th width="10%" class="text-center">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -68,19 +68,18 @@
 
             <td>
               <div class="product-info-row">
-                <img :src="item.image" class="collection-thumb" alt="img"
-                  @error="e => e.target.src = 'https://placehold.co/80x50?text=No+Img'" />
+                <img :src="item.image || 'https://placehold.co/80x50?text=No+Img'" class="collection-thumb" alt="img" />
                 <div class="info-text">
                   <span class="product-name">{{ item.title }}</span>
-                  <span class="sku-badge text-xs">{{ item.hotline }}</span>
+                  <span class="sku-badge text-xs">{{ item.hotline || 'Chưa cập nhật' }}</span>
                 </div>
               </div>
             </td>
 
-            <td class="text-sm text-gray-700">{{ item.subtitle }}</td>
+            <td class="text-sm text-gray-700">{{ item.subtitle || '-' }}</td>
 
             <td class="text-center">
-              <span class="count-pill">{{ item.productCount }}</span>
+              <span class="count-pill">{{ item.productCount || 0 }}</span>
             </td>
 
             <td>
@@ -90,12 +89,20 @@
               </div>
             </td>
 
-            <td class="text-muted text-xs">{{ item.createAt }}</td>
+            <td class="text-muted text-xs">{{ item.createAt || 'Chưa cập nhật' }}</td>
 
             <td class="text-center">
-              <button class="btn-icon" title="Xem chi tiết" @click="openModal(item)">
-                <i class="bi bi-pencil-square text-blue"></i>
-              </button>
+              <div class="action-buttons">
+                <router-link :to="{ name: 'collection-edit', params: { id: item.id } }" class="btn-icon" title="Chỉnh sửa">
+                  <i class="bi bi-pencil-square text-blue"></i>
+                </router-link>
+                <router-link :to="{ name: 'collection-delete', params: { id: item.id } }" class="btn-icon" title="Xóa">
+                  <i class="bi bi-trash3 text-red"></i>
+                </router-link>
+                <button class="btn-icon" title="Xem chi tiết" @click="openModal(item)">
+                  <i class="bi bi-eye text-green"></i>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -138,24 +145,24 @@
 
         <div class="modal-body">
           <div class="modal-cover-wrapper">
-            <img :src="selectedItem.image" alt="Cover">
+            <img :src="selectedItem.image || 'https://placehold.co/600x300?text=No+Image'" alt="Cover">
             <div class="cover-overlay">
-              <span>{{ selectedItem.subtitle }}</span>
+              <span>{{ selectedItem.subtitle || 'Không có mô tả' }}</span>
             </div>
           </div>
 
           <div class="modal-info-grid">
             <div class="info-item">
               <label>Ngày tạo</label>
-              <p>{{ selectedItem.createAt }}</p>
+              <p>{{ selectedItem.createAt || 'Chưa cập nhật' }}</p>
             </div>
             <div class="info-item">
               <label>Số lượng sản phẩm</label>
-              <p>{{ selectedItem.productCount }} sản phẩm</p>
+              <p>{{ selectedItem.productCount || 0 }} sản phẩm</p>
             </div>
             <div class="info-item">
               <label>Hotline phụ trách</label>
-              <p class="text-blue">{{ selectedItem.hotline }}</p>
+              <p class="text-blue">{{ selectedItem.hotline || 'Chưa cập nhật' }}</p>
             </div>
             <div class="info-item">
               <label>Link truy cập</label>
@@ -163,14 +170,16 @@
             </div>
             <div class="info-item full">
               <label>Mô tả / Thông điệp</label>
-              <p class="desc-text">{{ selectedItem.description }}</p>
+              <p class="desc-text">{{ selectedItem.description || 'Không có mô tả' }}</p>
             </div>
           </div>
         </div>
 
         <div class="modal-footer">
           <button class="btn-outline-custom" @click="closeModal">Đóng</button>
-          <button class="btn-primary-custom">Chỉnh sửa nội dung</button>
+          <router-link :to="{ name: 'collection-edit', params: { id: selectedItem.id } }" class="btn-primary-custom">
+            <i class="bi bi-pencil-square"></i> Chỉnh sửa nội dung
+          </router-link>
         </div>
       </div>
     </div>
@@ -179,34 +188,31 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
-const generateData = () => {
-  const data = [
-    { id: 1, title: 'FLOW MOTION 2025', subtitle: 'Thu Đông Collection', image: 'https://placehold.co/600x300/2a2a72/FFF?text=Flow', status: 'active', productCount: 24, createAt: '20/11/2025', description: 'Lấy cảm hứng từ sự chuyển động không ngừng, BST mang đến làn gió mới cho thời trang công sở.', hotline: '0972.359.666' },
-    { id: 2, title: 'SUMMER VIBES', subtitle: 'Hè Rực Rỡ', image: 'https://placehold.co/600x300/e67e22/FFF?text=Summer', status: 'inactive', productCount: 18, createAt: '15/05/2025', description: 'Sắc màu rực rỡ của mùa hè nhiệt đới.', hotline: '0972.359.666' },
-    { id: 3, title: 'ELEGANT LADY', subtitle: 'Dự Tiệc Sang Trọng', image: 'https://placehold.co/600x300/8e44ad/FFF?text=Elegant', status: 'active', productCount: 12, createAt: '10/10/2025', description: 'Đẳng cấp quý cô trong các bữa tiệc đêm.', hotline: '0988.111.222' },
-    { id: 4, title: 'STILLNESS OF SNOW', subtitle: 'Đông 2024', image: 'https://placehold.co/600x300/ecf0f1/333?text=Snow', status: 'active', productCount: 30, createAt: '01/12/2024', description: 'Vẻ đẹp tĩnh lặng của mùa đông qua các thiết kế len và dạ cao cấp.', hotline: '0972.359.666' },
-    { id: 5, title: 'TẾT VIỆT 2025', subtitle: 'Áo Dài Truyền Thống', image: 'https://placehold.co/600x300/c0392b/FFF?text=Tet', status: 'inactive', productCount: 45, createAt: '01/01/2025', description: 'Nét đẹp truyền thống kết hợp hơi thở hiện đại.', hotline: '0972.359.666' },
-  ];
+const collections = ref([]);
 
-  for (let i = 6; i <= 20; i++) {
-    data.push({
-      id: i,
-      title: `Collection Season ${i}`,
-      subtitle: `Trend ${2025 + i}`,
-      image: `https://placehold.co/600x300?text=Coll+${i}`,
-      status: Math.random() > 0.3 ? 'active' : 'inactive',
-      productCount: Math.floor(Math.random() * 50) + 5,
-      createAt: '25/11/2025',
-      description: 'Mô tả ngắn gọn về bộ sưu tập này...',
-      hotline: '1900.1000'
-    })
+// Load dữ liệu từ localStorage
+const loadCollections = () => {
+  const savedData = localStorage.getItem('collections');
+  if (savedData) {
+    collections.value = JSON.parse(savedData);
   }
-  return data;
 };
 
-const collections = ref(generateData());
+// Lưu dữ liệu vào localStorage
+const saveCollections = () => {
+  localStorage.setItem('collections', JSON.stringify(collections.value));
+};
+
+// Tìm bộ sưu tập theo ID
+const findCollectionById = (id) => {
+  return collections.value.find(item => item.id === id);
+};
+
+onMounted(() => {
+  loadCollections();
+});
 
 const searchQuery = ref("");
 const currentStatus = ref("all");
@@ -229,8 +235,8 @@ const filteredCollections = computed(() => {
   if (searchQuery.value) {
     const key = searchQuery.value.toLowerCase();
     result = result.filter(item =>
-      item.title.toLowerCase().includes(key) ||
-      item.subtitle.toLowerCase().includes(key)
+      (item.title?.toLowerCase() || '').includes(key) ||
+      (item.subtitle?.toLowerCase() || '').includes(key)
     );
   }
   return result;
@@ -263,12 +269,14 @@ const getCountByStatus = (status) => {
 
 const toggleStatus = (item) => {
   item.status = item.status === 'active' ? 'inactive' : 'active';
+  saveCollections();
 };
 
 const openModal = (item) => {
-  selectedItem.value = item;
+  selectedItem.value = { ...item };
   showModal.value = true;
 };
+
 const closeModal = () => showModal.value = false;
 
 </script>
@@ -437,6 +445,20 @@ const closeModal = () => showModal.value = false;
   text-decoration: none;
 }
 
+.btn-danger-custom {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
 .btn-outline-custom {
   background: white;
   border: 1px solid #d1d5db;
@@ -545,16 +567,37 @@ tr:hover td {
   background: #9ca3af;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
 .btn-icon {
   background: none;
   border: none;
   cursor: pointer;
   color: #6b7280;
   font-size: 15px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
 .btn-icon:hover {
-  color: #2563eb;
+  background-color: #f3f4f6;
+}
+
+.btn-icon .text-blue:hover {
+  color: #1d4ed8;
+}
+
+.btn-icon .text-red:hover {
+  color: #dc2626;
+}
+
+.btn-icon .text-green:hover {
+  color: #10b981;
 }
 
 .text-center {
@@ -579,6 +622,14 @@ tr:hover td {
 
 .text-blue {
   color: #2563eb;
+}
+
+.text-red {
+  color: #dc2626;
+}
+
+.text-green {
+  color: #10b981;
 }
 
 .pagination-footer {
@@ -633,6 +684,124 @@ tr:hover td {
   color: #9ca3af;
 }
 
+/* Modal Delete Styles */
+.delete-modal {
+  width: 450px;
+}
+
+.delete-warning {
+  text-align: center;
+  padding: 20px;
+}
+
+.delete-warning p {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 20px;
+}
+
+.delete-item-info {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.delete-item-preview {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.delete-item-preview img {
+  width: 80px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.delete-item-preview h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #111;
+}
+
+/* Modal Edit Styles */
+.edit-modal {
+  width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.form-input[type="number"]::-webkit-outer-spin-button,
+.form-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.image-preview {
+  margin-top: 10px;
+}
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 100px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+select.form-input {
+  background-color: white;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -648,7 +817,6 @@ tr:hover td {
 
 .modal-content {
   background: white;
-  width: 550px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -669,6 +837,9 @@ tr:hover td {
   font-weight: 700;
   color: #111;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .status-badge-modal {
