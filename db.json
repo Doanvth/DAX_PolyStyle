@@ -296,6 +296,29 @@
       "totalSpend": 0,
       "orderCount": 0,
       "joinDate": "18/12/2025"
+    },
+    {
+      "id": "cdfd",
+      "fullname": "Dương Quốc Duy",
+      "email": "duongquocduy2006@gmail.com",
+      "phone": "0385436832",
+      "password": "123456",
+      "gender": "1",
+      "role": "1",
+      "status": "active",
+      "addressStr": "47B",
+      "avatar": "https://res.cloudinary.com/dm623a8ue/image/upload/v1766070709/exledrfv24fxi4dklqld.png",
+      "birthday": "2006-09-03",
+      "confirmPassword": "123456",
+      "address": [
+        {
+          "id": 1766070711241,
+          "place_id": "47B"
+        }
+      ],
+      "totalSpend": 0,
+      "orderCount": 0,
+      "joinDate": "18/12/2025"
     }
   ],
   "place": [
