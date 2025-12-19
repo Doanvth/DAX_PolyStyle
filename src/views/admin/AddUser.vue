@@ -223,6 +223,7 @@ const previewAvatar = ref(null);
 const fileInput = ref(null);
 
 const form = reactive({
+  id: null,
   fullname: '',
   email: '',
   phone: '',
@@ -234,6 +235,7 @@ const form = reactive({
   avatar: ''
 });
 
+<<<<<<< Updated upstream
 onMounted(async () => {
   if (isEditMode.value) {
     try {
@@ -247,6 +249,38 @@ onMounted(async () => {
     } catch (error) { 
         console.error("Lỗi tải dữ liệu user:", error);
         alert("Không tìm thấy dữ liệu người dùng hoặc Server chưa chạy (Port 3000).");
+=======
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+};
+
+onMounted(() => {
+  if (isEditMode.value) {
+    const userId = parseInt(route.query.id);
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const userFound = users.find(u => u.id === userId);
+
+    if (userFound) {
+      form.id = userFound.id;
+      form.fullname = userFound.name;
+      form.email = userFound.email;
+      form.phone = userFound.phone;
+      form.role = String(userFound.role);
+      form.status = userFound.status;
+      form.gender = String(userFound.gender || '1');
+      form.birthday = userFound.birthday || '';
+      form.addressStr = userFound.address || '';
+      
+      if (userFound.avatar) {
+        form.avatar = userFound.avatar;
+        previewAvatar.value = userFound.avatar;
+      }
+>>>>>>> Stashed changes
     }
   }
 });
@@ -259,6 +293,7 @@ const save = async () => {
     address: [{ id: Date.now(), place_id: form.addressStr }]
   };
 
+<<<<<<< Updated upstream
   try {
     if (isEditMode.value) {
       await axios.put(`${API_URL}/${route.query.id}`, userData);
@@ -279,12 +314,78 @@ const save = async () => {
         alert("Không thể kết nối đến Server! Hãy kiểm tra xem JSON Server (Port 3000) đã bật chưa.");
     } else {
         alert("Lỗi khi lưu: " + error.message);
+=======
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    previewAvatar.value = URL.createObjectURL(file);
+    try {
+      const base64 = await fileToBase64(file);
+      form.avatar = base64;
+    } catch (e) {
+      console.error("Lỗi xử lý ảnh", e);
+>>>>>>> Stashed changes
     }
   }
 };
 
+<<<<<<< Updated upstream
 const cancel = () => {
   router.push({ name: 'user' });
+=======
+const removeAvatar = () => {
+  previewAvatar.value = null;
+  form.avatar = '';
+  if(fileInput.value) fileInput.value.value = '';
+};
+
+const save = () => {
+  if (!form.fullname || !form.email) return alert("Vui lòng nhập họ tên và email!");
+  if (!isEditMode.value && !form.password) return alert("Vui lòng nhập mật khẩu!");
+
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+  if (isEditMode.value) {
+    const index = users.findIndex(u => u.id === form.id);
+    if (index !== -1) {
+      users[index] = {
+        ...users[index],
+        name: form.fullname,
+        email: form.email,
+        phone: form.phone,
+        role: form.role,
+        status: form.status,
+        gender: form.gender,
+        birthday: form.birthday,
+        address: form.addressStr,
+        avatar: form.avatar,
+        password: form.password ? form.password : users[index].password 
+      };
+      alert("Cập nhật thành công!");
+    }
+  } else {
+    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+    const newUser = {
+      id: newId,
+      name: form.fullname,
+      email: form.email,
+      phone: form.phone,
+      role: form.role,
+      status: form.status,
+      gender: form.gender,
+      birthday: form.birthday,
+      address: form.addressStr,
+      password: form.password,
+      avatar: form.avatar || ''
+    };
+    users.unshift(newUser); 
+    alert("Thêm người dùng mới thành công!");
+  }
+
+  localStorage.setItem('users', JSON.stringify(users));
+
+  router.push({ name: 'user-list' }); 
+>>>>>>> Stashed changes
 };
 
 const triggerUpload = () => fileInput.value.click();
