@@ -217,7 +217,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
 // 1. Khai báo biến
-const orders = ref([]); // Chứa danh sách đơn hàng THẬT
+const orders = ref([]); 
 const searchQuery = ref("");
 const currentStatus = ref("all");
 const currentPage = ref(1);
@@ -225,26 +225,25 @@ const itemsPerPage = 10;
 const showModal = ref(false);
 const selectedOrder = ref({ products: [] });
 
-// 2. Gọi API để lấy dữ liệu thực tế từ db.json
+// 2. Gọi API để lấy dữ liệu thực tế
 const fetchOrdersFromDb = async () => {
   try {
-    const response = await fetch('http://localhost:3000/users');
-    const users = await response.json();
+    // Gọi song song cả users và products để mapping tên sản phẩm
+    const [usersRes, productsRes] = await Promise.all([
+      fetch('http://localhost:3000/users'),
+      fetch('http://localhost:3000/products')
+    ]);
+    
+    const users = await usersRes.json();
+    const products = await productsRes.json();
 
     const allOrders = [];
 
-    // Duyệt qua từng user
     users.forEach(user => {
-      // Logic lọc triệt để: Kiểm tra mảng order có tồn tại và có phần tử hay không
       if (user.order && Array.isArray(user.order) && user.order.length > 0) {
         user.order.forEach(ord => {
-          
-          // ĐIỀU KIỆN QUAN TRỌNG: 
-          // 1. Đơn hàng phải có ID (tránh các object đơn hàng rỗng)
-          // 2. Phải có ít nhất một chi tiết sản phẩm (order_detail) hợp lệ
           if (ord.id && ord.id.toString().trim() !== "" && ord.order_detail && ord.order_detail.length > 0) {
             
-            // Tính toán tổng tiền và số lượng từ chi tiết sản phẩm
             const totalAmount = ord.order_detail.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
             const itemsCount = ord.order_detail.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
 
@@ -259,21 +258,26 @@ const fetchOrdersFromDb = async () => {
               itemsCount: itemsCount,
               status: ord.order_detail[0]?.status === 'paid' ? 'active' : 'pending',
               paymentStatus: ord.order_detail[0]?.status === 'paid' ? 'Paid' : 'Unpaid',
-              products: ord.order_detail.map(d => ({
-                name: `Sản phẩm #${d.product_id}`,
-                price: d.quantity > 0 ? d.total / d.quantity : 0,
-                quantity: d.quantity
-              }))
+              
+              // SỬA LỖI TẠI ĐÂY: Tìm tên sản phẩm từ danh sách products
+              products: ord.order_detail.map(d => {
+                const productInfo = products.find(p => p.id == d.product_id);
+                return {
+                  name: productInfo ? productInfo.name : `Sản phẩm #${d.product_id}`,
+                  price: d.quantity > 0 ? d.total / d.quantity : 0,
+                  quantity: d.quantity,
+                  image: productInfo ? productInfo.image : "" // Thêm ảnh nếu cần hiển thị trong modal
+                };
+              })
             });
           }
         });
       }
     });
 
-    // Sắp xếp đơn mới nhất lên đầu dựa trên ID hoặc thời gian nếu có
     orders.value = allOrders.reverse();
   } catch (error) {
-    console.error("Lỗi khi tải đơn hàng:", error);
+    console.error("Lỗi khi tải dữ liệu:", error);
   }
 };
 

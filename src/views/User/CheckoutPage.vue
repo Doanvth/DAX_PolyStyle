@@ -267,6 +267,8 @@ const handleCheckout = async () => {
     // 4. Chuẩn bị chi tiết đơn hàng
     const orderDetails = cartItems.value.map(item => ({
       product_id: item.id,
+      product_name: item.name,   // THÊM DÒNG NÀY
+  product_image: item.image, // THÊM DÒNG NÀY
       quantity: item.quantity,
       total: item.price * item.quantity,
       payment: form.value.paymentMethod,
