@@ -218,6 +218,7 @@
 
 <script setup>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -227,6 +228,8 @@ const API_URL = "http://localhost:3000/users";
 
 const users = ref([]);
 =======
+=======
+>>>>>>> Stashed changes
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -238,6 +241,20 @@ const initialData = [
   { id: 2, name: 'Trần Thị User', email: 'user@gmail.com', phone: '0987654321', role: '0', status: 'active', avatar: '' },
   { id: 3, name: 'Lê Văn Staff', email: 'staff@gmail.com', phone: '0912345678', role: '2', status: 'suspended', avatar: '' },
 ];
+<<<<<<< Updated upstream
+=======
+
+onMounted(() => {
+  const storedUsers = localStorage.getItem('users');
+  
+  if (storedUsers) {
+    users.value = JSON.parse(storedUsers);
+  } else {
+    users.value = initialData;
+    localStorage.setItem('users', JSON.stringify(initialData));
+  }
+});
+>>>>>>> Stashed changes
 
 onMounted(() => {
   const storedUsers = localStorage.getItem('users');
@@ -414,6 +431,9 @@ const deleteUser = (id) => {
     
     if (paginatedUsers.value.length === 0 && currentPage.value > 1) {
         currentPage.value--;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
   }

@@ -236,6 +236,7 @@ const form = reactive({
 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 onMounted(async () => {
   if (isEditMode.value) {
     try {
@@ -250,6 +251,8 @@ onMounted(async () => {
         console.error("Lỗi tải dữ liệu user:", error);
         alert("Không tìm thấy dữ liệu người dùng hoặc Server chưa chạy (Port 3000).");
 =======
+=======
+>>>>>>> Stashed changes
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -280,6 +283,9 @@ onMounted(() => {
         form.avatar = userFound.avatar;
         previewAvatar.value = userFound.avatar;
       }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
   }
@@ -293,6 +299,7 @@ const save = async () => {
     address: [{ id: Date.now(), place_id: form.addressStr }]
   };
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   try {
     if (isEditMode.value) {
@@ -315,6 +322,8 @@ const save = async () => {
     } else {
         alert("Lỗi khi lưu: " + error.message);
 =======
+=======
+>>>>>>> Stashed changes
 const handleFileUpload = async (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -324,6 +333,9 @@ const handleFileUpload = async (event) => {
       form.avatar = base64;
     } catch (e) {
       console.error("Lỗi xử lý ảnh", e);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
   }
@@ -385,6 +397,9 @@ const save = () => {
   localStorage.setItem('users', JSON.stringify(users));
 
   router.push({ name: 'user-list' }); 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 };
 
