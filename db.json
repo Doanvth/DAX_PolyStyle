@@ -424,6 +424,29 @@
       "totalSpend": 0,
       "orderCount": 0,
       "joinDate": "19/12/2025"
+    },
+    {
+      "id": null,
+      "fullname": "QUốc Duy",
+      "email": "duy@gmail.com",
+      "phone": "0999999999",
+      "password": "123456",
+      "gender": "1",
+      "role": "0",
+      "status": "active",
+      "addressStr": "gfdxs",
+      "avatar": "https://res.cloudinary.com/dm623a8ue/image/upload/v1766134061/ayke0hczldydyetqkanr.png",
+      "birthday": "2006-09-03",
+      "confirmPassword": "123456",
+      "address": [
+        {
+          "id": 1766134073146,
+          "place_id": "gfdxs"
+        }
+      ],
+      "totalSpend": 0,
+      "orderCount": 0,
+      "joinDate": "19/12/2025"
     }
   ],
   "place": [
