@@ -50,7 +50,7 @@
                   <label class="form-label-custom">Vị trí hiển thị</label>
                   <select v-model="banner.position" class="form-select-custom">
                     <option value="Home Slider">Trang chủ (Slider chính)</option>
-                    <option value="Sidebar Right">Cột bên phải</option>
+                    <option value="Sidebar Right">Cột bên phải </option>
                   </select>
                 </div>
                 <div class="col-md-6 mb-4">
