@@ -213,13 +213,111 @@
 import { ref, computed, onMounted } from 'vue';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-
-// --- IMPORT PDF ---
 import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable"; 
+import autoTable from "jspdf-autotable";
 
-// --- HÀM XỬ LÝ LỖI FONT TIẾNG VIỆT (QUAN TRỌNG) ---
-// Hàm này chuyển đổi văn bản có dấu thành không dấu để jsPDF hiển thị đúng
+// 1. Khai báo biến
+const orders = ref([]); // Chứa danh sách đơn hàng THẬT
+const searchQuery = ref("");
+const currentStatus = ref("all");
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const showModal = ref(false);
+const selectedOrder = ref({ products: [] });
+
+// 2. Gọi API để lấy dữ liệu thực tế từ db.json
+const fetchOrdersFromDb = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/users');
+    const users = await response.json();
+
+    const allOrders = [];
+
+    // Duyệt qua từng user
+    users.forEach(user => {
+      // Logic lọc triệt để: Kiểm tra mảng order có tồn tại và có phần tử hay không
+      if (user.order && Array.isArray(user.order) && user.order.length > 0) {
+        user.order.forEach(ord => {
+          
+          // ĐIỀU KIỆN QUAN TRỌNG: 
+          // 1. Đơn hàng phải có ID (tránh các object đơn hàng rỗng)
+          // 2. Phải có ít nhất một chi tiết sản phẩm (order_detail) hợp lệ
+          if (ord.id && ord.id.toString().trim() !== "" && ord.order_detail && ord.order_detail.length > 0) {
+            
+            // Tính toán tổng tiền và số lượng từ chi tiết sản phẩm
+            const totalAmount = ord.order_detail.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
+            const itemsCount = ord.order_detail.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+
+            allOrders.push({
+              id: ord.id,
+              cart_id: ord.cart_id,
+              customerName: user.fullname,
+              phone: user.phone,
+              address: user.address[0]?.place_id || "Chưa cập nhật",
+              date: user.create_At ? new Date(user.create_At).toLocaleDateString('vi-VN') : "01/12/2025",
+              totalAmount: totalAmount,
+              itemsCount: itemsCount,
+              status: ord.order_detail[0]?.status === 'paid' ? 'active' : 'pending',
+              paymentStatus: ord.order_detail[0]?.status === 'paid' ? 'Paid' : 'Unpaid',
+              products: ord.order_detail.map(d => ({
+                name: `Sản phẩm #${d.product_id}`,
+                price: d.quantity > 0 ? d.total / d.quantity : 0,
+                quantity: d.quantity
+              }))
+            });
+          }
+        });
+      }
+    });
+
+    // Sắp xếp đơn mới nhất lên đầu dựa trên ID hoặc thời gian nếu có
+    orders.value = allOrders.reverse();
+  } catch (error) {
+    console.error("Lỗi khi tải đơn hàng:", error);
+  }
+};
+
+onMounted(() => {
+  fetchOrdersFromDb();
+});
+
+// 3. Logic Filter & Pagination
+const tabs = [
+  { label: 'Tất cả', value: 'all' },
+  { label: '⏳ Chờ xử lý', value: 'pending' },
+  { label: '🚚 Đang giao', value: 'shipping' },
+  { label: '✅ Hoàn thành', value: 'active' },
+  { label: '❌ Đã hủy', value: 'cancel' }
+];
+
+const filteredOrders = computed(() => {
+  return orders.value.filter(o => {
+    const matchStatus = currentStatus.value === 'all' || o.status === currentStatus.value;
+    const key = searchQuery.value.toLowerCase();
+    const matchSearch = o.customerName.toLowerCase().includes(key) || o.id.toLowerCase().includes(key) || o.phone.includes(key);
+    return matchStatus && matchSearch;
+  });
+});
+
+const paginatedOrders = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredOrders.value.slice(start, start + itemsPerPage);
+});
+
+const totalPages = computed(() => Math.ceil(filteredOrders.value.length / itemsPerPage) || 1);
+
+const stats = computed(() => {
+  return {
+    totalOrders: orders.value.length,
+    totalRevenue: orders.value.reduce((sum, o) => 
+      (o.status === 'active' && o.paymentStatus === 'Paid') ? sum + o.totalAmount : sum, 0),
+    pendingOrders: orders.value.filter(o => o.status === 'pending').length,
+    shippingOrders: orders.value.filter(o => o.status === 'shipping').length
+  };
+});
+
+// --- CÁC HÀM XỬ LÝ (Sửa lỗi Unicode & Logic in ấn) ---
+
 const removeVietnameseTones = (str) => {
   if (!str) return "";
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -239,252 +337,79 @@ const removeVietnameseTones = (str) => {
   return str;
 };
 
-// --- DỮ LIỆU GỐC ---
-const generateData = () => {
-  const data = [];
-  const statuses = ['pending', 'shipping', 'active', 'cancel'];
-  const productNames = ['Vay Hoa Nhi Vintage', 'Ao Thun Polo Premium', 'Ao Khoac Gio 2 Lop', 'Quan Jean Slimfit', 'Giay Sneaker Basic'];
-  const names = ['Nguyen Van A', 'Tran Thi B', 'Le Van C', 'Pham Thi D', 'Hoang E'];
-
-  for (let i = 1; i <= 30; i++) {
-    const products = [];
-    let total = 0;
-    const numItems = Math.floor(Math.random() * 3) + 1;
-    for (let j = 0; j < numItems; j++) {
-      const price = (Math.floor(Math.random() * 5) + 2) * 100000;
-      const qty = Math.floor(Math.random() * 2) + 1;
-      products.push({ name: productNames[Math.floor(Math.random() * productNames.length)], price, quantity: qty });
-      total += price * qty;
-    }
-
-    data.push({
-      id: `ORD${(1000 + i)}`,
-      customerName: names[i % 5],
-      phone: `09${Math.floor(10000000 + Math.random() * 90000000)}`,
-      address: `So ${i} Duong 3/2, Can Tho`,
-      date: `2025-12-${(i % 28 + 1).toString().padStart(2, '0')}`,
-      itemsCount: products.reduce((acc, cur) => acc + cur.quantity, 0),
-      totalAmount: total,
-      status: statuses[Math.floor(Math.random() * statuses.length)],
-      paymentStatus: Math.random() > 0.4 ? 'Paid' : 'Unpaid',
-      products: products
-    });
-  }
-  return data.reverse();
-};
-
-const orders = ref(generateData());
-const searchQuery = ref("");
-const currentStatus = ref("all");
-const currentPage = ref(1);
-const itemsPerPage = 10;
-const showModal = ref(false);
-const selectedOrder = ref({ products: [] });
-
-const tabs = [
-  { label: 'Tất cả', value: 'all' },
-  { label: '⏳ Chờ xử lý', value: 'pending' },
-  { label: '🚚 Đang giao', value: 'shipping' },
-  { label: '✅ Hoàn thành', value: 'active' },
-  { label: '❌ Đã hủy', value: 'cancel' }
-];
-
-const stats = computed(() => {
-  return {
-    totalOrders: orders.value.length,
-    totalRevenue: orders.value.reduce((sum, o) => 
-      (o.status === 'active' && o.paymentStatus === 'Paid') ? sum + o.totalAmount : sum, 0),
-    pendingOrders: orders.value.filter(o => o.status === 'pending').length,
-    shippingOrders: orders.value.filter(o => o.status === 'shipping').length
-  };
-});
-
-// --- CHỨC NĂNG 1: IN DANH SÁCH TỔNG HỢP (PDF) ---
 const printList = () => {
   try {
     const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    // Chuyển tiêu đề sang không dấu
-    doc.text(removeVietnameseTones("DANH SACH HOA DON - SHOP THOI TRANG ORCHID"), 105, 15, { align: "center" });
+    doc.text(removeVietnameseTones("DANH SACH HOA DON - SHOP ORCHID"), 105, 15, { align: "center" });
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("Orchid Fashion", 15, 25);
-    doc.text("Dia chi: 123 Duong 3/2, Ninh Kieu, Can Tho", 15, 30);
-    doc.text("SDT: 0987.654.321", 15, 35);
-    doc.text(`Ngay xuat: ${getCurrentFullTime()}`, 15, 40);
-
-    const tableRows = [];
-    let totalGrandRevenue = 0;
-
-    filteredOrders.value.forEach((order) => {
-      order.products.forEach((p, index) => {
-        tableRows.push([
-          index === 0 ? order.id : "", 
-          index === 0 ? order.date : "",
-          index === 0 ? removeVietnameseTones(order.customerName) : "", // Xử lý tên KH
-          removeVietnameseTones(p.name), // Xử lý tên SP
-          p.quantity,
-          formatCurrency(p.price).replace('₫', 'VND'),
-          formatCurrency(p.price * p.quantity).replace('₫', 'VND'),
-          removeVietnameseTones(getPaymentLabel(order.paymentStatus)) // Xử lý trạng thái
-        ]);
-      });
-      totalGrandRevenue += order.totalAmount;
-    });
-
-    autoTable(doc, {
-      startY: 50,
-      head: [['Ma HD', 'Ngay lap', 'Khach hang', 'San pham', 'SL', 'Don gia', 'Thanh tien', 'Trang thai']],
-      body: tableRows,
-      theme: 'striped',
-      headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold' },
-      styles: { fontSize: 8, font: "helvetica" },
-      didDrawPage: (data) => {
-        doc.setFontSize(8);
-        doc.text("Page " + doc.internal.getNumberOfPages(), data.settings.margin.left, doc.internal.pageSize.height - 10);
-        doc.text("Bao cao tu dong - Orchid Fashion", 140, doc.internal.pageSize.height - 10);
-      }
-    });
-
-    const finalY = doc.lastAutoTable.finalY + 10;
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "bold");
-    doc.text(`Tong so hoa don: ${filteredOrders.value.length}`, 15, finalY);
-    doc.text(`Tong doanh thu: ${formatCurrency(totalGrandRevenue).replace('₫', 'VND')}`, 15, finalY + 7);
-
-    doc.save("Danh_sach_hoa_don_Orchid.pdf");
-  } catch (error) {
-    console.error("Lỗi in PDF:", error);
-    alert("Có lỗi xảy ra khi tạo file PDF.");
-  }
-};
-
-// --- CHỨC NĂNG 2: IN CHI TIẾT 1 HÓA ĐƠN (PDF) ---
-const printInvoice = () => {
-  try {
-    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-    const order = selectedOrder.value;
-
-    doc.setFont("times", "italic");
-    doc.setFontSize(22);
-    doc.text("Orchid", 15, 15);
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text("HOA DON MUA HANG", 105, 25, { align: "center" });
-
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("Orchid Fashion", 15, 35);
-    doc.text("Dia chi: 123 Duong 3/2, Can Tho", 15, 40);
-    doc.text("SDT: 0987.654.321", 15, 45);
-    
-    doc.text(`Ma hoa don: #${order.id}`, 140, 35);
-    doc.text(`Ngay lap: ${order.date}`, 140, 40);
-    doc.text(`Khach hang: ${removeVietnameseTones(order.customerName)}`, 140, 45); // Xử lý tên KH
-    doc.text(`SDT: ${order.phone}`, 140, 50);
-    doc.text(`Dia chi: ${removeVietnameseTones(order.address)}`, 140, 55); // Xử lý địa chỉ
-
-    const items = order.products.map((p, index) => [
-      index + 1,
-      removeVietnameseTones(p.name), // Xử lý tên SP
-      `x${p.quantity}`,
-      formatCurrency(p.price).replace('₫', 'VND'),
-      formatCurrency(p.price * p.quantity).replace('₫', 'VND')
+    const tableRows = filteredOrders.value.map(o => [
+      o.id,
+      o.date,
+      removeVietnameseTones(o.customerName),
+      o.itemsCount,
+      formatCurrency(o.totalAmount).replace('₫', 'VND'),
+      removeVietnameseTones(getPaymentLabel(o.paymentStatus))
     ]);
 
     autoTable(doc, {
-      startY: 65,
-      head: [['STT', 'Ten san pham', 'So luong', 'Don gia', 'Thanh tien']],
-      body: items,
-      theme: 'grid',
-      headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0] },
-      styles: { font: "helvetica", fontSize: 9 },
-      columnStyles: { 0: { width: 10 }, 4: { halign: 'right' } }
+      startY: 25,
+      head: [['Ma HD', 'Ngay', 'Khach hang', 'SL', 'Tong tien', 'Trang thai']],
+      body: tableRows,
+      theme: 'striped',
+      styles: { font: "helvetica", fontSize: 9 }
     });
 
-    const finalY = doc.lastAutoTable.finalY + 10;
-    doc.setFont("helvetica", "bold");
-    doc.text(`Tong tien hang: ${formatCurrency(order.totalAmount).replace('₫', 'VND')}`, 140, finalY, { align: "right" });
-    doc.text(`Phi van chuyen: 0 VND`, 140, finalY + 5, { align: "right" });
-    doc.setFontSize(12);
-    doc.text(`TONG THANH TOAN: ${formatCurrency(order.totalAmount).replace('₫', 'VND')}`, 140, finalY + 12, { align: "right" });
-
-    doc.setFont("helvetica", "italic");
-    doc.setFontSize(10);
-    doc.text("Cam on quy khach da mua sam tai Orchid Fashion!", 105, finalY + 25, { align: "center" });
-
-    doc.save(`Hoa_Don_${order.id}.pdf`);
+    doc.save("Danh_sach_don_hang.pdf");
   } catch (error) {
-    console.error("Lỗi in hóa đơn:", error);
-    alert("Không thể in hóa đơn chi tiết.");
+    alert("Lỗi in PDF!");
   }
 };
 
-// --- LOGIC XUẤT EXCEL (Giữ nguyên) ---
+const printInvoice = () => {
+  const doc = new jsPDF();
+  const order = selectedOrder.value;
+  doc.setFont("helvetica", "bold");
+  doc.text("HOA DON BAN LE", 105, 20, { align: "center" });
+  doc.setFontSize(10);
+  doc.text(`Khach hang: ${removeVietnameseTones(order.customerName)}`, 15, 35);
+  doc.text(`Ma don: ${order.id}`, 15, 42);
+
+  const items = order.products.map((p, i) => [i + 1, removeVietnameseTones(p.name), p.quantity, formatCurrency(p.price * p.quantity).replace('₫', 'VND')]);
+  autoTable(doc, { startY: 50, head: [['STT', 'Ten SP', 'SL', 'Thanh tien']], body: items });
+  doc.save(`HD_${order.id}.pdf`);
+};
+
 const exportExcel = async () => {
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('Export');
-  worksheet.columns = [
-    { header: 'Ma Don', key: 'id' },
-    { header: 'Khach hang', key: 'name' },
-    { header: 'Tong tien', key: 'amount' }
-  ];
+  const worksheet = workbook.addWorksheet('Orders');
+  worksheet.columns = [{ header: 'Mã Đơn', key: 'id' }, { header: 'Khách hàng', key: 'name' }, { header: 'Tổng tiền', key: 'amount' }];
   filteredOrders.value.forEach(o => worksheet.addRow({ id: o.id, name: o.customerName, amount: o.totalAmount }));
   const buffer = await workbook.xlsx.writeBuffer();
   saveAs(new Blob([buffer]), 'Orders.xlsx');
 };
 
 const handleStatusChange = (order) => {
-  if (order.status === 'cancel' && order.paymentStatus === 'Paid') {
-    order.paymentStatus = 'Pending Refund';
-  } else if (order.status === 'active') {
-    order.paymentStatus = 'Paid';
-  }
-};
-
-const getCurrentFullTime = () => {
-  const now = new Date();
-  return `${now.getHours()}h${now.getMinutes()}p - Ngay ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
-};
-
-const getPaymentLabel = (status) => {
-  const map = { 'Paid': 'Đã thanh toán', 'Unpaid': 'Chưa thanh toán', 'Pending Refund': 'Chờ hoàn tiền' };
-  return map[status] || status;
-};
-
-const getPaymentIcon = (status) => {
-  const map = { 'Paid': 'bi-check-circle-fill', 'Unpaid': 'bi-clock', 'Pending Refund': 'bi-arrow-left-right' };
-  return map[status] || 'bi-question';
+  if (order.status === 'cancel' && order.paymentStatus === 'Paid') order.paymentStatus = 'Pending Refund';
+  else if (order.status === 'active') order.paymentStatus = 'Paid';
 };
 
 const formatCurrency = (val) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
-
 const getStatusColorClass = (status) => {
   const map = { active: 'bg-success-subtle', pending: 'bg-warning-subtle', shipping: 'bg-blue-subtle', cancel: 'bg-gray-subtle' };
   return map[status] || '';
 };
-
+const getPaymentLabel = (status) => {
+  const map = { 'Paid': 'Da thanh toan', 'Unpaid': 'Chua thanh toan', 'Pending Refund': 'Cho hoan tien' };
+  return map[status] || status;
+};
+const getPaymentIcon = (status) => {
+  const map = { 'Paid': 'bi-check-circle-fill', 'Unpaid': 'bi-clock', 'Pending Refund': 'bi-arrow-left-right' };
+  return map[status] || 'bi-question';
+};
+const getCurrentFullTime = () => new Date().toLocaleString();
 const setFilter = (status) => { currentStatus.value = status; currentPage.value = 1; };
 const getCountByStatus = (status) => status === 'all' ? orders.value.length : orders.value.filter(o => o.status === status).length;
-
-const filteredOrders = computed(() => {
-  return orders.value.filter(o => {
-    const matchStatus = currentStatus.value === 'all' || o.status === currentStatus.value;
-    const key = searchQuery.value.toLowerCase();
-    return matchStatus && (o.customerName.toLowerCase().includes(key) || o.id.toLowerCase().includes(key) || o.phone.includes(key));
-  });
-});
-
-const paginatedOrders = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  return filteredOrders.value.slice(start, start + itemsPerPage);
-});
-
-const totalPages = computed(() => Math.ceil(filteredOrders.value.length / itemsPerPage) || 1);
 const openModal = (order) => { selectedOrder.value = { ...order }; showModal.value = true; };
 const closeModal = () => showModal.value = false;
 </script>
