@@ -147,6 +147,10 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router'; // Thêm router để điều hướng
+
+// Khởi tạo router
+const router = useRouter();
 
 // 1. DATA FORM
 const form = ref({
@@ -163,7 +167,7 @@ const form = ref({
 const couponCode = ref('');
 const discountAmount = ref(0);
 
-// 2. DATA GIẢ LẬP ĐỊA ĐIỂM (Tỉnh/Huyện)
+// 2. DATA GIẢ LẬP ĐỊA ĐIỂM
 const cities = ref([
   { id: 'HN', name: 'Hà Nội' },
   { id: 'HCM', name: 'TP Hồ Chí Minh' },
@@ -181,10 +185,10 @@ const availableDistricts = computed(() => {
 });
 
 const onCityChange = () => {
-  form.value.district = ''; // Reset huyện khi đổi tỉnh
+  form.value.district = ''; 
 };
 
-// 3. DATA GIỎ HÀNG (Giả lập lấy từ localStorage/Store)
+// 3. DATA GIỎ HÀNG
 const cartItems = ref([
   {
     id: 1,
@@ -212,19 +216,19 @@ const subtotal = computed(() => {
 });
 
 const shippingFee = computed(() => {
-  return subtotal.value > 1000000 ? 0 : 30000; // Miễn phí nếu > 1 triệu
+  return subtotal.value > 1000000 ? 0 : 30000; 
 });
 
 const finalTotal = computed(() => {
   return subtotal.value + shippingFee.value - discountAmount.value;
 });
 
-// Helper
 const formatCurrency = (val) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
 };
 
-// Actions
+// --- CHỨC NĂNG THANH TOÁN ---
+
 const applyCoupon = () => {
   if (couponCode.value === 'ORCHID2025') {
     discountAmount.value = 50000;
@@ -235,12 +239,104 @@ const applyCoupon = () => {
   }
 };
 
-const handleCheckout = () => {
-  if (!form.value.name || !form.value.phone || !form.value.address) {
-    alert("Vui lòng điền đầy đủ thông tin giao hàng!");
+// Hàm xử lý thanh toán chính
+const handleCheckout = async () => {
+  // 1. Validate thông tin bắt buộc
+  if (!form.value.name || !form.value.phone || !form.value.address || !form.value.city || !form.value.district) {
+    alert("Vui lòng điền đầy đủ thông tin giao hàng bắt buộc!");
     return;
   }
-  alert(`Đặt hàng thành công! Tổng tiền: ${formatCurrency(finalTotal.value)}`);
+
+  // Chặn trường hợp giỏ hàng trống
+  if (cartItems.value.length === 0) {
+    alert("Giỏ hàng của bạn đang trống!");
+    return;
+  }
+
+  try {
+    // 2. Gọi API lấy danh sách users
+    const response = await fetch('http://localhost:3000/users');
+    const users = await response.json();
+
+    // 3. Tìm user hiện có
+    let user = users.find(u => u.phone === form.value.phone || (form.value.email && u.email === form.value.email));
+    
+    const orderId = "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+    const cartId = "CART-" + Math.floor(Math.random() * 1000000);
+
+    // 4. Chuẩn bị chi tiết đơn hàng
+    const orderDetails = cartItems.value.map(item => ({
+      product_id: item.id,
+      quantity: item.quantity,
+      total: item.price * item.quantity,
+      payment: form.value.paymentMethod,
+      status: form.value.paymentMethod === 'cod' ? 'pending' : 'paid'
+    }));
+
+    const newOrder = {
+      id: orderId,
+      cart_id: cartId,
+      order_detail: orderDetails
+    };
+
+    // 5. Cập nhật db.json qua API
+    if (user) {
+      const updatedUser = { ...user, order: [...(user.order || []), newOrder] };
+      await fetch(`http://localhost:3000/users/${user.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedUser)
+      });
+    } else {
+      const newUser = {
+        id: "U-" + Date.now(),
+        fullname: form.value.name,
+        email: form.value.email || "",
+        password: "",
+        phone: form.value.phone,
+        address: [{ id: "ADDR-1", place_id: `${form.value.address}, ${form.value.district}, ${form.value.city}` }],
+        gender: "",
+        role: "customer",
+        status: "active",
+        birthday: "",
+        create_At: new Date().toISOString(),
+        avatar: "",
+        voucher_id: [],
+        cart: [],
+        order: [newOrder]
+      };
+      await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+      });
+    }
+
+    // 6. QUAN TRỌNG: Lưu thông tin vào LocalStorage ĐỂ TRANG SUCCESS HIỂN THỊ
+    // Tạo một bản sao sâu (deep copy) của cartItems để không bị ảnh hưởng khi clear giỏ hàng
+    const productsForSuccessPage = JSON.parse(JSON.stringify(cartItems.value));
+    
+    const infoToSave = {
+      customer: {
+        fullname: form.value.name,
+        phone: form.value.phone,
+        address: `${form.value.address}, ${form.value.district}, ${form.value.city}`
+      },
+      order: newOrder,
+      products: productsForSuccessPage // Chứa đầy đủ thông tin Image, Name, Price để render giao diện
+    };
+    
+    localStorage.setItem('last_order_info', JSON.stringify(infoToSave));
+
+    // 7. Kết thúc: Clear giỏ hàng và chuyển trang
+    cartItems.value = [];
+    // Sử dụng điều hướng của Router thay vì để router-link bao ngoài nút bấm
+    router.push('/OrderSuccessPage');
+
+  } catch (error) {
+    console.error("Lỗi thanh toán:", error);
+    alert("Đã xảy ra lỗi trong quá trình đặt hàng. Vui lòng thử lại!");
+  }
 };
 </script>
 

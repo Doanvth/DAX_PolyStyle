@@ -156,6 +156,7 @@ const removeItem = (index) => {
         cart.value.splice(index, 1);
     }
 };
+
 </script>
 
 <style scoped>
