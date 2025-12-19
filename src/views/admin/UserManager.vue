@@ -217,8 +217,6 @@
 </template>
 
 <script setup>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -227,34 +225,15 @@ const router = useRouter();
 const API_URL = "http://localhost:3000/users";
 
 const users = ref([]);
-=======
-=======
->>>>>>> Stashed changes
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
-const users = ref([]);
+
 
 const initialData = [
   { id: 1, name: 'Nguyễn Văn Admin', email: 'admin@gmail.com', phone: '0123456789', role: '1', status: 'active', avatar: '' },
   { id: 2, name: 'Trần Thị User', email: 'user@gmail.com', phone: '0987654321', role: '0', status: 'active', avatar: '' },
   { id: 3, name: 'Lê Văn Staff', email: 'staff@gmail.com', phone: '0912345678', role: '2', status: 'suspended', avatar: '' },
 ];
-<<<<<<< Updated upstream
-=======
 
-onMounted(() => {
-  const storedUsers = localStorage.getItem('users');
-  
-  if (storedUsers) {
-    users.value = JSON.parse(storedUsers);
-  } else {
-    users.value = initialData;
-    localStorage.setItem('users', JSON.stringify(initialData));
-  }
-});
->>>>>>> Stashed changes
 
 onMounted(() => {
   const storedUsers = localStorage.getItem('users');
@@ -267,7 +246,17 @@ onMounted(() => {
   }
 });
 
->>>>>>> Stashed changes
+onMounted(() => {
+  const storedUsers = localStorage.getItem('users');
+  
+  if (storedUsers) {
+    users.value = JSON.parse(storedUsers);
+  } else {
+    users.value = initialData;
+    localStorage.setItem('users', JSON.stringify(initialData));
+  }
+});
+
 const searchQuery = ref("");
 const currentPage = ref(1);
 const itemsPerPage = 8;
@@ -275,7 +264,6 @@ const currentTab = ref("all");
 const showModal = ref(false);
 const selectedUser = ref({});
 
-<<<<<<< Updated upstream
 const tabs = [
   { label: "Tất cả", value: "all" },
   { label: "Hoạt động", value: "active" },
@@ -294,7 +282,6 @@ const editUser = (id) => {
 const fetchUsers = async () => {
   try {
     const res = await axios.get(API_URL);
-    // Map fullname sang name nếu Template yêu cầu
     users.value = res.data.map((u) => ({
       ...u,
       name: u.fullname || u.name,
@@ -377,67 +364,10 @@ const deleteUser = async (id) => {
       users.value = users.value.filter((u) => u.id !== id);
     } catch (e) {
       alert("Lỗi xóa!");
-=======
-const filteredUsers = computed(() => {
-  if (!searchQuery.value) return users.value;
-  const key = searchQuery.value.toLowerCase();
-  return users.value.filter(u => 
-    (u.name && u.name.toLowerCase().includes(key)) || 
-    (u.email && u.email.toLowerCase().includes(key))
-  );
-});
-
-const paginatedUsers = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  return filteredUsers.value.slice(start, start + itemsPerPage);
-});
-
-const totalPages = computed(() => Math.ceil(filteredUsers.value.length / itemsPerPage) || 1);
-
-const stats = computed(() => ({
-  total: users.value.length,
-  new: users.value.filter(u => u.id > 3).length, 
-  active: users.value.filter(u => u.status === 'active').length,
-  suspended: users.value.filter(u => u.status === 'suspended').length
-}));
-
-const getRoleLabel = (role) => {
-  const r = String(role); 
-  if (r === '1') return 'Admin';
-  if (r === '2') return 'Nhân viên';
-  return 'Khách hàng';
-};
-
-const getRoleClass = (role) => {
-  const r = String(role);
-  if (r === '1') return 'badge-purple';
-  if (r === '2') return 'badge-blue';
-  return 'badge-gray';
-};
-
-const editUser = (id) => {
-  router.push({ name: 'user-add', query: { id: id } });
-};
-
-const toggleStatus = (user) => {
-  user.status = user.status === 'active' ? 'suspended' : 'active';
-  localStorage.setItem('users', JSON.stringify(users.value));
-};
-
-const deleteUser = (id) => {
-  if (confirm('Bạn có chắc muốn xóa khách hàng này?')) {
-    users.value = users.value.filter(u => u.id !== id);
-    localStorage.setItem('users', JSON.stringify(users.value));
-    
-    if (paginatedUsers.value.length === 0 && currentPage.value > 1) {
-        currentPage.value--;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     }
   }
 };
+
 </script>
 
 <style scoped>
