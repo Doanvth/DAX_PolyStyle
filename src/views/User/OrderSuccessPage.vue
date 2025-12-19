@@ -1,8 +1,7 @@
 <template>
   <div class="success-page-container">
-    <div class="card-success">
+    <div class="card-success" v-if="latestOrder">
       
-      <!-- 1. ICON & LỜI CẢM ƠN -->
       <div class="success-header">
         <div class="icon-circle">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -11,34 +10,30 @@
         </div>
         <h1 class="title">ĐẶT HÀNG THÀNH CÔNG!</h1>
         <p class="subtitle">Cảm ơn bạn đã mua sắm tại Orchid. Đơn hàng của bạn đã được tiếp nhận và đang xử lý.</p>
-        <div class="order-id">Mã đơn hàng: <strong>#ORD-20258899</strong></div>
+        <div class="order-id">Mã đơn hàng: <strong>#{{ latestOrder.id }}</strong></div>
       </div>
 
-      <!-- 2. THÔNG TIN ĐƠN HÀNG -->
       <div class="order-details">
         
-        <!-- Cột thông tin khách hàng -->
         <div class="info-column">
           <h3>Thông tin nhận hàng</h3>
-          <p><strong>Người nhận:</strong> Nguyễn Văn A</p>
-          <p><strong>SĐT:</strong> 0988 123 456</p>
-          <p><strong>Địa chỉ:</strong> 123 Đường Láng, Đống Đa, Hà Nội</p>
-          <p><strong>Phương thức thanh toán:</strong> Chuyển khoản ngân hàng</p>
+          <p><strong>Người nhận:</strong> {{ customerInfo.fullname }}</p>
+          <p><strong>SĐT:</strong> {{ customerInfo.phone }}</p>
+          <p><strong>Địa chỉ:</strong> {{ customerInfo.address }}</p>
+          <p><strong>Phương thức thanh toán:</strong> {{ getPaymentName(latestOrder.order_detail[0].payment) }}</p>
           
-          <!-- Box thông tin chuyển khoản nếu chọn Banking -->
-          <div class="banking-info">
+          <div class="banking-info" v-if="latestOrder.order_detail[0].payment !== 'cod'">
             <p class="bank-title">Vui lòng chuyển khoản tới:</p>
             <p>Vietcombank - CN Hà Nội</p>
             <p>STK: <strong>001100999999</strong></p>
             <p>Chủ TK: CONG TY TNHH ORCHID</p>
-            <p>Nội dung: <strong>ORD-20258899</strong></p>
+            <p>Nội dung: <strong>{{ latestOrder.id }}</strong></p>
           </div>
         </div>
 
-        <!-- Cột sản phẩm -->
         <div class="product-column">
           <h3>Sản phẩm đã đặt</h3>
-          <div class="item-row" v-for="item in purchasedItems" :key="item.id">
+          <div class="item-row" v-for="(item, index) in orderProducts" :key="index">
             <div class="item-img">
               <img :src="item.image" :alt="item.name">
               <span class="qty">x{{ item.quantity }}</span>
@@ -47,55 +42,68 @@
               <p class="name">{{ item.name }}</p>
               <p class="variant">{{ item.size }} / {{ item.color }}</p>
             </div>
-            <div class="item-price">{{ formatCurrency(item.price) }}</div>
+            <div class="item-price">{{ formatCurrency(item.total) }}</div>
           </div>
 
           <div class="divider"></div>
 
           <div class="total-row">
             <span>Tổng cộng:</span>
-            <span class="price-final">1,258,000 ₫</span>
+            <span class="price-final">{{ formatCurrency(totalAmount) }}</span>
           </div>
         </div>
-
       </div>
 
-      <!-- 3. BUTTONS -->
       <div class="action-buttons">
-        <button class="btn-continue">TIẾP TỤC MUA SẮM</button>
+        <router-link to="/"><button class="btn-continue">TIẾP TỤC MUA SẮM</button></router-link>
         <button class="btn-track">THEO DÕI ĐƠN HÀNG</button>
       </div>
 
+    </div>
+    
+    <div class="card-success" v-else>
+        <div class="success-header" style="background: #fff; color: #333;">
+            <h1 class="title">KHÔNG TÌM THẤY ĐƠN HÀNG</h1>
+            <router-link to="/"><button class="btn-continue">QUAY LẠI TRANG CHỦ</button></router-link>
+        </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
-// Data giả lập các món vừa mua
-const demoImg = "https://pos.nvncdn.com/af3c03-152482/ps/20251112_kwRZ3ZkLE4.jpeg?v=1762929741";
+// Khai báo các biến reactive
+const latestOrder = ref(null);
+const customerInfo = ref({});
+const orderProducts = ref([]);
+const totalAmount = ref(0);
 
-const purchasedItems = ref([
-  {
-    id: 1,
-    name: "OD4S439 - Áo len lông ghi",
-    price: 659000,
-    quantity: 1,
-    size: 'M',
-    color: 'Ghi đá',
-    image: demoImg
-  },
-  {
-    id: 2,
-    name: "OD4B453 - Áo nhung the",
-    price: 599000,
-    quantity: 1,
-    size: 'S',
-    color: 'Đỏ đô',
-    image: demoImg
+onMounted(() => {
+  // 1. Giả sử tại trang Checkout, sau khi thành công bạn lưu đơn hàng vào localStorage
+  // Hoặc bạn có thể gọi API lấy đơn hàng mới nhất của User theo SĐT vừa nhập.
+  // Ở đây tôi dùng logic lấy từ localStorage để hiển thị ngay lập tức.
+  const savedData = localStorage.getItem('last_order_info');
+  
+  if (savedData) {
+    const data = JSON.parse(savedData);
+    latestOrder.value = data.order;
+    customerInfo.value = data.customer;
+    orderProducts.value = data.products; // Danh sách SP đầy đủ (có tên, ảnh)
+    
+    // Tính tổng tiền từ danh sách chi tiết
+    totalAmount.value = data.order.order_detail.reduce((sum, item) => sum + item.total, 0);
   }
-]);
+});
+
+const getPaymentName = (method) => {
+  const map = {
+    cod: 'Thanh toán khi nhận hàng (COD)',
+    banking: 'Chuyển khoản ngân hàng',
+    momo: 'Ví điện tử MoMo'
+  };
+  return map[method] || method;
+};
 
 const formatCurrency = (val) => {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
