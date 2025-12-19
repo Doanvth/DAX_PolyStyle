@@ -12,6 +12,13 @@
               <li class="breadcrumb-item active">{{ isEditMode ? 'Chỉnh sửa' : 'Thêm mới' }}</li>
             </ol>
           </nav>
+<!-- ======= Delete after pulish branch ============ -->
+            <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active">{{ isEditMode ? 'Chỉnh sửa' : 'Thêm mới' }}</li>
+            </ol>
+          </nav>
+<!-- ===================================================== -->
         </div>
       </div>
       <div class="header-right">
