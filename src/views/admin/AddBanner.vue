@@ -51,7 +51,7 @@
                   <select v-model="banner.position" class="form-select-custom">
                     <option value="Home Slider">Trang chủ (Slider chính)</option>
                     <option value="Sidebar Right">Cột bên phải (Sidebar)</option>
-                    <option value="Popup">Popup quảng cáo</option>
+                    <option value="Popup">Banner quảng cáo</option>
                   </select>
                 </div>
                 <div class="col-md-6 mb-4">
