@@ -21,7 +21,6 @@
           </div>
         </div>
 
-        <!-- Nút điều hướng -->
         <button class="nav-btn prev" @click="prevSlide">
           <svg
             width="24"
@@ -47,7 +46,6 @@
           </svg>
         </button>
 
-        <!-- Dots chỉ dẫn -->
         <div class="dots-container">
           <span
             v-for="(banner, index) in banners"
@@ -60,7 +58,6 @@
       </div>
     </section>
 
-    <!-- 2. SECTION: ÁO - ĐẦM - ÁO DÀI -->
     <section class="product-section container">
       <div class="section-header">
         <div class="tabs">
@@ -76,72 +73,16 @@
         <a href="#" class="view-more">Xem thêm ></a>
       </div>
 
-      <!-- Grid Sản Phẩm -->
-      <router-link to="/ProductDetailPageView">
-        <div class="product-grid">
-          <div
-            v-for="product in productsAo"
-            :key="product.id"
-            class="product-card"
-          >
-            <div class="card-image">
-              <img :src="product.image" :alt="product.name" />
-              <!-- Đã bỏ hover-overlay "Xem nhanh" ở đây -->
-              <span class="tag-new">NEW</span>
-            </div>
-            <div class="card-info">
-              <div class="brand-logo">Orchid</div>
-              <h3 class="product-name">{{ product.name }}</h3>
-              <div class="price-row">
-                <span class="price">{{ formatCurrency(product.price) }}</span>
-                <button class="btn-add-cart">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
-                    ></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </router-link>
-    </section>
-
-    <!-- 3. SECTION: QUẦN - JUYP -->
-    <section class="product-section container">
-      <div class="section-header">
-        <div class="tabs">
-          <button
-            v-for="tab in tabsQuan"
-            :key="tab"
-            :class="{ active: activeTabQuan === tab }"
-            @click="activeTabQuan = tab"
-          >
-            {{ tab }}
-          </button>
-        </div>
-        <a href="#" class="view-more">Xem thêm ></a>
-      </div>
-
       <div class="product-grid">
         <div
-          v-for="product in productsQuan"
+          v-for="product in productsAo"
           :key="product.id"
           class="product-card"
+          @click="goToProductDetail(product.id)"
         >
           <div class="card-image">
-            <img :src="product.image" :alt="product.name" />
-            <!-- Đã bỏ hover-overlay "Xem nhanh" ở đây -->
+            <img :src="getProductImage(product)" :alt="product.name" />
+            <span class="tag-new">NEW</span>
           </div>
           <div class="card-info">
             <div class="brand-logo">Orchid</div>
@@ -170,7 +111,58 @@
       </div>
     </section>
 
-    <!-- 4. SECTION: TIN TỨC -->
+    <section class="product-section container">
+      <div class="section-header">
+        <div class="tabs">
+          <button
+            v-for="tab in tabsQuan"
+            :key="tab"
+            :class="{ active: activeTabQuan === tab }"
+            @click="activeTabQuan = tab"
+          >
+            {{ tab }}
+          </button>
+        </div>
+        <a href="#" class="view-more">Xem thêm ></a>
+      </div>
+
+      <div class="product-grid">
+        <div
+          v-for="product in productsQuan"
+          :key="product.id"
+          class="product-card"
+          @click="goToProductDetail(product.id)"
+        >
+          <div class="card-image">
+            <img :src="getProductImage(product)" :alt="product.name" />
+          </div>
+          <div class="card-info">
+            <div class="brand-logo">Orchid</div>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <div class="price-row">
+              <span class="price">{{ formatCurrency(product.price) }}</span>
+              <button class="btn-add-cart">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
+                  ></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="news-section container">
       <div class="section-header no-border">
         <div class="tabs">
@@ -180,42 +172,40 @@
       </div>
       <div class="header-line"></div>
 
-      <div class="news-layout">
-        <!-- Tin lớn bên trái -->
+      <div class="news-layout" v-if="newsList.length > 0">
         <div class="news-main">
           <div class="news-img-wrapper">
-            <img :src="newsList[0].image" alt="Tin chính" />
+            <img :src="newsList[0].image || newsList[0].img" alt="Tin chính" />
           </div>
           <div class="news-content-main">
             <h3>{{ newsList[0].title }}</h3>
-            <span class="date">{{ newsList[0].date }}</span>
+            <span class="date">{{
+              newsList[0].date || newsList[0].create_At
+            }}</span>
           </div>
         </div>
 
-        <!-- List tin nhỏ bên phải -->
         <div class="news-list">
           <div
             class="news-item"
             v-for="(news, idx) in newsList.slice(1)"
             :key="idx"
           >
-            <img :src="news.image" alt="news thumb" />
+            <img :src="news.image || news.img" alt="news thumb" />
             <div class="news-text">
               <h4>{{ news.title }}</h4>
-              <p>{{ news.desc }}</p>
-              <span class="date">{{ news.date }}</span>
+              <p>{{ news.desc || news.content }}</p>
+              <span class="date">{{ news.date || news.create_At }}</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5. SECTION: CỬA HÀNG -->
     <section class="store-section container">
       <h2 class="section-title">Tìm cửa hàng</h2>
 
       <div class="store-layout">
-        <!-- Bản đồ -->
         <div class="map-area">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Hanoi_street_map.png"
@@ -224,7 +214,6 @@
           <button class="btn-map-large">Xem bản đồ lớn hơn</button>
         </div>
 
-        <!-- Danh sách địa chỉ -->
         <div class="store-info">
           <div class="dropdown-wrapper">
             <label>Danh sách địa chỉ các cửa hàng</label>
@@ -236,27 +225,41 @@
           </div>
 
           <div class="store-list-scroll">
-            <div class="store-item">
-              <h3>Orchid Quang Trung CS2</h3>
-              <p>
-                <span>📍</span> Số 212A Quang Trung, phường Hà Đông, TP Hà Nội
-                (ĐC cũ: Số 212A Quang Trung, Q. Hà Đông, Hà Nội)
-              </p>
-              <p><span>🕒</span> 9h00 - 22h00 (Kể cả chủ nhật và ngày lễ)</p>
-              <a href="#" class="directions">→ Chỉ đường</a>
+            <div v-if="stores.length === 0">
+              <div class="store-item">
+                <h3>Orchid Quang Trung CS2</h3>
+                <p>
+                  <span>📍</span> Số 212A Quang Trung, phường Hà Đông, TP Hà Nội
+                </p>
+                <p><span>🕒</span> 9h00 - 22h00</p>
+                <a href="#" class="directions">→ Chỉ đường</a>
+              </div>
+              <div class="store-item">
+                <h3>Orchid Quang Trung CS1</h3>
+                <p>
+                  <span>📍</span> Số 504 Quang Trung, phường Dương Nội, TP Hà
+                  Nội
+                </p>
+                <p><span>🕒</span> 9h00 - 22h00</p>
+                <a href="#" class="directions">→ Chỉ đường</a>
+              </div>
+              <div class="store-item">
+                <h3>Orchid Phố Huế</h3>
+                <p><span>📍</span> 189 Phố Huế, Hai Bà Trưng, Hà Nội</p>
+                <p><span>🕒</span> 9h00 - 22h00</p>
+                <a href="#" class="directions">→ Chỉ đường</a>
+              </div>
             </div>
-            <div class="store-item">
-              <h3>Orchid Quang Trung CS1</h3>
-              <p>
-                <span>📍</span> Số 504 Quang Trung, phường Dương Nội, TP Hà Nội
-              </p>
-              <p><span>🕒</span> 9h00 - 22h00 (Kể cả chủ nhật và ngày lễ)</p>
-              <a href="#" class="directions">→ Chỉ đường</a>
-            </div>
-            <div class="store-item">
-              <h3>Orchid Phố Huế</h3>
-              <p><span>📍</span> 189 Phố Huế, Hai Bà Trưng, Hà Nội</p>
-              <p><span>🕒</span> 9h00 - 22h00 (Kể cả chủ nhật và ngày lễ)</p>
+
+            <div
+              v-else
+              class="store-item"
+              v-for="store in stores"
+              :key="store.id"
+            >
+              <h3>{{ store.name }}</h3>
+              <p><span>📍</span> {{ store.address }}</p>
+              <p><span>🕒</span> 9h00 - 22h00</p>
               <a href="#" class="directions">→ Chỉ đường</a>
             </div>
           </div>
@@ -270,14 +273,13 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
 
-// --- 1. SLIDER DATA & LOGIC ---
-const banners = [
-  "https://pos.nvncdn.com/af3c03-152482/bn/20251111_ZpQJ6M8Y.gif?v=1762835594",
-  "https://pos.nvncdn.com/af3c03-152482/bn/20251027_yogb2yD2.gif?v=1761559786",
-  "https://pos.nvncdn.com/af3c03-152482/bn/20250923_3cUU5tbu.gif?v=1758611925",
-];
+const router = useRouter();
 
+// --- 1. BANNER & SLIDER LOGIC ---
+const banners = ref([]);
 const currentIndex = ref(0);
 let slideInterval = null;
 const API_URL = "http://localhost:3000/carousel";
@@ -320,36 +322,36 @@ const fetchBanners = async () => {
 };
 
 const nextSlide = () => {
-  currentIndex.value = (currentIndex.value + 1) % banners.length;
+  if (banners.value.length > 0) {
+    currentIndex.value = (currentIndex.value + 1) % banners.value.length;
+  }
 };
 
 const prevSlide = () => {
-  currentIndex.value =
-    (currentIndex.value - 1 + banners.length) % banners.length;
+  if (banners.value.length > 0) {
+    currentIndex.value =
+      (currentIndex.value - 1 + banners.value.length) % banners.value.length;
+  }
 };
 
 const goToSlide = (index) => {
   currentIndex.value = index;
 };
-
 const startAutoPlay = () => {
-  slideInterval = setInterval(nextSlide, 3000); // 3 giây chuyển 1 lần
+  stopAutoPlay();
+  slideInterval = setInterval(nextSlide, 5000);
 };
-
-const pauseAutoPlay = () => {
+const stopAutoPlay = () => {
   if (slideInterval) clearInterval(slideInterval);
 };
+const pauseAutoPlay = () => stopAutoPlay();
 
-onMounted(() => startAutoPlay());
-onUnmounted(() => pauseAutoPlay());
-
-// --- 2. DỮ LIỆU MẪU (KHÔI PHỤC LẠI) ---
+// --- 2. PRODUCT DATA ---
 const tabsAo = ref(["ÁO", "ĐẦM", "ÁO DÀI"]);
 const activeTabAo = ref("ÁO");
 const tabsQuan = ref(["QUẦN", "JUYP"]);
 const activeTabQuan = ref("QUẦN");
 
-// Ảnh demo chung
 const demoImg =
   "https://pos.nvncdn.com/af3c03-152482/ps/20251112_kwRZ3ZkLE4.jpeg?v=1762929741";
 
@@ -399,6 +401,68 @@ const newsList = ref([
   },
 ]);
 
+const stores = ref([]);
+
+// --- 4. API FETCHING & MERGE ---
+const fetchData = async () => {
+  try {
+    const [resCarousel, resProducts, resNews, resStores] = await Promise.all([
+      axios.get("http://localhost:3000/carousel"),
+      axios.get("http://localhost:3000/products"),
+      axios.get("http://localhost:3000/news"),
+      axios.get("http://localhost:3000/stores"),
+    ]);
+
+    if (resCarousel.data.length > 0)
+      banners.value = resCarousel.data.filter(
+        (item) => item.status === "active"
+      );
+
+    if (resProducts.data.length > 0) {
+      const all = resProducts.data;
+      // Lọc sản phẩm theo tên để chia nhóm
+      const ao = all.filter(
+        (p) =>
+          p.name.toLowerCase().includes("áo") ||
+          p.name.toLowerCase().includes("đầm")
+      );
+      const quan = all.filter(
+        (p) =>
+          p.name.toLowerCase().includes("quần") ||
+          p.name.toLowerCase().includes("juyp")
+      );
+
+      // Nếu API có dữ liệu mới gán, nếu không giữ nguyên mặc định
+      if (ao.length > 0) productsAo.value = ao;
+      if (quan.length > 0) productsQuan.value = quan;
+    }
+
+    if (resNews.data.length > 0) newsList.value = resNews.data;
+    if (resStores.data.length > 0) stores.value = resStores.data;
+  } catch (error) {
+    console.log("Dùng dữ liệu mặc định do lỗi API:", error);
+  }
+};
+
+// --- 5. HELPER FUNCTIONS ---
+// Hàm xử lý ảnh sản phẩm để tránh lỗi (quan trọng)
+const getProductImage = (product) => {
+  // Nếu image là mảng và có phần tử -> lấy url của phần tử đầu
+  if (Array.isArray(product.image) && product.image.length > 0) {
+    return product.image[0].url || demoImg;
+  }
+  // Nếu image là chuỗi (dữ liệu cũ) -> trả về chính nó
+  if (typeof product.image === "string") {
+    return product.image;
+  }
+  return demoImg;
+};
+
+// Hàm chuyển trang chi tiết
+const goToProductDetail = (id) => {
+  router.push({ name: "ProductDetailPageViews", params: { id: id } });
+};
+
 // Helper format tiền tệ
 const formatCurrency = (val) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -406,10 +470,16 @@ const formatCurrency = (val) => {
     currency: "VND",
   }).format(val);
 };
+
+onMounted(async () => {
+  await fetchBanners();
+  startAutoPlay();
+});
+onUnmounted(() => stopAutoPlay());
 </script>
 
 <style scoped>
-/* GIỮ NGUYÊN CSS CỦA BẠN - KHÔNG THAY ĐỔI */
+/* --- GLOBAL STYLES --- */
 .home-container {
   font-family: "Arial", sans-serif;
   color: #333;
@@ -576,6 +646,7 @@ a {
   font-weight: bold;
 }
 
+/* Product Grid */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

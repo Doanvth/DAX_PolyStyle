@@ -447,6 +447,53 @@
       "totalSpend": 0,
       "orderCount": 0,
       "joinDate": "19/12/2025"
+    },
+    {
+      "id": "U-1766137665763",
+      "fullname": "Test",
+      "email": "",
+      "password": "",
+      "phone": "0941223154",
+      "address": [
+        {
+          "id": "ADDR-1",
+          "place_id": "123 Tran Hung Dao, Q3, HCM"
+        }
+      ],
+      "gender": "",
+      "role": "customer",
+      "status": "active",
+      "birthday": "",
+      "create_At": "2025-12-19T09:47:45.763Z",
+      "avatar": "",
+      "voucher_id": [],
+      "cart": [],
+      "order": [
+        {
+          "id": "ORD-Q4BY07TTL",
+          "cart_id": "CART-347089",
+          "order_detail": [
+            {
+              "product_id": 1,
+              "product_name": "OD4S439 - Áo len lông ghi",
+              "product_image": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_kwRZ3ZkLE4.jpeg?v=1762929741",
+              "quantity": 1,
+              "total": 659000,
+              "payment": "cod",
+              "status": "pending"
+            },
+            {
+              "product_id": 2,
+              "product_name": "OD4B453 - Áo nhung the",
+              "product_image": "https://pos.nvncdn.com/af3c03-152482/ps/20251112_kwRZ3ZkLE4.jpeg?v=1762929741",
+              "quantity": 1,
+              "total": 599000,
+              "payment": "cod",
+              "status": "pending"
+            }
+          ]
+        }
+      ]
     }
   ],
   "place": [
